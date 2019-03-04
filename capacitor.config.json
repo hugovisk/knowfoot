@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "pisada",
+  "appId": "com.gpmov.knowfoot",
+  "appName": "knowfoot",
   "bundledWebRuntime": false,
   "webDir": "www"
 }

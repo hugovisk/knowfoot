@@ -1,0 +1,7 @@
+{
+  "name": "pisada",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { AuthService } from './services/user/auth.service';
+
 import { Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 const { SplashScreen, StatusBar } = Plugins;
@@ -11,6 +13,7 @@ const { SplashScreen, StatusBar } = Plugins;
 export class AppComponent {
   constructor(
     private platform: Platform,
+    private authService: AuthService
   ) {
     this.initializeApp();
   }
@@ -19,10 +22,13 @@ export class AppComponent {
     this.platform.ready().then(() => {
       SplashScreen.hide().catch(error => {
         console.error(error);
-        });
-        StatusBar.hide().catch(error => {
+      });
+      StatusBar.hide().catch(error => {
         console.error(error);
-        });
+      });
+
+     // this.authService.authRouting();
+
     });
   }
 }

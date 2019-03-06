@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="landing" text="" icon="close"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <!-- backdrop para bloquear touch no fundo do form -->
+  <ion-backdrop></ion-backdrop>
+  <!-- <ion-card padding> -->
+  <ion-card-title text-center margin-top>Acessar conta</ion-card-title>
+
+  <form [formGroup]="loginForm">
+    
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input #emailInput formControlName="email" type="email" inputmode="email" clearInput="true"
+        (ionFocus)="input.email.markAsUntouched()">
+      </ion-input>
+    </ion-item>
+    <div *ngIf="input.email.invalid && input.email.touched">
+      <div *ngFor="let validation of validationMessages.email">
+        <ion-text padding-start *ngIf="input.email.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Senha</ion-label>
+      <ion-input #passwordInput formControlName="password" [type]="hide ? 'password':'text'" inputmode="password"
+        (ionFocus)="input.password.markAsUntouched()">
+      </ion-input>
+      <ion-buttons slot="end" class="btnHideShow">
+        <ion-button type="button" (mousedown)="onHideShow(passwordInput, $event)"
+          (touchstart)="onHideShow(passwordInput, $event)">
+          <ion-icon slot="icon-only" [name]="hide ? 'eye-off':'eye'"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <div *ngIf="input.password.invalid && input.password.touched">
+      <div *ngFor="let validation of validationMessages.password">
+        <ion-text padding-start *ngIf="input.password.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div>
+
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button shape="round" expand="full" size="large" (click)="loginUser()" [disabled]="!loginForm.valid">
+      Login</ion-button>
+  </ion-toolbar>
+</ion-footer>

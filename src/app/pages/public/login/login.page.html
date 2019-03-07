@@ -7,13 +7,13 @@
 </ion-header>
 
 <ion-content padding>
-  <!-- backdrop para bloquear touch no fundo do form -->
-  <ion-backdrop></ion-backdrop>
+  <!-- backdrop para bloquear touch no fundo do form 
+  <ion-backdrop></ion-backdrop>-->
   <!-- <ion-card padding> -->
   <ion-card-title text-center margin-top>Acessar conta</ion-card-title>
 
   <form [formGroup]="loginForm">
-    
+
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input #emailInput formControlName="email" type="email" inputmode="email" clearInput="true"
@@ -49,6 +49,12 @@
     </div>
 
   </form>
+
+  <ion-button size="small" fill="clear" routerLink="/reset-password"> 
+    <!-- expand="block"   -->
+    Esqueceu a senha?
+  </ion-button>
+
 </ion-content>
 
 <ion-footer>

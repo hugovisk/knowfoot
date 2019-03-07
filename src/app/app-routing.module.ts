@@ -12,6 +12,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: './pages/private/private-routing.module#PrivateRoutingModule'
   },
+  { path: 'reset-password', loadChildren: './pages/public/reset-password/reset-password.module#ResetPasswordPageModule' },
 ];
 
 @NgModule({

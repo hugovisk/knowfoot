@@ -19,7 +19,7 @@ export class AuthService {
   /**
    * Verifica se usuario esta autenticado no firebase.
    * Se não autenticado, direciona para landing.
-   * 
+   *
    * @returns true para autenticado
    *
    * https://angular.io/guide/observables#subscribing
@@ -53,7 +53,7 @@ export class AuthService {
    * se nao autenticado redireciona para 'landing'
    *
    * https://angular.io/api/router/Router#navigate
-   * 
+   *
    * TODO: funcao chamada no app.component em initializeApp()... precisa?
   */
   // async authRouting(): Promise<void> {
@@ -66,9 +66,9 @@ export class AuthService {
 
   /**
    * Getter do usuario logado
-   * 
+   *
    * @returns objeto da conta do usuario
-   * 
+   *
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#currentUser
    * https://firebase.google.com/docs/reference/js/firebase.User
    */
@@ -78,7 +78,7 @@ export class AuthService {
 
   /**
    * Faz a autenticacao do usuario no app
-   * 
+   *
    * @param email
    * @param password
    *
@@ -109,8 +109,10 @@ export class AuthService {
    * @param email
    * @param password
    *
+   * https://firebase.google.com/docs/reference/js/firebase.firestore.FieldValue
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createUserWithEmailAndPassword
    * https://firebase.google.com/docs/reference/js/firebase.auth#.UserCredential
+   * https://firebase.google.com/docs/reference/js/firebase.User#updateProfile
    * https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference#doc
    * https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference#set
    *
@@ -126,14 +128,21 @@ export class AuthService {
   //     });
   // }
 
-  async signupUser(email: string, password: string): Promise<any> {
+  async signupUser(email: string, password: string, name: string): Promise<any> {
     try {
+      const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
       const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+      await this.afAuth.auth.currentUser.updateProfile({ displayName: name });
       // cria a coleção userProfile, se nao houver, e armazena o email no id do usuario
-      this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({ email });
+      this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({
+        email,
+        name,
+        creationDate
+      });
     }
     catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
@@ -154,7 +163,7 @@ export class AuthService {
   /**
    * Envia um email para redefinicao de senha no email informado
    * @param email
-   * 
+   *
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#sendPasswordResetEmail
    *
    * TODO: fazer tratamento de erros

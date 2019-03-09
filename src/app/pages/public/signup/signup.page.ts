@@ -106,7 +106,7 @@ export class SignupPage implements OnInit {
     await loading.present();
 
     try {
-      await this.authService.signupUser(user.email, user.password);
+      await this.authService.signupUser(user.email, user.password, user.name);
       await loading.dismiss();
       this.router.navigateByUrl('private/dashboard'); // redirecionar para profile
     }

@@ -13,6 +13,11 @@ const routes: Routes = [
     loadChildren: './pages/private/private-routing.module#PrivateRoutingModule'
   },
   { path: 'reset-password', loadChildren: './pages/public/reset-password/reset-password.module#ResetPasswordPageModule' },
+  { path: 'privacy-policy', loadChildren: './pages/public/privacy-policy/privacy-policy.module#PrivacyPolicyPageModule' },
+  {
+    path: 'terms-and-conditions',
+    loadChildren: './pages/public/terms-and-conditions/terms-and-conditions.module#TermsAndConditionsPageModule'
+  },
 ];
 
 @NgModule({

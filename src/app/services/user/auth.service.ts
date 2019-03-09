@@ -34,14 +34,7 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
    */
-  // isAuth(): Promise<boolean> {
-  //   return new Promise((resolve) => {
-  //     this.afAuth.authState.subscribe(auth => {
-  //       resolve(auth ? true : false);
-  //     });
-  //   });
-  // }
-
+  
   async isAuth(): Promise<boolean> {
     let auth: firebase.User;
     await this.afAuth.authState.subscribe(res => auth = res);
@@ -114,20 +107,10 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference#doc
    * https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference#set
    *
-   *  TODO: tratamento de erros
    */
-  // signupUser(email: string, password: string): Promise<any> {
-  //   // cria o usuario
-  //   return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-  //     // autentica o novo usuario
-  //     .then((newUser: firebase.auth.UserCredential) => {
-  //       // cria a coleção userProfile, se nao houver, e armazena o email no id do usuario
-  //       this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({ email });
-  //     });
-  // }
-
   async signupUser(email: string, password: string, name: string): Promise<any> {
     try {
+      console.log('try signUp')
       const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
       const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
       await this.afAuth.auth.currentUser.updateProfile({ displayName: name });
@@ -144,22 +127,7 @@ export class AuthService {
     }
   }
 
-  /**
-   * Verifca mensagens de erro do firebase
-   *
-   * @param errorCode codigo de erro do firebase.auth
-   * @returns mensagem em portugues para ser repassada pelo AuthService.
-   *
-   * https://firebase.google.com/docs/reference/js/firebase.auth.Error
-   */
-  errorHandler(errorCode: string): string | void {
-    for (const error of this.errorMessages.auth) {
-      if (errorCode === error.code) {
-        return error.message;
-      }
-    }
-  }
-
+  
   /**
    * Envia um email para redefinicao de senha no email informado
    * @param email
@@ -185,6 +153,22 @@ export class AuthService {
    */
   logoutUser(): Promise<void> {
     return this.afAuth.auth.signOut();
+  }
+
+  /**
+   * Verifca mensagens de erro do firebase
+   *
+   * @param errorCode codigo de erro do firebase.auth
+   * @returns mensagem em portugues para ser repassada pelo AuthService.
+   *
+   * https://firebase.google.com/docs/reference/js/firebase.auth.Error
+   */
+  errorHandler(errorCode: string): string | void {
+    for (const error of this.errorMessages.auth) {
+      if (errorCode === error.code) {
+        return error.message;
+      }
+    }
   }
 
 

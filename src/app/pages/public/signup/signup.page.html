@@ -7,10 +7,11 @@
 </ion-header>
 
 <ion-content padding>
-  <!-- backdrop para bloquear touch no fundo do form 
-  <ion-backdrop></ion-backdrop>-->
-  <!-- <ion-card padding> -->
-  <ion-card-title text-center margin-top>Criar uma conta</ion-card-title>
+  <!-- backdrop para bloquear touch no fundo do form -->
+  <ion-backdrop></ion-backdrop>
+  <ion-text text-center margin-top>
+    <h4>Criar uma conta</h4>
+  </ion-text>
 
   <form [formGroup]="signupForm">
 
@@ -62,12 +63,19 @@
     </div>
 
   </form>
-  <!-- </ion-card> -->  
+
+  <div class="signTerms" margin-top>
+    <small>Ao me cadastrar, concordo com a <a [routerLink]="['/privacy-policy']">Política de privacidade</a> e com os <a [routerLink]="['/terms-and-conditions']">Termos de serviço</a> do
+      KnowFoot.</small>
+  </div>
+
 </ion-content>
+
+
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button shape="round" expand="full" size="large" (click)="submitSignup()" [disabled]="!signupForm.valid">
+    <ion-button shape="round" expand="full" size="large" (click)="signupUser()" [disabled]="!signupForm.valid">
       Registrar</ion-button>
   </ion-toolbar>
 </ion-footer>

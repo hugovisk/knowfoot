@@ -20,7 +20,7 @@ export class LoginPage implements OnInit {
   */
  hide = true;
   /**
-   * Importa mensagens de erro 
+   * Importa mensagens de erro
    */
   validationMessages = formErrorMessages;
 
@@ -94,7 +94,7 @@ export class LoginPage implements OnInit {
     catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({
-        message: error.message,
+        message: error,
         buttons: [{ text: 'Ok', role: 'cancel' }],
       });
       await alert.present();

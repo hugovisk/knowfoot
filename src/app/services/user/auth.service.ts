@@ -5,10 +5,16 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
+import { firebaseErrorMessages } from '../shared/firebase-error-messages';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  /**
+   * Importa as mensagens de erro
+   */
+  private errorMessages = firebaseErrorMessages;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -84,23 +90,15 @@ export class AuthService {
    *
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signInWithEmailAndPassword
    *
-   * TODO: fazer tratamento de erros
    */
   async loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
     try {
       return await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-     // return credential; // testar o return direto
+      // return credential; // testar o return direto
     }
     catch (error) {
-      // TODO: tratar o erro
-      // for (let error in errorCodes) {
-      //   if(error === error.code)
-      //   return error.message;
-      // }
-      if (error.code === 'auth/user-not-found') {
-        error.message = 'Usuario NAO encontrado';
-      }
-      throw error;
+      console.log(error);
+      throw this.errorHandler(error.code);
     }
   }
 
@@ -133,7 +131,7 @@ export class AuthService {
       const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
       const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
       await this.afAuth.auth.currentUser.updateProfile({ displayName: name });
-      // cria a coleção userProfile, se nao houver, e armazena o email no id do usuario
+      // cria a coleção userProfile, se nao houver, e armazena o email, nome e data de criação no id do usuário
       this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({
         email,
         name,
@@ -142,7 +140,7 @@ export class AuthService {
     }
     catch (error) {
       console.log(error);
-      throw error;
+      throw this.errorHandler(error.code);
     }
   }
 
@@ -154,9 +152,11 @@ export class AuthService {
    *
    * https://firebase.google.com/docs/reference/js/firebase.auth.Error
    */
-  errorMessage(errorCode: string): string | void {
-    if (errorCode === 'auth/user-not-found') {
-      return 'Usuario NAO encontrado';
+  errorHandler(errorCode: string): string | void {
+    for (const error of this.errorMessages.auth) {
+      if (errorCode === error.code) {
+        return error.message;
+      }
     }
   }
 
@@ -176,7 +176,7 @@ export class AuthService {
     }
     catch (error) {
       console.log(error);
-      throw error;
+      throw this.errorHandler(error.code);
     }
   }
 

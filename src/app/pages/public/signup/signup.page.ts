@@ -113,7 +113,7 @@ export class SignupPage implements OnInit {
     catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({
-        message: error.message,
+        message: error,
         buttons: [{ text: 'Ok', role: 'cancel' }],
       });
       await alert.present();

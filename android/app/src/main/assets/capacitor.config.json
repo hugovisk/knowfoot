@@ -1,0 +1,6 @@
+{
+  "appId": "com.gpmov.knowfoot",
+  "appName": "knowfoot",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}

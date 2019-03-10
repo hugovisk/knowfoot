@@ -34,16 +34,34 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
    */
-  
-  async isAuth(): Promise<boolean> {
-    let auth: firebase.User;
-    await this.afAuth.authState.subscribe(res => auth = res);
-    if (auth) {
-      return true;
-    } else {
-      this.router.navigate(['landing']);
-      return false;
-    }
+
+  // async isAuth(): Promise<boolean> {
+  //   const auth = await this.afAuth.authState.toPromise();
+  //   console.log(auth);
+  //   if (auth) {
+  //     console.log('LOGADO');
+  //     return true;
+  //   } else {
+  //     console.log('NAO');
+  //     this.router.navigate(['landing']);
+  //     return false;
+  //   }
+  // }
+
+
+  isAuth(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.afAuth.authState.subscribe(user => {
+        if (user) {
+           console.log('User is logged in');
+          resolve(true);
+        } else {
+           console.log('User is not logged in');
+          this.router.navigate(['landing']);
+          resolve(false);
+        }
+      });
+    });
   }
 
 
@@ -78,8 +96,8 @@ export class AuthService {
   /**
    * Faz a autenticacao do usuario no app
    *
-   * @param email
-   * @param password
+   * @param email vinculado a conta
+   * @param password senha definida pelo usuario
    *
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signInWithEmailAndPassword
    *
@@ -89,6 +107,7 @@ export class AuthService {
       return await this.afAuth.auth.signInWithEmailAndPassword(email, password);
       // return credential; // testar o return direto
     }
+   // tslint:disable-next-line: one-line
     catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
@@ -97,8 +116,8 @@ export class AuthService {
 
   /**
    *
-   * @param email
-   * @param password
+   * @param email email que sera vinculado a conta do usuario
+   * @param password senha definida pelo usuario para acesso autenticado
    *
    * https://firebase.google.com/docs/reference/js/firebase.firestore.FieldValue
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createUserWithEmailAndPassword
@@ -110,7 +129,6 @@ export class AuthService {
    */
   async signupUser(email: string, password: string, name: string): Promise<any> {
     try {
-      console.log('try signUp')
       const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
       const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
       await this.afAuth.auth.currentUser.updateProfile({ displayName: name });
@@ -121,13 +139,14 @@ export class AuthService {
         creationDate
       });
     }
+    // tslint:disable-next-line: one-line
     catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
     }
   }
 
-  
+
   /**
    * Envia um email para redefinicao de senha no email informado
    * @param email
@@ -142,6 +161,7 @@ export class AuthService {
     try {
       return await this.afAuth.auth.sendPasswordResetEmail(email);
     }
+    // tslint:disable-next-line: one-line
     catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);

@@ -22,7 +22,7 @@ export class SignupPage implements OnInit {
   hide = true;
 
   /**
-   * Importa mensagens de erro 
+   * Importa mensagens de erro
    */
   validationMessages = formErrorMessages;
 
@@ -37,9 +37,9 @@ export class SignupPage implements OnInit {
   /**
    *
    * https://angular.io/guide/reactive-forms#generating-form-controls-with-formbuilder
-   * 
+   *
    * obs: validacao do ion-item do ion-input dispara no momento de foco
-   * mesmo se o paramentro do input touched=false. Comportamento esperado 
+   * mesmo se o paramentro do input touched=false. Comportamento esperado
    * e' disparar a validacao quando o input perde o foco a primeira vez e
    * o parametro touched=true.
    * TODO: Abrir bug fix https://github.com/ionic-team/ionic/issues/
@@ -67,22 +67,22 @@ export class SignupPage implements OnInit {
   /**
    * Getter para acessar os controls do campo do formulario de forma resumida,
    * ex.: input.name, ao invez de registerForm.controls.name
-   * 
-   * https://angular.io/api/forms/AbstractControl 
+   *
+   * https://angular.io/api/forms/AbstractControl
    */
   get input() {
     return this.signupForm.controls;
   }
 
 
-  /** 
+  /**
    * Troca a visibilidade dos caracteres no campo de
    * senha e o icone no botao de troca de visibilidade,
-   * mantendo o foco no input e o teclado visível 
-   * 
+   * mantendo o foco no input e o teclado visível
+   *
    *  @param input atributo tag de elemento do input alvo
    *  @param ev
-   * 
+   *
    *  https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
    *  https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
    */
@@ -96,7 +96,7 @@ export class SignupPage implements OnInit {
     input.setFocus();
   }
 
-/** 
+/**
  * Transfere o conteudo do formulario para a variavel registerPayload
  * TODO: validar errors
  */
@@ -110,6 +110,7 @@ export class SignupPage implements OnInit {
       await loading.dismiss();
       this.router.navigateByUrl('private/dashboard'); // redirecionar para profile
     }
+    // tslint:disable-next-line: one-line
     catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({

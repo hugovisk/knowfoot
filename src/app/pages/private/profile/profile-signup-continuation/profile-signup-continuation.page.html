@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="profileSignupForm">
+
+    <ion-item>
+      <ion-label position="floating">Nome</ion-label>
+      <ion-input #nameInput autofocus="true" formControlName="name" (ionFocus)="input.name.markAsUntouched()" value="{{ (userProfile | async)?.name}}">
+      </ion-input>
+    </ion-item>
+    <!-- <div *ngIf="input.name.invalid && input.name.touched">
+      <div *ngFor="let validation of validationMessages.name">
+        <ion-text padding-start *ngIf="input.name.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div> 
+    <pre>{{ (userProfile | async)?.name}}</pre>-->
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input #emailInput formControlName="email" type="email" inputmode="email" clearInput="true" value="{{ (userProfile | async)?.email}}"
+        (ionFocus)="input.email.markAsUntouched()" (ionChange)="autoSave()">
+      </ion-input>
+    </ion-item>
+    <!-- <div *ngIf="input.email.invalid && input.email.touched">
+      <div *ngFor="let validation of validationMessages.email">
+        <ion-text padding-start *ngIf="input.email.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div> -->
+
+  </form>
+
+</ion-content>

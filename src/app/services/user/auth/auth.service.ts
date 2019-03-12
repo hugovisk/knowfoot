@@ -5,7 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
-import { firebaseErrorMessages } from '../shared/firebase-error-messages';
+import { firebaseErrorMessages } from '../../shared/firebase-error-messages';
 
 @Injectable({
   providedIn: 'root'
@@ -53,10 +53,10 @@ export class AuthService {
     return new Promise((resolve) => {
       this.afAuth.authState.subscribe(user => {
         if (user) {
-           console.log('User is logged in');
+          console.log('User is logged in');
           resolve(true);
         } else {
-           console.log('User is not logged in');
+          console.log('User is not logged in');
           this.router.navigate(['landing']);
           resolve(false);
         }
@@ -89,9 +89,20 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#currentUser
    * https://firebase.google.com/docs/reference/js/firebase.User
    */
-  getUser(): firebase.User {
+  getUser() {
     return this.afAuth.auth.currentUser;
   }
+
+  // logedUser(): firebase.User {
+  //   let logedUser: firebase.User;
+  //    this.afAuth.authState.subscribe(user => {
+  //       if (user) {
+  //         logedUser = user;
+  //       }
+  //   });
+  //   console.log(logedUser);
+  //   return logedUser;
+  // }
 
   /**
    * Faz a autenticacao do usuario no app
@@ -107,7 +118,7 @@ export class AuthService {
       return await this.afAuth.auth.signInWithEmailAndPassword(email, password);
       // return credential; // testar o return direto
     }
-   // tslint:disable-next-line: one-line
+    // tslint:disable-next-line: one-line
     catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
@@ -176,6 +187,26 @@ export class AuthService {
   }
 
   /**
+   * Por medida de segurança algumas operaçĩes necessitam que o token de
+   * autenticação seja recente
+   *
+   * @param email email do usuario ativo
+   * @param password senha de autenticacao do usuario ativo
+   *
+   * https://firebase.google.com/docs/reference/js/firebase.auth.EmailAuthProvider#.credential
+   * https://firebase.google.com/docs/reference/js/firebase.User#reauthenticateAndRetrieveDataWithCredential
+   */
+  async reAuthUser(email: string, password: string): Promise<any> {
+    try {
+      const credential = await firebase.auth.EmailAuthProvider.credential(this.getUser().email, password);
+      await this.getUser().reauthenticateAndRetrieveDataWithCredential(credential);
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * Verifca mensagens de erro do firebase
    *
    * @param errorCode codigo de erro do firebase.auth
@@ -190,6 +221,4 @@ export class AuthService {
       }
     }
   }
-
-
 }

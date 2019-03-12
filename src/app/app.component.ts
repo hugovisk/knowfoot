@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AuthService } from './services/user/auth.service';
+import { AuthService } from './services/user/auth/auth.service';
 
 import { Platform } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';

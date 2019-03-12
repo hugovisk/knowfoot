@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../../services/user/auth.service';
+import { AuthService } from '../../../services/user/auth/auth.service';
 import { UserAccount } from '../../../interfaces/user-account';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { formErrorMessages } from '../shared/form-error-messages/form-error-mesages';
@@ -108,7 +108,7 @@ export class SignupPage implements OnInit {
     try {
       await this.authService.signupUser(user.email, user.password, user.name);
       await loading.dismiss();
-      this.router.navigateByUrl('private/dashboard'); // redirecionar para profile
+      this.router.navigateByUrl('private/profile-signup-continuation'); // redirecionar para profile
     }
     // tslint:disable-next-line: one-line
     catch (error) {

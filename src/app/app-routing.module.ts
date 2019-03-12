@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from './services/user/auth.guard';
+import { AuthGuard } from './services/user/auth/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'private/dashboard', pathMatch: 'full' },

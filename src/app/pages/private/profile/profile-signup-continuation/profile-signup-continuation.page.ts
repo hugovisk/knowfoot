@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+
 import { ProfileService } from '../../../../services/user/profile/profile.service';
-import { AngularFirestoreDocument } from '@angular/fire/firestore';
-import { debounceTime } from 'rxjs/operators'; 
+import { UserProfile } from '../../../../interfaces/user-profile';
+// import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { formSelectsContent } from '../../../shared/form-selects-content';
+
 
 @Component({
   selector: 'app-profile-signup-continuation',
@@ -11,12 +14,23 @@ import { Observable } from 'rxjs';
   styleUrls: ['./profile-signup-continuation.page.scss'],
 })
 export class ProfileSignupContinuationPage implements OnInit {
-  public userProfile: any;
+  public userProfile: Observable<any>;
+  public dataTest: any;
+  selectContent = formSelectsContent;
+
+  userTest: UserProfile;
+  private timeoutID: any = 0;
 
   constructor(
     private formBuilder: FormBuilder,
     private profileService: ProfileService
-  ) { }
+  ) {
+    // this.userProfile = this.profileService.getUserProfileData();
+
+    // this.userProfile.subscribe((res: UserProfile) => {
+    //   this.dataTest = res;
+    // });
+  }
 
   /**
    *
@@ -39,15 +53,23 @@ export class ProfileSignupContinuationPage implements OnInit {
       Validators.required,
       Validators.email
     ]],
+    birthDate: ['', Validators.required],
+    education: ['', Validators.required],
+    occupation: ['', Validators.required],
   });
 
   ngOnInit() {
+
     this.userProfile = this.profileService.getUserProfileData();
 
+    this.userProfile.subscribe((res: UserProfile) => {
+      this.dataTest = res;
+    });
+
     // this.profileService.getUserProfile().snapshotChanges().subscribe(actions =>{
-    //   this.userProfile = actions.payload.data();
+    //   this.dataTest = actions.payload.data();
     // });
-    // console.log(this.userProfile.name);
+    // console.log(this.dataTest.email);
   }
 
   /**
@@ -60,13 +82,29 @@ export class ProfileSignupContinuationPage implements OnInit {
     return this.profileSignupForm.controls;
   }
 
-  private timeoutID: any = 0;
-  autoSave() {
-    console.log('mudança');
+  autoSave(key: string) {
     clearTimeout(this.timeoutID);
-    this.timeoutID = setTimeout(() => {
-        console.log('Salvo!');
-      }, 2000);
+    console.log('mudança blur');
+    if (this.input[key].valid && this.profileSignupForm.value[key] !== this.dataTest[key]) {
+      console.log(this.profileSignupForm.value[key]);
+      console.log('Salvo blur!');
+    }
   }
 
+  autoSaveDebounce(key: string) {
+    // console.log(this.dataTest[key]);
+    console.log('mudança change');
+
+    clearTimeout(this.timeoutID);
+    this.timeoutID = setTimeout(() => {
+      if (this.input[key].valid && this.profileSignupForm.value[key] !== this.dataTest[key]) {
+        console.log(this.profileSignupForm.value[key]);
+        console.log('Salvo change!');
+      }
+    }, 3000);
+  }
+
+
 }
+
+

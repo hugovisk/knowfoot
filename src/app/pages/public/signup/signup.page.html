@@ -3,20 +3,25 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="landing" text="" icon="close"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="ion-text-capitalize" color="primary" shape="round" size="small" fill="solid" (click)="signupUser()" [disabled]="!signupForm.valid">
+        Criar Conta
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <!-- backdrop para bloquear touch no fundo do form -->
+<ion-content>
+  <!-- backdrop para bloquear touch no fundo do form
   <ion-backdrop></ion-backdrop>
   <ion-text text-center margin-top>
     <h4>Criar uma conta</h4>
-  </ion-text>
+  </ion-text> -->
 
   <form [formGroup]="signupForm">
 
     <ion-item>
-      <ion-label position="floating">Nome</ion-label>
+      <ion-label position="floating">Nome Completo</ion-label>
       <ion-input #nameInput autofocus="true" formControlName="name" (ionFocus)="input.name.markAsUntouched()">
       </ion-input>
     </ion-item>
@@ -27,6 +32,51 @@
         </ion-text>
       </div>
     </div>
+
+    <ion-item>
+        <ion-label position="floating">Data de Nascimento</ion-label>
+        <ion-datetime 
+          formControlName="birthDate" 
+          display-format="DD/MMM/YYYY" 
+          picker-format="DD MMMM YYYY"
+          min="1919"
+          max="2009"
+          doneText="Definir"
+          cancelText="Cancelar"
+         
+         ></ion-datetime>
+         <!-- (ionChange)="autoSave('birthDate')"
+         value="{{ (userProfile | async)?.birthDate}}" -->
+      </ion-item>
+
+      <ion-item>
+          <ion-label position="floating">Escolaridade</ion-label>
+          <ion-select 
+            interface="action-sheet" 
+            cancelText="Cancelar" 
+            formControlName="education" 
+            (ionChange)="autoSave('education')"
+            value="{{ (userProfile | async)?.education}}">
+            <div *ngFor="let education of selectContent.educations">
+                <ion-select-option [value]="education.value">{{ education.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+    
+        <ion-item>
+            <ion-label position="floating">Ocupação</ion-label>
+            <ion-select
+              interface="action-sheet" 
+              cancelText="Cancelar" 
+              formControlName="occupation" >
+<!-- 
+              (ionChange)="autoSave('occupation')"
+              value="{{ (userProfile | async)?.occupation}}" -->
+              <div *ngFor="let occupations of selectContent.occupations">
+                  <ion-select-option [value]="occupations.value">{{ occupations.viewValue }}</ion-select-option>
+              </div>       
+            </ion-select>
+          </ion-item>
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
@@ -64,16 +114,17 @@
 
   </form>
 
-  <div class="signTerms" margin-top>
-    <small>Ao me cadastrar, concordo com a <a [routerLink]="['/privacy-policy']">Política de privacidade</a> e com os <a [routerLink]="['/terms-and-conditions']">Termos de serviço</a> do
+  <div class="signTerms" margin>
+    <small>Ao me cadastrar, concordo com a <a [routerLink]="['/privacy-policy']">Política de privacidade</a> e com os <a
+        [routerLink]="['/terms-and-conditions']">Termos de serviço</a> do
       KnowFoot.</small>
   </div>
 
 </ion-content>
 
-<ion-footer>
+<!-- <ion-footer>
   <ion-toolbar>
     <ion-button shape="round" expand="full" size="large" (click)="signupUser()" [disabled]="!signupForm.valid">
       Continuar</ion-button>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->

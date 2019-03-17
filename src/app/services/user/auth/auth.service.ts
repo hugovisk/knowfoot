@@ -6,6 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
 import { firebaseErrorMessages } from '../../shared/firebase-error-messages';
+import { UserProfile } from '../../../interfaces/user-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -138,16 +139,19 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference#set
    *
    */
-  async signupUser(email: string, password: string, name: string): Promise<any> {
+  async signupUser(user: UserProfile): Promise<any> {
     try {
       const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
-      const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-      await this.afAuth.auth.currentUser.updateProfile({ displayName: name });
+      const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);
+      await this.afAuth.auth.currentUser.updateProfile({ displayName: user.name });
       // cria a coleção userProfile, se nao houver, e armazena o email, nome e data de criação no id do usuário
       this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({
-        email,
-        name,
-        creationDate
+        birthDate: user.birthDate,
+        creationDate,
+        education: user.education,
+        email: user.email,
+        name: user.name,
+        occupation: user.occupation
       });
     }
     // tslint:disable-next-line: one-line
@@ -181,9 +185,12 @@ export class AuthService {
 
   /**
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signOut
+   * 
+   * TODO: verificar dados offline
    */
-  logoutUser(): Promise<void> {
-    return this.afAuth.auth.signOut();
+  async logoutUser(): Promise<void> {
+    await this.afAuth.auth.signOut();
+    Platform.exitApp();
   }
 
   /**

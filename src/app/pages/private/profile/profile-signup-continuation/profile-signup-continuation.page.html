@@ -12,7 +12,13 @@
 
     <ion-item>
       <ion-label position="floating">Nome</ion-label>
-      <ion-input #nameInput autofocus="true" formControlName="name" (ionFocus)="input.name.markAsUntouched()" value="{{ (userProfile | async)?.name}}">
+      <ion-input 
+        #nameInput 
+        formControlName="name" 
+        (ionFocus)="input.name.markAsUntouched()" 
+        value="{{ (userProfile | async)?.name}}"
+        (ionChange)="autoSaveDebounce('name')"
+        (ionBlur)="autoSave('name')">
       </ion-input>
     </ion-item>
     <!-- <div *ngIf="input.name.invalid && input.name.touched">
@@ -26,8 +32,16 @@
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input #emailInput formControlName="email" type="email" inputmode="email" clearInput="true" value="{{ (userProfile | async)?.email}}"
-        (ionFocus)="input.email.markAsUntouched()" (ionChange)="autoSave()">
+      <ion-input 
+        #emailInput 
+        formControlName="email" 
+        type="email" 
+        inputmode="email" 
+        clearInput="true" 
+        value="{{ (userProfile | async)?.email}}"
+        (ionFocus)="input.email.markAsUntouched()" 
+        (ionChange)="autoSaveDebounce('email')"        
+        (ionBlur)="autoSave('email')">
       </ion-input>
     </ion-item>
     <!-- <div *ngIf="input.email.invalid && input.email.touched">
@@ -37,6 +51,58 @@
         </ion-text>
       </div>
     </div> -->
+
+    
+    <ion-item>
+      <ion-label position="floating">Data de Nascimento</ion-label>
+      <ion-datetime 
+        formControlName="birthDate" 
+        display-format="DD/MMM/YYYY" 
+        picker-format="DD MMMM YYYY"
+        min="1919"
+        max="2009"
+        doneText="Definir"
+        cancelText="Cancelar"
+        (ionChange)="autoSave('birthDate')"
+        value="{{ (userProfile | async)?.birthDate}}"
+       ></ion-datetime>
+       <!-- [value]="userTest.birthDate" -->
+    </ion-item>
+    <!-- <div *ngIf="input.email.invalid && input.email.touched">
+      <div *ngFor="let validation of validationMessages.email">
+        <ion-text padding-start *ngIf="input.email.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div> -->
+
+    <ion-item>
+      <ion-label position="floating">Escolaridade</ion-label>
+      <ion-select 
+        interface="action-sheet" 
+        cancelText="Cancelar" 
+        formControlName="education" 
+        (ionChange)="autoSave('education')"
+        value="{{ (userProfile | async)?.education}}">
+        <div *ngFor="let education of selectContent.educations">
+            <ion-select-option [value]="education.value">{{ education.viewValue }}</ion-select-option>
+        </div>       
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Ocupação</ion-label>
+        <ion-select
+          interface="action-sheet" 
+          cancelText="Cancelar" 
+          formControlName="occupation" 
+          (ionChange)="autoSave('occupation')"
+          value="{{ (userProfile | async)?.occupation}}">
+          <div *ngFor="let occupations of selectContent.occupations">
+              <ion-select-option [value]="occupations.value">{{ occupations.viewValue }}</ion-select-option>
+          </div>       
+        </ion-select>
+      </ion-item>
 
   </form>
 

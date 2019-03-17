@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/user/auth/auth.service';
 import { UserAccount } from '../../../interfaces/user-account';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { formErrorMessages } from '../shared/form-error-messages/form-error-mesages';
+import { formErrorMessages } from '../../shared/form-error-mesages';
 
 @Component({
   selector: 'app-reset-password',

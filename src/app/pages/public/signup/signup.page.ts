@@ -3,9 +3,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../services/user/auth/auth.service';
-import { UserAccount } from '../../../interfaces/user-account';
+import { UserProfile } from '../../../interfaces/user-profile';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { formErrorMessages } from '../shared/form-error-messages/form-error-mesages';
+import { formErrorMessages } from '../../shared/form-error-mesages';
+import { formSelectsContent } from '../../shared/form-selects-content';
 
 
 @Component({
@@ -25,6 +26,9 @@ export class SignupPage implements OnInit {
    * Importa mensagens de erro
    */
   validationMessages = formErrorMessages;
+
+
+  selectContent = formSelectsContent;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -58,7 +62,10 @@ export class SignupPage implements OnInit {
     password: ['', [
       Validators.required,
       Validators.minLength(4)
-    ]]
+    ]],
+    birthDate: ['', Validators.required],
+    education: ['', Validators.required],
+    occupation: ['', Validators.required]
   });
 
   ngOnInit() {
@@ -101,12 +108,12 @@ export class SignupPage implements OnInit {
  * TODO: validar errors
  */
   async signupUser() {
-    const user: UserAccount = this.signupForm.value;
+    const user: UserProfile = this.signupForm.value;
     const loading = await this.loadingCtrl.create();
     await loading.present();
 
     try {
-      await this.authService.signupUser(user.email, user.password, user.name);
+      await this.authService.signupUser(user);
       await loading.dismiss();
       this.router.navigateByUrl('private/profile-signup-continuation'); // redirecionar para profile
     }

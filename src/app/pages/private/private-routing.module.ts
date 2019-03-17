@@ -1,12 +1,42 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { MainPage } from './main/main.page';
 
 const routes: Routes = [
-  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule' },
   {
-    path: 'profile-signup-continuation',
-    loadChildren: './profile/profile-signup-continuation/profile-signup-continuation.module#ProfileSignupContinuationPageModule'
-  }
+    path: 'main',
+    component: MainPage,
+    children: [
+      {
+        path: 'assess',
+        children: [
+          {
+            path: '',
+            loadChildren: './assess/assess.module#AssessPageModule'
+          }
+        ]
+      },
+      {
+        path: 'athletes',
+        children: [
+          {
+            path: '',
+            loadChildren: './athletes/athletes.module#AthletesPageModule'
+          }
+        ]
+      },
+      {
+        path: '',
+        redirectTo: '/main/assess',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: '',
+    redirectTo: '/main/assess',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

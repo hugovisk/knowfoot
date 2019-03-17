@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './services/user/auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'private/dashboard', pathMatch: 'full' },
+  //{ path: '', redirectTo: 'private/main', pathMatch: 'full' },
+  { path: '', loadChildren: './pages/private/main/main.module#MainPageModule' },
   { path: 'landing', loadChildren: './pages/public/landing/landing.module#LandingPageModule' },
   { path: 'login', loadChildren: './pages/public/login/login.module#LoginPageModule' },
   { path: 'signup', loadChildren: './pages/public/signup/signup.module#SignupPageModule' },
@@ -22,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

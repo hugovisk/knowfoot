@@ -190,7 +190,6 @@ export class AuthService {
    */
   async logoutUser(): Promise<void> {
     await this.afAuth.auth.signOut();
-    Platform.exitApp();
   }
 
   /**

@@ -26,6 +26,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'more',
+        children: [
+          {
+            path: '',
+            loadChildren: './more/more.module#MorePageModule'
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/main/assess',
         pathMatch: 'full'

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -8,7 +8,7 @@ import {
 } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { AuthService } from '../auth/auth.service';
-import { UserProfile } from '../../../interfaces/user-profile';
+import { UserProfile } from '../../../models/interfaces/user-profile';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -21,11 +21,16 @@ export class ProfileService {
 
   constructor(
     public authService: AuthService,
+    public afAuth: AngularFireAuth,
     private firestore: AngularFirestore,
   ) {
-    this.currentUser = this.authService.getUser();
+    //this.currentUser = this.authService.getUser();
     // this.userProfile = this.firestore.doc(`/userProfile/${this.currentUser.uid}`);
-    this.userProfile = this.firestore.collection('userProfile').doc(this.currentUser.uid);
+    //this.userProfile = this.firestore.collection('userProfile').doc(this.currentUser.uid);
+    this.afAuth.authState.subscribe(user => {
+      this.currentUser = user;
+      this.userProfile = this.firestore.doc(`/userProfile/${user.uid}`);
+    });
   }
 
   /**
@@ -33,7 +38,7 @@ export class ProfileService {
    *
    * @returns caminho do userProfile do usuario corrente
    */
-  getUserProfile(){
+  getUserProfile() {
     return this.userProfile;
   }
 

@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../services/user/auth/auth.service';
-import { UserAccount } from '../../../interfaces/user-account';
+import { UserAccount } from '../../../models/interfaces/user-account';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { formErrorMessages } from '../../shared/form-error-mesages';
 
@@ -89,7 +89,7 @@ export class LoginPage implements OnInit {
     try {
       await this.authService.loginUser(user.email, user.password);
       await loading.dismiss();
-      this.router.navigateByUrl('private/dashboard');
+      this.router.navigateByUrl('main');
     }
     catch (error) {
       await loading.dismiss();

@@ -6,12 +6,15 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
 import { firebaseErrorMessages } from '../../shared/firebase-error-messages';
-import { UserProfile } from '../../../interfaces/user-profile';
+import { UserProfile } from '../../../models/interfaces/user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  public nfUser: firebase.User; // usuario do knowfoot
+
   /**
    * Importa as mensagens de erro
    */

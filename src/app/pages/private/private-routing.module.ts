@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainPage } from './main/main.page';
+import { AuthGuard } from '../../services/user/auth/auth.guard';
 
 const routes: Routes = [
   {
     path: 'main',
     component: MainPage,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'assess',
@@ -33,6 +35,10 @@ const routes: Routes = [
             loadChildren: './more/more.module#MorePageModule'
           }
         ]
+      },
+      {
+        path: 'profile',
+        loadChildren: './profile/profile-signup-continuation/profile-signup-continuation.module#ProfileSignupContinuationPageModule'
       },
       {
         path: '',

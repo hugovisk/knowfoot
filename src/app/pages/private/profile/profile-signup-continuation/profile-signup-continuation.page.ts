@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { ProfileService } from '../../../../services/user/profile/profile.service';
-import { UserProfile } from '../../../../interfaces/user-profile';
+import { UserProfile } from '../../../../models/interfaces/user-profile';
 // import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { formSelectsContent } from '../../../shared/form-selects-content';
+
+import { AuthService } from '../../../../services/user/auth/auth.service';
 
 
 @Component({
@@ -22,6 +24,7 @@ export class ProfileSignupContinuationPage implements OnInit {
   private timeoutID: any = 0;
 
   constructor(
+    public auth: AuthService,
     private formBuilder: FormBuilder,
     private profileService: ProfileService
   ) {
@@ -102,6 +105,10 @@ export class ProfileSignupContinuationPage implements OnInit {
         console.log('Salvo change!');
       }
     }, 3000);
+  }
+
+  logOut() {
+    this.auth.logoutUser();
   }
 
 

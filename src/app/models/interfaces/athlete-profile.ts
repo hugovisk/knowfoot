@@ -1,6 +1,6 @@
-import { FootSide, FootInjurie } from '../models/enums/foot.enum';
-import { Gender } from '../models/enums/gender.enum';
-import { Sport, SportPraticeFrequency, SportPraticeTime } from '../models/enums/sport.enum';
+import { FootSide, FootInjurie } from '../enums/foot.enum';
+import { Gender } from '../enums/gender.enum';
+import { Sport, SportPraticeFrequency, SportPraticeTime } from '../enums/sport.enum';
 
 export interface AthleteProfile {
     birthDate: Date;
@@ -11,12 +11,13 @@ export interface AthleteProfile {
     furtherInformation?: string;
     gender: Gender;
     height: number;
+    id: string;
     isDeleted: boolean;
     leftFootInjuries: FootInjurie[];
     name: string;
     rightFootInjuries: FootInjurie[];
     sport: Sport;
-    sportPraticeFrequency?: SportPraticeFrequency | null;
-    sportPraticeHowLong?: SportPraticeTime | null;
+    sportPraticeFrequency?: SportPraticeFrequency;
+    sportPraticeTime?: SportPraticeTime;
     weight: number;
 }

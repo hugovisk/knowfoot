@@ -15,7 +15,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './assess/assess.module#AssessPageModule'
+            loadChildren: '../assess/assess.module#AssessPageModule'
           }
         ]
       },
@@ -24,7 +24,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './athletes/athletes.module#AthletesPageModule'
+            loadChildren: '../athletes/athletes.module#AthletesPageModule'
           }
         ]
       },
@@ -33,7 +33,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './more/more.module#MorePageModule'
+            loadChildren: '../more/more.module#MorePageModule'
           }
         ]
       },

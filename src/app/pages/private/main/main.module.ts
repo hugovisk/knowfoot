@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { PrivateRoutingModule } from '../private-routing.module';
+// import { PrivateRoutingModule } from '../private-routing.module';
+import { MainRouterModule } from './main-router.module';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +14,8 @@ import { MainPage } from './main.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    PrivateRoutingModule
+    // PrivateRoutingModule
+    MainRouterModule
   ],
   declarations: [MainPage]
 })

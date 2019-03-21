@@ -69,7 +69,8 @@ export class ProfileSignupContinuationPage implements OnInit {
       this.dataTest = res;
     });
 
-    // this.profileService.getUserProfile().snapshotChanges().subscribe(actions =>{
+
+        // this.profileService.getUserProfile().snapshotChanges().subscribe(actions =>{
     //   this.dataTest = actions.payload.data();
     // });
     // console.log(this.dataTest.email);

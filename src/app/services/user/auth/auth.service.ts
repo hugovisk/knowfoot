@@ -39,20 +39,6 @@ export class AuthService {
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#onAuthStateChanged
    */
 
-  // async isAuth(): Promise<boolean> {
-  //   const auth = await this.afAuth.authState.toPromise();
-  //   console.log(auth);
-  //   if (auth) {
-  //     console.log('LOGADO');
-  //     return true;
-  //   } else {
-  //     console.log('NAO');
-  //     this.router.navigate(['landing']);
-  //     return false;
-  //   }
-  // }
-
-
   isAuth(): Promise<boolean> {
     return new Promise((resolve) => {
       this.afAuth.authState.subscribe(user => {
@@ -68,23 +54,6 @@ export class AuthService {
     });
   }
 
-
-  /**
-   * Redirecionamento de autenticação,
-   * se nao autenticado redireciona para 'landing'
-   *
-   * https://angular.io/api/router/Router#navigate
-   *
-   * TODO: funcao chamada no app.component em initializeApp()... precisa?
-  */
-  // async authRouting(): Promise<void> {
-  //   if (await this.isAuth()) {
-  //     this.router.navigate(['private', 'dashboard']);
-  //   } else {
-  //     this.router.navigate(['landing']);
-  //   }
-  // }
-
   /**
    * Getter do usuario logado
    *
@@ -96,17 +65,6 @@ export class AuthService {
   getUser() {
     return this.afAuth.auth.currentUser;
   }
-
-  // logedUser(): firebase.User {
-  //   let logedUser: firebase.User;
-  //    this.afAuth.authState.subscribe(user => {
-  //       if (user) {
-  //         logedUser = user;
-  //       }
-  //   });
-  //   console.log(logedUser);
-  //   return logedUser;
-  // }
 
   /**
    * Faz a autenticacao do usuario no app
@@ -120,10 +78,7 @@ export class AuthService {
   async loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
     try {
       return await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-      // return credential; // testar o return direto
-    }
-    // tslint:disable-next-line: one-line
-    catch (error) {
+    } catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
     }
@@ -131,8 +86,8 @@ export class AuthService {
 
   /**
    *
-   * @param email email que sera vinculado a conta do usuario
-   * @param password senha definida pelo usuario para acesso autenticado
+   * @param user objeto com as informacoes do usuario
+   * /models/interfaces/user-profile'
    *
    * https://firebase.google.com/docs/reference/js/firebase.firestore.FieldValue
    * https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createUserWithEmailAndPassword
@@ -147,18 +102,9 @@ export class AuthService {
       const creationDate = await firebase.firestore.FieldValue.serverTimestamp();
       const newUser = await this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);
       await this.afAuth.auth.currentUser.updateProfile({ displayName: user.name });
-      // cria a coleção userProfile, se nao houver, e armazena o email, nome e data de criação no id do usuário
-      this.firestore.doc(`/userProfile/${newUser.user.uid}`).set({
-        birthDate: user.birthDate,
-        creationDate,
-        education: user.education,
-        email: user.email,
-        name: user.name,
-        occupation: user.occupation
-      });
-    }
-    // tslint:disable-next-line: one-line
-    catch (error) {
+      // cria a coleção userProfile, se nao houver, e armazena os dados do usuario
+      this.firestore.doc(`/userProfile/${newUser.user.uid}`).set(user);
+    } catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
     }
@@ -178,9 +124,7 @@ export class AuthService {
   async resetPassword(email: string): Promise<any> {
     try {
       return await this.afAuth.auth.sendPasswordResetEmail(email);
-    }
-    // tslint:disable-next-line: one-line
-    catch (error) {
+    } catch (error) {
       console.log(error);
       throw this.errorHandler(error.code);
     }
@@ -209,8 +153,7 @@ export class AuthService {
     try {
       const credential = await firebase.auth.EmailAuthProvider.credential(this.getUser().email, password);
       await this.getUser().reauthenticateAndRetrieveDataWithCredential(credential);
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
   }

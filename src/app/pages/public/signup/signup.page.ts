@@ -27,7 +27,7 @@ export class SignupPage implements OnInit {
    */
   validationMessages = formErrorMessages;
 
-
+  /** Importa conteúdos dos selcts */
   selectContent = formSelectsContent;
 
   constructor(
@@ -39,7 +39,6 @@ export class SignupPage implements OnInit {
   ) { }
 
   /**
-   *
    * https://angular.io/guide/reactive-forms#generating-form-controls-with-formbuilder
    *
    * obs: validacao do ion-item do ion-input dispara no momento de foco
@@ -105,7 +104,6 @@ export class SignupPage implements OnInit {
 
 /**
  * Transfere o conteudo do formulario para a variavel registerPayload
- * TODO: validar errors
  */
   async signupUser() {
     const user: UserProfile = this.signupForm.value;
@@ -116,9 +114,7 @@ export class SignupPage implements OnInit {
       await this.authService.signupUser(user);
       await loading.dismiss();
       this.router.navigateByUrl('main');
-    }
-    // tslint:disable-next-line: one-line
-    catch (error) {
+    } catch (error) {
       await loading.dismiss();
       const alert = await this.alertCtrl.create({
         message: error,

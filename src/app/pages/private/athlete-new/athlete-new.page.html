@@ -1,16 +1,263 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>athlete-new</ion-title>
+    <ion-buttons slot="start">
+      <!-- verificar pq nao volta para a lista de atletas -->
+      <ion-back-button defaultHref="main/athletes" text="" icon="close"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="ion-text-capitalize" color="primary" shape="round" size="small" fill="solid"
+        (click)="createAthlete()" [disabled]="!athleteForm.valid">
+        <!-- go horse... TODO: ajustar paddings laterais no css pro botao -->
+        &nbsp; Cadastrar Atleta &nbsp;
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-button (click)="onClick()">
-    New
-  </ion-button>
+  <form [formGroup]="athleteForm">
 
-  <ion-button (click)="update()">
-      Update
-    </ion-button>
+    <ion-item>
+      <ion-label position="fixed">Nome</ion-label>
+      <ion-input 
+        class="ion-text-end" 
+        placeholder="Nome completo do atleta" 
+        autocapitalize="true" 
+        formControlName="name" 
+        (ionFocus)="input.name.markAsUntouched()">
+      </ion-input>
+    </ion-item>
+    <div *ngIf="input.name.invalid && input.name.touched">
+      <div *ngFor="let validation of validationMessages.name">
+        <ion-text padding-start *ngIf="input.name.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div>
 
+    <ion-item>
+      <ion-label>Nascimento</ion-label>
+      <ion-datetime
+        placeholder="Selecione data" 
+        formControlName="birthDate" 
+        display-format="DD/MMM/YYYY" 
+        picker-format="DD-MMMM-YYYY" 
+        min="1919"
+        max="2009"
+        month-names="janeiro, fevereiro, março, abril, maio, junho, julho, agosto, setembro, outubro, novembro, dezembro" 
+        month-short-names="JAN, FEV, MAR, ABR, MAI, JUN, JUL, AGO, SET, OUT, NOV, DEZ"
+        doneText="Definir" 
+        cancelText="Cancelar">
+      </ion-datetime>
+    </ion-item>
+    <div *ngIf="input.birthDate.invalid && input.birthDate.touched">
+      <div *ngFor="let validation of validationMessages.birthDate">
+        <ion-text padding-start *ngIf="input.birthDate.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div>
+
+    <ion-item>
+      <ion-label>Sexo</ion-label>
+      <ion-select
+        placeholder="Selecione"
+        formControlName="gender"
+        interface="popover" 
+        cancelText="Cancelar">
+        <div *ngFor="let genders of selectContent.genders">
+            <ion-select-option [value]="genders.value">{{ genders.viewValue }}</ion-select-option>
+        </div>       
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="fixed">Peso</ion-label>
+      <ion-input 
+        class="ion-text-end"
+        placeholder="em kilogramas" 
+        formControlName="weightInKg" 
+        type="number" 
+        inputmode="number"
+        min="0"
+        max="200" 
+        (ionFocus)="input.weightInKg.markAsUntouched()">
+      </ion-input>
+      <ion-text slot="end"><small>Kg</small></ion-text>
+    </ion-item>
+    <div *ngIf="input.weightInKg.invalid && input.weightInKg.touched">
+      <div *ngFor="let validation of validationMessages.weightInKg">
+        <ion-text padding-start *ngIf="input.weightInKg.hasError(validation.type)">
+          {{validation.message}}
+        </ion-text>
+      </div>
+    </div>
+
+    <ion-item>
+        <ion-label position="fixed">Altura</ion-label>
+        <ion-input 
+          class="ion-text-end"
+          placeholder="em centimetros" 
+          formControlName="heightInCm" 
+          type="number" 
+          inputmode="number"
+          min="0"
+          max="300" 
+          (ionFocus)="input.heightInCm.markAsUntouched()">
+        </ion-input>
+        <ion-text slot="end"><small>cm</small></ion-text>
+      </ion-item>
+      <div *ngIf="input.heightInCm.invalid && input.heightInCm.touched">
+        <div *ngFor="let validation of validationMessages.heightInCm">
+          <ion-text padding-start *ngIf="input.heightInCm.hasError(validation.type)">
+            {{validation.message}}
+          </ion-text>
+        </div>
+      </div>
+
+      <ion-item>
+        <ion-label>Pé dominante</ion-label>
+        <ion-select
+          placeholder="Selecione"
+          formControlName="footDominant"
+          interface="popover" 
+          cancelText="Cancelar">
+          <div *ngFor="let footDominants of selectContent.footDominants">
+              <ion-select-option [value]="footDominants.value">{{ footDominants.viewValue }}</ion-select-option>
+          </div>       
+        </ion-select>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label>Possui lesão no pé</ion-label>
+        <ion-checkbox formControlName="footInjuries" checked="false"></ion-checkbox>
+      </ion-item>
+
+      <div *ngIf="input.footInjuries.value">
+        <ion-item>
+          <ion-label>Lesões pé direto</ion-label>
+          <ion-select
+            placeholder="Selecione"
+            formControlName="footInjuriesRight"
+            multiple="true" 
+            cancelText="Cancelar">
+            <div *ngFor="let footInjuries of selectContent.footInjuries">
+                <ion-select-option [value]="footInjuries.value">{{ footInjuries.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Lesões pé esquerdo</ion-label>
+          <ion-select
+            placeholder="Selecione"
+            formControlName="footInjuriesLeft"
+            multiple="true"
+            cancelText="Cancelar">
+            <div *ngFor="let footInjuries of selectContent.footInjuries">
+                <ion-select-option [value]="footInjuries.value">{{ footInjuries.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-item>
+        <ion-label>Pratica Esporte</ion-label>
+        <ion-checkbox formControlName="sportPratice" checked="false" ></ion-checkbox>
+      </ion-item>
+
+      <div *ngIf="input.sportPratice.value">
+        <ion-item>
+          <ion-label>Esporte</ion-label>
+          <ion-select
+            placeholder="Selecione"
+            formControlName="sport"
+            interface="popover" 
+            cancelText="Cancelar">
+            <div *ngFor="let sports of selectContent.sports">
+                <ion-select-option [value]="sports.value">{{ sports.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Tempo de pratica</ion-label>
+          <ion-select
+            placeholder="Selecione"
+            formControlName="sportPraticeTime"
+            interface="popover" 
+            cancelText="Cancelar">
+            <div *ngFor="let sportPraticeTimes of selectContent.sportPraticeTimes">
+                <ion-select-option [value]="sportPraticeTimes.value">{{ sportPraticeTimes.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+  
+        <ion-item>
+          <ion-label>Frequência de pratica</ion-label>
+          <ion-select
+            placeholder="Selecione"
+            formControlName="sportPraticeFrequency"
+            interface="popover" 
+            cancelText="Cancelar">
+            <div *ngFor="let sportPraticeFrequencies of selectContent.sportPraticeFrequencies">
+                <ion-select-option [value]="sportPraticeFrequencies.value">{{ sportPraticeFrequencies.viewValue }}</ion-select-option>
+            </div>       
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-item>
+        <ion-label>Dados para contato</ion-label>
+        <ion-checkbox formControlName="contact" checked="false"></ion-checkbox>
+      </ion-item>
+
+      <div *ngIf="input.contact.value">
+        <ion-item>
+          <ion-label position="fixed">Email</ion-label>
+          <ion-input 
+            class="ion-text-end" 
+            placeholder="exemplo@email.com" 
+            formControlName="contactEmail" 
+            type="email" 
+            inputmode="email" 
+            clearInput="true"
+            (ionFocus)="input.contactEmail.markAsUntouched()">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="input.contactEmail.invalid && input.contactEmail.touched">
+          <div *ngFor="let validation of validationMessages.contactEmail">
+            <ion-text padding-start *ngIf="input.contactEmail.hasError(validation.type)">
+              {{validation.message}}
+            </ion-text>
+          </div>
+        </div>
+  
+        <ion-item>
+          <ion-label position="fixed">Telefone</ion-label>
+          <ion-input 
+            class="ion-text-end" 
+            placeholder="55 5-55555-5555" 
+            formControlName="contactPhone"
+            type="tel" 
+            inputmode="tel" 
+            clearInput="true"
+            (ionFocus)="input.contactPhone.markAsUntouched()">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="input.contactPhone.invalid && input.contactPhone.touched">
+          <div *ngFor="let validation of validationMessages.contactPhone">
+            <ion-text padding-start *ngIf="input.contactPhone.hasError(validation.type)">
+              {{validation.message}}
+            </ion-text>
+          </div>
+        </div>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Outras Informações</ion-label>
+        <ion-textarea placeholder="Mais sobre este atleta..." formControlName="furtherInformation"></ion-textarea>
+      </ion-item>
+
+  </form>
 </ion-content>

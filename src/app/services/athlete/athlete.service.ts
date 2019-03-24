@@ -10,6 +10,7 @@ import {
 import * as firebase from 'firebase/app';
 
 import { AthleteProfile } from '../../models/interfaces/athlete-profile';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,24 +23,48 @@ export class AthleteService {
   /** Caminho para a coleção de atletas no firestore */
   private athletesCollection: AngularFirestoreCollection<AthleteProfile>;
 
+  /** Caminho para a coleção de atletas no firestore */
+  private athletesAlphabeticalCollection: AngularFirestoreCollection<AthleteProfile>;
+
+
   constructor(
     public afAuth: AngularFireAuth,
     private firestore: AngularFirestore,
   ) {
     /**
-     * Pegando user.uid e definindo caminho da coleção de atletas no firestore
-     * de forma assincrona para evitar que o user retorne null quando
-     * inicializar o serviço e evitar que os dados recebidos fiquem em cache
-     * caso o usuario faça logout e outro usuario faça login
+     * Pegando `user.uid`.
+     * Definindo caminho da coleção de atletas no firestore.
+     * Fazendo uma query que retorne atletas ativos e ordenados
+     * por ordem alfabetica.
+     *
+     * OBS. usando requisição assincrona do subscribe para evitar
+     * que o `user` retorne null quando inicializar o serviço e
+     * também evitar que os dados recebidos fiquem em cache
+     * caso o usuario faça logout e outro usuario faça login no mesmo
+     * dispositivo.
+     *
+     * https://firebase.google.com/docs/firestore/query-data/indexing
      */
     this.afAuth.authState.subscribe(user => {
       this.userId = user.uid;
       this.athletesCollection = this.firestore.collection<AthleteProfile>(`/userProfile/${user.uid}/athletes`);
+      this.athletesAlphabeticalCollection =
+        this.firestore.collection<AthleteProfile>(`/userProfile/${user.uid}/athletes`, ref =>
+        // necessario criar index no firestore para esta query
+        ref.where('isDeleted', '==' , false).orderBy('name', 'asc'));
     });
   }
 
   getAthletesCollection(): AngularFirestoreCollection<AthleteProfile> {
     return this.athletesCollection;
+  }
+
+  getAthletesAlphabeticalOrder(): Observable<any> {
+    return this.athletesAlphabeticalCollection.valueChanges();
+  }
+
+  getAthletes(): Observable<any> {
+    return this.getAthletesCollection().valueChanges();
   }
 
   getAthlete(athleteId: string): AngularFirestoreDocument<any> {

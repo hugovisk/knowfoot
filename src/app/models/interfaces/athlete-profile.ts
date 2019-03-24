@@ -3,20 +3,23 @@ import { Gender } from '../enums/gender.enum';
 import { Sport, SportPraticeFrequency, SportPraticeTime } from '../enums/sport.enum';
 
 export interface AthleteProfile {
-    birthDate: string;
+    birthDate: Date;
     createdAt?: object;
+    contact: boolean;
     contactEmail?: string;
     contactPhone?: string;
-    dominantFoot: FootSide;
+    footDominant: FootSide;
+    footInjuries: boolean;
+    footInjuriesLeft?: FootInjurie[];
+    footInjuriesRight?: FootInjurie[];
     furtherInformation?: string;
     gender: Gender;
     heightInCm: number;
     id?: string;
     isDeleted?: boolean;
-    leftFootInjuries: FootInjurie[];
     name: string;
-    rightFootInjuries: FootInjurie[];
     sport: Sport;
+    sportPratice: boolean;
     sportPraticeFrequency?: SportPraticeFrequency;
     sportPraticeTime?: SportPraticeTime;
     updatedAt?: object;

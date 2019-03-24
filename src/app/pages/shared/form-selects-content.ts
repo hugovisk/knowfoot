@@ -25,6 +25,11 @@ export const formSelectsContent = {
     { value: 'Others', viewValue: 'Outros' }
   ],
   // Lesões para seleção
+  'footDominants': [
+    { value: 'Right', viewValue: 'Direito' },
+    { value: 'Left', viewValue: 'Esquerdo' }
+  ],
+  // Lesões para seleção
   'footInjuries': [
     { value: 'AnkleSprain', viewValue: 'Entorse de Tornozelo' },
     { value: 'PlantarFasciitis', viewValue: 'Fascite plantar' },
@@ -48,17 +53,16 @@ export const formSelectsContent = {
     { value: 'Basketball', viewValue: 'Basquete' },
     { value: 'MartialArts', viewValue: 'Artes Marciais' },
     { value: 'Volleyball', viewValue: 'Vôlei' },
-    { value: 'Another', viewValue: 'Outro(s)' },
-    { value: 'DoesntPratice', viewValue: 'Não Pratica' }
+    { value: 'Another', viewValue: 'Outro(s)' }
   ],
   // Tempo que pratica o esporte para seleção
-  'sportPraticeTime': [
+  'sportPraticeTimes': [
     { value: 'LessThanSixMonths', viewValue: 'Menos de 6 meses' },
     { value: 'BetweenSixAndTwentyFourMonths', viewValue: 'Entre 6 e 24 meses' },
     { value: 'MoreThanTwoYears', viewValue: 'Mais de 2 anos' }
   ],
   // Frequência que pratica o esporte por semana para seleção
-  'sportPraticeFrequency': [
+  'sportPraticeFrequencies': [
     { value: 'OnePerWeek', viewValue: '1 vez por semana' },
     { value: 'TwoOrTreePerWeek', viewValue: '2 a 3 vezes por semana' },
     { value: 'MoreThanThreePerWeek', viewValue: 'Mais de 3 vezes por semana' }

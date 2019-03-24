@@ -18,6 +18,6 @@
 </ion-content>
 
 <ion-footer padding>
-  <ion-button shape="round" expand="full" size="large" routerLink="/signup"  margin-bottom>Nova conta</ion-button>
-  <ion-button shape="round" expand="full" size="large" fill="outline" routerLink="/login">Ja tenho uma conta</ion-button>
+  <ion-button shape="round" expand="full" size="large" [routerLink]="['/signup']"  margin-bottom>Nova conta</ion-button>
+  <ion-button shape="round" expand="full" size="large" fill="outline" [routerLink]="['/login']">Ja tenho uma conta</ion-button>
 </ion-footer>

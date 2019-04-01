@@ -3,8 +3,9 @@ import { Gender } from '../enums/gender.enum';
 import { Sport, SportPraticeFrequency, SportPraticeTime } from '../enums/sport.enum';
 
 export interface AthleteProfile {
-    birthDate: Date;
-    createdAt?: object;
+    age?: number;
+    birthDate: firebase.firestore.Timestamp | Date;
+    createdAt?: firebase.firestore.FieldValue;
     contact: boolean;
     contactEmail?: string;
     contactPhone?: string;
@@ -22,6 +23,6 @@ export interface AthleteProfile {
     sportPratice: boolean;
     sportPraticeFrequency?: SportPraticeFrequency;
     sportPraticeTime?: SportPraticeTime;
-    updatedAt?: object;
+    updatedAt?: firebase.firestore.FieldValue;
     weightInKg: number;
 }

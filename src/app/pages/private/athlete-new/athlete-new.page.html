@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- verificar pq nao volta para a lista de atletas -->
-      <ion-back-button defaultHref="main/athletes" text="" icon="close"></ion-back-button>
+      <ion-back-button [routerLink]="['/main/athletes']" defaultHref="/main/athletes" text="" icon="close"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button class="ion-text-capitalize" color="primary" shape="round" size="small" fill="solid"
@@ -207,7 +206,7 @@
         </ion-item>
       </div>
 
-      <ion-item>
+      <!-- <ion-item>
         <ion-label>Dados para contato</ion-label>
         <ion-checkbox formControlName="contact" checked="false"></ion-checkbox>
       </ion-item>
@@ -257,7 +256,7 @@
       <ion-item>
         <ion-label position="stacked">Outras Informações</ion-label>
         <ion-textarea placeholder="Mais sobre este atleta..." formControlName="furtherInformation"></ion-textarea>
-      </ion-item>
+      </ion-item> -->
 
   </form>
 </ion-content>

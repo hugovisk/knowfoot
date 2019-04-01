@@ -136,5 +136,4 @@ export class AthleteNewPage implements OnInit {
   formattedBirthDate(date: string): Date {
     return new Date(date.substr(0, 10).concat('T00:00:00.000-03:00'));
   }
-
 }

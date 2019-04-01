@@ -8,7 +8,7 @@ export const enum Sport {
     MartialArts = 'Artes Marciais',
     Volleyball = 'Vôlei',
     Another = 'Outro(s)',
-    DoesntPratice = 'Não Pratica'
+    // DoesntPratice = 'Não Pratica'
 }
 
 export const enum SportPraticeTime {

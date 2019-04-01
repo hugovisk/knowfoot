@@ -1,0 +1,247 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [routerLink]="['/main/athletes']" defaultHref="/main/athletes"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center offset="1" size="10">
+        <!-- <div text-center margin-top> -->
+        <h3>
+          <strong>{{ athlete?.name }}</strong>
+          <br>
+          <div class="text-sport-play">
+            <ion-text color="medium">
+              {{ athlete?.sport ? 
+                "Praticante de " + sport
+                : "Não pratica esporte."}}
+              <br>
+              <span *ngIf="athlete?.sport">{{ "Nível " + praticeTime + "&nbsp; | &nbsp;" + praticeFrequency}}</span>
+            </ion-text>
+          </div>
+        </h3>
+        <!-- sumir depois de x segundos depois q carregar a pagina -->
+        <ion-chip color="medium">
+          <ion-icon name="medkit" *ngIf="injuriesQuantity > 0"></ion-icon>
+          <ion-label><small>
+              <ion-text color="medium" *ngIf="injuriesQuantity === 0">Sem reporte de lesões nos pés</ion-text>
+              <ion-text color="medium" *ngIf="injuriesQuantity > 0">
+                {{ injuriesQuantity }}
+                {{ injuriesQuantity === 1 ? "lesão" : "lesões" }}
+                {{ footSideInjuries }}
+              </ion-text>
+            </small></ion-label>
+        </ion-chip>
+        <!-- <div>
+          <span *ngFor="let injurie of footInjuriesRight" color="medium">
+           <small><strong>
+                </strong>{{ injurie }} | </small>
+          </span>
+        </div> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.age }}</strong>
+          <small>
+            <ion-text color="medium"> anos</ion-text>
+          </small>
+          <br>
+          <ion-text color="medium">
+            <small>idade</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.heightInCm / 100 }}
+            <small>
+              <ion-text color="medium"> m</ion-text>
+            </small>
+          </strong>
+          <br>
+          <ion-text color="medium">
+            <small>altura</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.weightInKg }}<small>
+              <ion-text color="medium"> kg</ion-text>
+            </small></strong>
+          <br>
+          <ion-text color="medium">
+            <small>peso</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ footDominant }}</strong>
+          <br>
+          <ion-text color="medium">
+            <small>pé</small>
+          </ion-text>
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.age }}</strong>
+          <small>
+            <ion-text color="medium"> anos</ion-text>
+          </small>
+          <br>
+          <ion-text color="medium">
+            <small>idade</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.heightInCm / 100 }}
+            <small>
+              <ion-text color="medium"> m</ion-text>
+            </small>
+          </strong>
+          <br>
+          <ion-text color="medium">
+            <small>altura</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ athlete?.weightInKg }}<small>
+              <ion-text color="medium"> kg</ion-text>
+            </small></strong>
+          <br>
+          <ion-text color="medium">
+            <small>peso</small>
+          </ion-text>
+        </p>
+      </ion-col>
+      <ion-col text-center>
+        <p>
+          <strong>{{ footDominant }}</strong>
+          <br>
+          <ion-text color="medium">
+            <small>pé</small>
+          </ion-text>
+        </p>
+      </ion-col> -->
+  <!--<ion-col text-center>
+        <p>
+          <strong>{{ injuriesQuantity }}</strong>
+          <br>
+          <ion-text color="medium">
+            <small>{{ injuriesQuantity === 1 ? "Lesãos" : "Lesões" }}</small>
+          </ion-text>
+        </p>
+      </ion-col> -->
+  <!-- </ion-row> -->
+  <!-- <ion-row>
+      <ion-col text-center>
+          <ion-chip color="medium">
+              <ion-label><small>
+                    <ion-text color="medium">Sem reporte de lesões nos pés</ion-text>
+                    </small></ion-label>
+            </ion-chip>
+      </ion-col>
+    </ion-row> -->
+  <!-- <ion-row>
+      <ion-col>
+        <ion-item lines="full">
+          <ion-label><small>{{ injuriesQuantity > 1 ? "Lesões" : "Lesão" }} nos pés</small></ion-label>
+          <ion-badge slot="start" color="danger">{{ injuriesQuantity }}</ion-badge>
+        </ion-item>
+      </ion-col>
+    </ion-row> -->
+  <!-- <ion-row>
+      <ion-col>
+        <div>
+          Lesões
+          <ion-chip *ngFor="let injurie of footInjuriesRight" color="medium">
+            <ion-label><small><strong>
+                  <ion-text color="medium">Dir</ion-text>
+                </strong>- {{injurie}}</small></ion-label>
+          </ion-chip>
+          <ion-chip *ngFor="let injurie of footInjuriesLeft" color="medium">
+            <ion-label><small><strong>
+                  <ion-text color="medium">Esq</ion-text>
+                </strong> - {{injurie}}</small></ion-label>
+          </ion-chip>
+        </div>
+      </ion-col>
+    </ion-row> -->
+  <!-- </ion-grid> -->
+
+  <!-- <ion-item>
+    <ion-label>Pé dominante</ion-label>
+    <ion-input value="{{ athlete?.footDominant }}" readonly></ion-input>
+  </ion-item> -->
+  <!-- <ion-item-group>
+    <ion-item-divider>
+      <ion-label [class.empty]="athlete?.footInjuries">Lesões no pé</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-label>Direito</ion-label>
+      <ion-input value="{{ athlete?.footInjuriesRight }}" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Esquerdo</ion-label>
+      <ion-input value="{{ athlete?.footInjuriesLeft }}" readonly></ion-input>
+    </ion-item>
+  </ion-item-group> -->
+  <!-- <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Pratica de esporte</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-label>Frequência</ion-label>
+      <ion-input value="{{ athlete?.sportPraticeFrequency }}" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Tempo</ion-label>
+      <ion-input value="{{ athlete?.sportPraticeTime }}" readonly></ion-input>
+    </ion-item>
+  </ion-item-group> -->
+  <!-- <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Contato</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-input value="{{ athlete?.contactEmail }}" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Telefone</ion-label>
+      <ion-input value="{{ athlete?.contactPhone }}" readonly></ion-input>
+    </ion-item>
+  </ion-item-group>
+  <ion-item>
+    <ion-label position="stacked">Mais Informações</ion-label>
+    <ion-textarea      
+      readonly
+      value="{{ athlete?.furtherInformation }}">
+    </ion-textarea>
+  </ion-item> -->
+
+
+
+</ion-content>

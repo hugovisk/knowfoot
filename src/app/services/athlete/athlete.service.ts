@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
@@ -10,7 +10,6 @@ import {
 import * as firebase from 'firebase/app';
 
 import { AthleteProfile } from '../../models/interfaces/athlete-profile';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -67,8 +66,26 @@ export class AthleteService {
     return this.getAthletesCollection().valueChanges();
   }
 
-  getAthlete(athleteId: string): AngularFirestoreDocument<any> {
+  getAthleteDocument(athleteId: string): AngularFirestoreDocument<any> {
     return this.athletesCollection.doc(athleteId);
+  }
+
+  getAthlete(athleteId: string): Observable<any> {
+    return this.athletesCollection.doc(athleteId).valueChanges();
+  }
+
+  /**
+   * Calcula a idade atual baseado na data de nascimento
+   *
+   * @param birthDate data de aniverssario
+   *
+   * getTime() retorna o numero de milisegundos entre 0:00 de janeiro de 1970 ate a data
+   * especificada.
+   */
+  athleteAge(birthDate: any): number {
+    const now = firebase.firestore.Timestamp.now().toDate();
+    const timeDifference = now.getTime() - birthDate.toDate().getTime();
+    return new Date(timeDifference).getUTCFullYear() - 1970;
   }
 
   /**

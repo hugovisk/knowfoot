@@ -57,6 +57,7 @@ const routes: Routes = [
     path: 'profile',
     loadChildren: './profile/profile-signup-continuation/profile-signup-continuation.module#ProfileSignupContinuationPageModule'
   },
+  { path: 'athlete-detail/:id', loadChildren: './athlete-detail/athlete-detail.module#AthleteDetailPageModule' },
 ];
 
 @NgModule({

@@ -127,7 +127,6 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-
   segmentChanged(ev: any) {
     this.slides.slideTo(ev.detail.value === 'assess' ? 0 : 1);
   }

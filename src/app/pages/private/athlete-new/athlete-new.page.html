@@ -205,58 +205,5 @@
           </ion-select>
         </ion-item>
       </div>
-
-      <!-- <ion-item>
-        <ion-label>Dados para contato</ion-label>
-        <ion-checkbox formControlName="contact" checked="false"></ion-checkbox>
-      </ion-item>
-
-      <div *ngIf="input.contact.value">
-        <ion-item>
-          <ion-label position="fixed">Email</ion-label>
-          <ion-input 
-            class="ion-text-end" 
-            placeholder="exemplo@email.com" 
-            formControlName="contactEmail" 
-            type="email" 
-            inputmode="email" 
-            clearInput="true"
-            (ionFocus)="input.contactEmail.markAsUntouched()">
-          </ion-input>
-        </ion-item>
-        <div *ngIf="input.contactEmail.invalid && input.contactEmail.touched">
-          <div *ngFor="let validation of validationMessages.contactEmail">
-            <ion-text padding-start *ngIf="input.contactEmail.hasError(validation.type)">
-              {{validation.message}}
-            </ion-text>
-          </div>
-        </div>
-  
-        <ion-item>
-          <ion-label position="fixed">Telefone</ion-label>
-          <ion-input 
-            class="ion-text-end" 
-            placeholder="55 5-55555-5555" 
-            formControlName="contactPhone"
-            type="tel" 
-            inputmode="tel" 
-            clearInput="true"
-            (ionFocus)="input.contactPhone.markAsUntouched()">
-          </ion-input>
-        </ion-item>
-        <div *ngIf="input.contactPhone.invalid && input.contactPhone.touched">
-          <div *ngFor="let validation of validationMessages.contactPhone">
-            <ion-text padding-start *ngIf="input.contactPhone.hasError(validation.type)">
-              {{validation.message}}
-            </ion-text>
-          </div>
-        </div>
-      </div>
-
-      <ion-item>
-        <ion-label position="stacked">Outras Informações</ion-label>
-        <ion-textarea placeholder="Mais sobre este atleta..." formControlName="furtherInformation"></ion-textarea>
-      </ion-item> -->
-
   </form>
 </ion-content>

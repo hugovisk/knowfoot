@@ -1,0 +1,127 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>assess-fpi</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/main/assess" text="" icon="close"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="medium">
+  <ion-grid>
+    <!-- GO HORSE... deixar fixo sobre o conteudo -->
+    <ion-row>
+      <ion-col offset="10">
+        <ion-buttons>
+          <ion-button (click)="presentInformation($event)">
+            <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <!-- GO HORSE... ajustar bg no css -->
+        <br><br><br><br><br>
+        <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-footer>
+  <ion-slides [options]="slideOptions">
+    <ion-slide>
+      <ion-grid>        
+        <ion-row>
+          <ion-col>
+            <!-- TODO: mostrar so no slide ativo -->
+            <ion-buttons class="information-score">
+              <ion-button (click)="presentInformation($event)">
+                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <br>
+            <ion-icon class="image-score" name="image"></ion-icon><br>
+            -2
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>        
+        <ion-row>
+          <ion-col>
+            <ion-buttons class="information-score">
+              <ion-button (click)="presentInformation($event)">
+                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <br>
+            <ion-icon class="image-score" name="image"></ion-icon><br>
+            -1
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>        
+        <ion-row>
+          <ion-col>
+            <ion-buttons class="information-score">
+              <ion-button (click)="presentInformation($event)">
+                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <br>
+            <ion-icon class="image-score" name="image"></ion-icon><br>
+            0
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>        
+        <ion-row>
+          <ion-col>
+            <ion-buttons class="information-score">
+              <ion-button (click)="presentInformation($event)">
+                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <br>
+            <ion-icon class="image-score" name="image"></ion-icon><br>
+            +1
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <ion-slide>
+      <ion-grid>        
+        <ion-row>
+          <ion-col>
+            <ion-buttons class="information-score">
+              <ion-button (click)="presentInformation($event)">
+                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <br>
+            <ion-icon class="image-score" name="image"></ion-icon><br>
+            +2
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+   
+  </ion-slides>
+</ion-footer>

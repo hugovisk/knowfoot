@@ -14,7 +14,7 @@
   </ion-card>
   <div>
     <ion-card>
-      <ion-item href="#" detail>
+      <ion-item routerLink="/private/assess-fpi" detail>
         <ion-label>
           <h1><strong>FPI</strong> <small><em> Foot Posture Index</em></small></h1>
           <p>Altamente confiável,</p>
@@ -31,6 +31,10 @@
       </ion-item>
     </ion-card>
   </div>
+
+  <ion-button (click)="presentModal()">
+    Click me
+  </ion-button>
 
 
 </ion-content>

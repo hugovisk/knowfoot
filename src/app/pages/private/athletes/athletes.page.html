@@ -20,7 +20,8 @@
     </ion-item-divider>
     <ion-item
     *ngFor="let athlete of athletes | async"
-    [routerLink]="['/private/athlete-detail/' + athlete.id]">
+    [routerLink]="['/private/athlete-detail/', athlete.id]"
+    routerDirection="forward">
       <ion-label>{{ athlete.name }}</ion-label>
     </ion-item>
     <!-- <ion-item>

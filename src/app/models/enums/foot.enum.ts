@@ -11,3 +11,11 @@ export const enum FootInjurie {
     Another = 'Outro(s)',
     None = 'Nenhuma'
 }
+
+export const enum FootPosture {
+    Neutral = 'neutro',
+    Pronated = 'pronado',
+    PronatedHighly = 'altamente pronado',
+    Supinated = 'supinado',
+    SupinatedHighly = 'altamente supinado'
+}

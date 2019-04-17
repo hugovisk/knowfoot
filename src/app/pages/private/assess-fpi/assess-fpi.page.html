@@ -1,127 +1,211 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>assess-fpi</ion-title>
-    <ion-buttons slot="start">
+    <ion-title>FPI • <ion-text text-capitalize>Pé {{ footAssessed}}</ion-text></ion-title>
+    <ion-buttons slot="start" *ngIf="currentCriteria === 0">
       <ion-back-button defaultHref="/main/assess" text="" icon="close"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
+    <ion-buttons slot="start" *ngIf="currentCriteria !== 0">
+      <ion-button class="ion-text-capitalize" (click)="fpiStepSlides.slidePrev()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="currentCriteria !== 4">
+      <ion-button class="ion-text-capitalize" [fill]="fpiScore === '-' ? 'outline' : 'solid'"
+        [color]="fpiScore === '-' ? 'medium' : 'primary'" (click)="fpiStepSlides.slideNext()">
+        Próximo
+        <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="currentCriteria === 4">
+      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="footPostureResult()">
+        Finalizar
+        <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <!-- <ion-toolbar>
+    <ion-title style="font-size: 12px" color="medium">{{ fpiCriteriaDescrition[fpiCriteria].viewValue }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentInformation($event)" color="medium">
+        <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar> -->
 </ion-header>
 
 <ion-content color="medium">
   <ion-grid>
-    <!-- GO HORSE... deixar fixo sobre o conteudo -->
-    <ion-row>
-      <ion-col offset="10">
+    <!-- GO HORSE... deixar fixo sobre o conteudo ou outra coisa -->
+    <!--  <ion-row>
+      <ion-col size="12" text-right>
+        <ion-chip color="dark" (click)="presentInformation($event)" class="fpi-criteria" >
+          <ion-label>{{ fpiCriteriaDescrition[fpiCriteria].viewValue }}</ion-label>
+          <ion-icon name="information-circle"></ion-icon>
+        </ion-chip>
+        
+      </ion-col>
+     <ion-col>
         <ion-buttons>
           <ion-button (click)="presentInformation($event)">
             <ion-icon slot="icon-only" name="information-circle"></ion-icon>
           </ion-button>
         </ion-buttons>
-      </ion-col>
-    </ion-row>
+      </ion-col> 
+    </ion-row>-->
     <ion-row>
       <ion-col text-center>
         <!-- GO HORSE... ajustar bg no css -->
-        <br><br><br><br><br>
-        <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+        <div *ngIf="!footPicture">
+          <br><br><br>
+          <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+        </div>
+        <div *ngIf="footPicture"><img [src]="footPicture" /></div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset="10">
+        <ion-buttons *ngIf="footPicture">
+          <ion-button (click)="deletePicture()">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!footPicture">
+    <ion-fab-button (click)="takePicture()">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  <!-- <strong>FPI score: {{ fpiScore }}</strong><br>
+  <strong>FPI Criteria: {{ fpiCriteria }}</strong> 
+  <p>pé {{ footAssessed }} </p>-->
+  FPI score: {{  fpi.assessment[fpiDefinitions.criterias[currentCriteria].value].score }}
+  <div *ngIf="fpi.indexResult">
+      <br><br>
+    Index: {{ fpi.indexResult }}
+    <br>
+    Pisada: {{fpi.footPostureResult}}
+  </div>
 </ion-content>
 
-<ion-footer>
-  <ion-slides [options]="slideOptions">
+<ion-footer>    
+  <ion-slides #fpiStepSlides [options]="fpiStepsSlideOptions" pager="true" noSwipingClass
+    (ionSlideWillChange)="setCriteria(fpiStepSlides.getActiveIndex())">
     <ion-slide>
-      <ion-grid>        
-        <ion-row>
-          <ion-col>
-            <!-- TODO: mostrar so no slide ativo -->
-            <ion-buttons class="information-score">
-              <ion-button (click)="presentInformation($event)">
-                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <br>
-            <ion-icon class="image-score" name="image"></ion-icon><br>
-            -2
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreslideOptions"
+        (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
+        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <!-- TODO: mostrar só no slide ativo -->
+                <ion-buttons class="information-score">
+                  <ion-button (click)="presentInformation($event)">
+                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <br>
+                <ion-icon class="image-score" name="image"></ion-icon>
+                <!-- <br>
+                {{ fpiScoreImage00 }} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-grid>        
-        <ion-row>
-          <ion-col>
-            <ion-buttons class="information-score">
-              <ion-button (click)="presentInformation($event)">
-                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <br>
-            <ion-icon class="image-score" name="image"></ion-icon><br>
-            -1
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+        <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreslideOptions"
+        (ionSlideWillChange)="setScore(fpiScoresSlides01.getActiveIndex())">
+        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <!-- TODO: mostrar só no slide ativo -->
+                <ion-buttons class="information-score">
+                  <ion-button (click)="presentInformation($event)">
+                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <br>
+                <ion-icon class="image-score" name="image"></ion-icon>
+                <!-- <br>
+                {{ fpiScoreImage00 }} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-grid>        
-        <ion-row>
-          <ion-col>
-            <ion-buttons class="information-score">
-              <ion-button (click)="presentInformation($event)">
-                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <br>
-            <ion-icon class="image-score" name="image"></ion-icon><br>
-            0
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-slides class="score-slide" #fpiScoresSlides02 [options]="fpiScoreslideOptions"
+        (ionSlideWillChange)="setScore(fpiScoresSlides02.getActiveIndex())">
+        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <!-- TODO: mostrar só no slide ativo -->
+                <ion-buttons class="information-score">
+                  <ion-button (click)="presentInformation($event)">
+                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <br>
+                <ion-icon class="image-score" name="image"></ion-icon>
+                <!-- <br>
+                {{ fpiScoreImage00 }} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-grid>        
-        <ion-row>
-          <ion-col>
-            <ion-buttons class="information-score">
-              <ion-button (click)="presentInformation($event)">
-                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <br>
-            <ion-icon class="image-score" name="image"></ion-icon><br>
-            +1
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-slides class="score-slide" #fpiScoresSlides03 [options]="fpiScoreslideOptions"
+        (ionSlideWillChange)="setScore(fpiScoresSlides03.getActiveIndex())">
+        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <!-- TODO: mostrar só no slide ativo -->
+                <ion-buttons class="information-score">
+                  <ion-button (click)="presentInformation($event)">
+                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <br>
+                <ion-icon class="image-score" name="image"></ion-icon>
+                <!-- <br>
+                {{ fpiScoreImage00 }} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-grid>        
-        <ion-row>
-          <ion-col>
-            <ion-buttons class="information-score">
-              <ion-button (click)="presentInformation($event)">
-                <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <br>
-            <ion-icon class="image-score" name="image"></ion-icon><br>
-            +2
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-slides class="score-slide" #fpiScoresSlides04 [options]="fpiScoreslideOptions"
+        (ionSlideWillChange)="setScore(fpiScoresSlides04.getActiveIndex())">
+        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <!-- TODO: mostrar só no slide ativo -->
+                <ion-buttons class="information-score">
+                  <ion-button (click)="presentInformation($event)">
+                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+                <br>
+                <ion-icon class="image-score" name="image"></ion-icon>
+                <!-- <br>
+                {{ fpiScoreImage00 }} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
     </ion-slide>
-   
   </ion-slides>
 </ion-footer>

@@ -1,6 +1,7 @@
 import { FootSide, FootInjurie } from '../enums/foot.enum';
 import { Gender } from '../enums/gender.enum';
 import { Sport, SportPraticeFrequency, SportPraticeTime } from '../enums/sport.enum';
+import * as firebase from 'firebase/app';
 
 export interface AthleteProfile {
     age?: number;

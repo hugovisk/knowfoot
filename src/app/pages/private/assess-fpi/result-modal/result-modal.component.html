@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" class="ion-text-capitalize" color="primary">
+        <!-- <ion-icon slot="icon-only" name="close"></ion-icon> -->
+        Finalizar
+      </ion-button>
+    </ion-buttons>    
+  </ion-toolbar>
+  <ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content text-center>
+  <!-- <h4>Resultado da Avaliação</h4> -->
+  <!-- <ion-card>
+    <ion-card-content> -->
+      <h1><ion-icon class="PROVISORIO" name="images" color="medium" [ngStyle]="{'font-size.px': 80}"></ion-icon></h1>
+        <p><small>Pisada pé {{result.footAssessed}}</small></p>
+        <h2><strong>{{result.footPostureResult}}</strong></h2>
+        <!-- <div>
+            <ion-icon name="clipboard"></ion-icon>
+              <small>                  
+              Avaliado com método FPI • 01 abr, 2019</small>
+          </div> -->
+    <!-- </ion-card-content>
+  </ion-card> -->
+</ion-content>
+<ion-footer>
+  <!-- <ion-list> -->
+    <ion-item detail lines="none">
+      <ion-icon slot="start" name="clipboard"></ion-icon>
+      <ion-label>Avaliar pé Direto</ion-label>
+    </ion-item>
+    <!-- <ion-item text-right lines="none">
+      <ion-label color="primary">Finalizar</ion-label>
+    </ion-item> -->
+  <!-- </ion-list> -->
+</ion-footer>

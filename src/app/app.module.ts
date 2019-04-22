@@ -14,11 +14,19 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 
 import { AthleteModalPageModule } from './pages/private/athlete-modal/athlete-modal.module';
-import { FpiCriteriaInformationComponent } from './pages/private/assess-fpi/fpi-criteria-information/fpi-criteria-information.component';
+// import { ResultModalComponent } from './pages/private/assess-fpi/result-modal/result-modal.component';
+// import { FpiCriteriaInformationComponent } from './pages/private/assess-fpi/fpi-criteria-information/fpi-criteria-information.component';
 
 @NgModule({
-  declarations: [AppComponent, FpiCriteriaInformationComponent],
-  entryComponents: [FpiCriteriaInformationComponent],
+  declarations: [
+    AppComponent,
+    // FpiCriteriaInformationComponent,
+    // ResultModalComponent
+  ],
+  entryComponents: [
+    // FpiCriteriaInformationComponent,
+    // ResultModalComponent
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -27,7 +35,7 @@ import { FpiCriteriaInformationComponent } from './pages/private/assess-fpi/fpi-
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
-    AthleteModalPageModule
+    AthleteModalPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

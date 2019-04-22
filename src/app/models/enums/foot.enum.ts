@@ -19,3 +19,8 @@ export const enum FootPosture {
     Supinated = 'supinado',
     SupinatedHighly = 'altamente supinado'
 }
+
+export const enum FootView {
+    Medial = 'medial',
+    Rear = 'posterior'
+}

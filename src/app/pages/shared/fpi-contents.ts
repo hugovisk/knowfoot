@@ -3,7 +3,7 @@
  * uma método de transformar enum em par chave-valor...
  */
 
-export const fpi = {
+export const fpiContents = {
   // Postura do pé
   'footPosture': [
     { value: 'SupinatedHighly', viewValue: 'Altamente Supinado' },
@@ -21,7 +21,7 @@ export const fpi = {
     { value: 'ProeminenceInRegionOfTnj', viewValue: 'Proeminência na região da ATN' }
   ],
   // Vistas de observação
-  'view': [
+  'footView': [
     { value: 'Medial', viewValue: 'Medial' },
     { value: 'Rear', viewValue: 'Posterior' }
   ]

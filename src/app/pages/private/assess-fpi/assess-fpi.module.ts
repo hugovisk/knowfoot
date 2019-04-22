@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AssessFpiPage } from './assess-fpi.page';
+import { FpiCriteriaInformationComponent } from './fpi-criteria-information/fpi-criteria-information.component';
+import { ResultModalComponent } from './result-modal/result-modal.component';
 
 const routes: Routes = [
   {
@@ -19,8 +21,16 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  declarations: [AssessFpiPage]
+  declarations: [
+    AssessFpiPage,
+    FpiCriteriaInformationComponent,
+    ResultModalComponent
+  ],
+  entryComponents: [
+    FpiCriteriaInformationComponent,
+    ResultModalComponent
+  ],
 })
 export class AssessFpiPageModule {}

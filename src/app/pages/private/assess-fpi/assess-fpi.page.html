@@ -1,24 +1,29 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>FPI • <ion-text text-capitalize>Pé {{ footAssessed}}</ion-text></ion-title>
-    <ion-buttons slot="start" *ngIf="currentCriteria === 0">
-      <ion-back-button defaultHref="/main/assess" text="" icon="close"></ion-back-button>
+    <ion-title>FPI • <ion-text text-capitalize>Pé {{ fpi.footAssessed }}</ion-text>
+    </ion-title>
+    <ion-buttons slot="start" *ngIf="current.observationSlide === 0">
+      <ion-button [routerLink]="['/main/assess']" routerDirection="back">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-buttons slot="start" *ngIf="currentCriteria !== 0">
-      <ion-button class="ion-text-capitalize" (click)="fpiStepSlides.slidePrev()">
+    <!-- <ion-buttons slot="start" *ngIf="current.observationSlide === 0">
+      <ion-back-button defaultHref="/main/assess" text="" icon="close"></ion-back-button>
+    </ion-buttons> -->
+    <ion-buttons slot="start" *ngIf="current.observationSlide !== 0">
+      <ion-button class="ion-text-capitalize" (click)="fpiSlides.slidePrev(); changeFootViewPicture()">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="currentCriteria !== 4">
-      <ion-button class="ion-text-capitalize" [fill]="fpiScore === '-' ? 'outline' : 'solid'"
-        [color]="fpiScore === '-' ? 'medium' : 'primary'" (click)="fpiStepSlides.slideNext()">
+    <ion-buttons slot="end" *ngIf="current.observationSlide !== 4">
+      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="fpiSlides.slideNext(); changeFootViewPicture()">
         Próximo
         <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="currentCriteria === 4">
-      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="footPostureResult()">
-        Finalizar
+    <ion-buttons slot="end" *ngIf="current.observationSlide === 4">
+      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="footPostureResult(); presentResult()">
+        Resultado
         <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
       </ion-button>
     </ion-buttons>
@@ -32,66 +37,74 @@
     </ion-buttons>
   </ion-toolbar> -->
 </ion-header>
-
-<ion-content color="medium">
-  <ion-grid>
-    <!-- GO HORSE... deixar fixo sobre o conteudo ou outra coisa -->
-    <!--  <ion-row>
-      <ion-col size="12" text-right>
-        <ion-chip color="dark" (click)="presentInformation($event)" class="fpi-criteria" >
-          <ion-label>{{ fpiCriteriaDescrition[fpiCriteria].viewValue }}</ion-label>
+<!-- <ion-chip color="dark" text-center (click)="presentInformation($event)" class="fpi-criteria" >
+          <ion-label>{{ observationCriteria[currentCriteria].viewValue }}</ion-label>
           <ion-icon name="information-circle"></ion-icon>
-        </ion-chip>
-        
-      </ion-col>
-     <ion-col>
-        <ion-buttons>
-          <ion-button (click)="presentInformation($event)">
-            <ion-icon slot="icon-only" name="information-circle"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-col> 
-    </ion-row>-->
-    <ion-row>
-      <ion-col text-center>
-        <!-- GO HORSE... ajustar bg no css -->
-        <div *ngIf="!footPicture">
-          <br><br><br>
-          <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
-        </div>
-        <div *ngIf="footPicture"><img [src]="footPicture" /></div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col offset="10">
-        <ion-buttons *ngIf="footPicture">
-          <ion-button (click)="deletePicture()">
-            <ion-icon slot="icon-only" name="trash"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!footPicture">
+        </ion-chip> -->
+<ion-item (click)="presentInformation($event)" lines="none" color="light">
+  <ion-label>
+    <small><strong>Observar</strong> • {{ observationCriteria[current.observationSlide].viewValue }}</small>
+  </ion-label>
+  <ion-icon name="information-circle" slot="end"></ion-icon>
+</ion-item>
+
+<ion-content color="medium" *ngIf="current.footView === 'posterior'">      
+    <div *ngIf="!current.footPicture.rear" text-center>
+      <br><br><br><br>       
+      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+    </div>
+    <div class="foot-picture" *ngIf="current.footPicture.rear" [style.backgroundImage]="current.footPicture.rear">
+    </div>
+  <ion-fab 
+    vertical="bottom" 
+    horizontal="center" 
+    slot="fixed" 
+    *ngIf="!current.footPicture.rear">
     <ion-fab-button (click)="takePicture()">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <!-- <strong>FPI score: {{ fpiScore }}</strong><br>
-  <strong>FPI Criteria: {{ fpiCriteria }}</strong> 
-  <p>pé {{ footAssessed }} </p>-->
-  FPI score: {{  fpi.assessment[fpiDefinitions.criterias[currentCriteria].value].score }}
-  <div *ngIf="fpi.indexResult">
-      <br><br>
-    Index: {{ fpi.indexResult }}
-    <br>
-    Pisada: {{fpi.footPostureResult}}
-  </div>
+  <ion-fab 
+    vertical="bottom" 
+    horizontal="end" 
+    slot="fixed" 
+    *ngIf="current.footPicture.rear">
+    <ion-fab-button (click)="deletePicture()" size="small" color="light">
+      <ion-icon name="trash"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>  
 </ion-content>
 
-<ion-footer>    
-  <ion-slides #fpiStepSlides [options]="fpiStepsSlideOptions" pager="true" noSwipingClass
-    (ionSlideWillChange)="setCriteria(fpiStepSlides.getActiveIndex())">
+<ion-content color="medium" *ngIf="current.footView === 'medial'">     
+    <div *ngIf="!current.footPicture.medial" text-center>
+      <br><br><br><br>        
+      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+    </div>
+    <div class="foot-picture" *ngIf="current.footPicture.medial" [style.backgroundImage]="current.footPicture.medial">
+    </div>
+  <ion-fab 
+    vertical="bottom" 
+    horizontal="center" 
+    slot="fixed" 
+    *ngIf="!current.footPicture.medial">
+    <ion-fab-button (click)="takePicture()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-fab 
+    vertical="bottom" 
+    horizontal="end" 
+    slot="fixed" 
+    *ngIf="current.footPicture.medial">
+    <ion-fab-button (click)="deletePicture()" size="small" color="light">
+      <ion-icon name="trash"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>   
+</ion-content>
+
+<ion-footer>
+  <ion-slides #fpiSlides [options]="fpiSlideOptions" pager="true" noSwipingClass
+    (ionSlideWillChange)="setCurrentObservationSlide(fpiSlides.getActiveIndex())">
     <ion-slide>
       <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreslideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
@@ -116,7 +129,7 @@
       </ion-slides>
     </ion-slide>
     <ion-slide>
-        <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreslideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides01.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>

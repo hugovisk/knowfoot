@@ -6,11 +6,23 @@ import * as firebase from 'firebase/app';
 export interface AssessFpi {
     athleteId?: string;
     assessId?: string;
-    assessment?: { [observation: string]: {score: number} };
+    // assessment?: { [observation: string]: {score: number} };
     createdAt?: firebase.firestore.FieldValue | Date;
-    footAssessed?: FootSide;
-    footPostureResult?: string | FootPosture;
-    footImage?: any[]; // TODO: definir tipo
-    indexResult?: number;
+    footLeft?: {
+        assessment?: { [observation: string]: {score: number} };
+        posture?: string | FootPosture;
+        imageUrl?: { rear: string, medial: string };
+        index?: number;
+    };
+    footRight?: {
+        assessment?: { [observation: string]: {score: number} };
+        posture?: string | FootPosture;
+        imageUrl?: { rear: string, medial: string };
+        index?: number;
+    };
+    // footAssessed?: FootSide;
+    // footPostureResult?: string | FootPosture;
+    // footImage?: any[]; // TODO: definir tipo
+    // indexResult?: number;
     updatedAt?: firebase.firestore.FieldValue | Date;
 }

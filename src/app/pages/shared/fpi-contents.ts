@@ -22,7 +22,9 @@ export const fpiContents = {
   ],
   // Vistas de observação
   'footView': [
+    { value: 'InsideRearAngle', viewValue: 'Poterior interno oblíquo' },
     { value: 'Medial', viewValue: 'Medial' },
     { value: 'Rear', viewValue: 'Posterior' }
+    
   ]
 };

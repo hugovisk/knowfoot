@@ -21,6 +21,7 @@ export const enum FootPosture {
 }
 
 export const enum FootView {
+    InsideRearAngle = 'posterior interno oblíquo',
     Medial = 'medial',
     Rear = 'posterior'
 }

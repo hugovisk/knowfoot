@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>FPI • <ion-text text-capitalize>Pé {{ fpi.footAssessed }}</ion-text>
+    <ion-title>FPI • <ion-text text-capitalize>Pé {{ current.footAssessed }}</ion-text>
     </ion-title>
     <ion-buttons slot="start" *ngIf="current.observationSlide === 0">
       <ion-button [routerLink]="['/main/assess']" routerDirection="back">
@@ -16,13 +16,15 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="current.observationSlide !== 4">
-      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="fpiSlides.slideNext(); changeFootViewPicture()">
+      <ion-button class="ion-text-capitalize" fill="solid" color="primary"
+        (click)="fpiSlides.slideNext(); changeFootViewPicture()">
         Próximo
         <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="current.observationSlide === 4">
-      <ion-button class="ion-text-capitalize" fill="solid" color="primary" (click)="footPostureResult(); presentResult()">
+      <ion-button class="ion-text-capitalize" fill="solid" color="primary"
+        (click)="footPostureResult(); presentResult()">
         Resultado
         <!-- <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon> -->
       </ion-button>
@@ -48,58 +50,61 @@
   <ion-icon name="information-circle" slot="end"></ion-icon>
 </ion-item>
 
-<ion-content color="medium" *ngIf="current.footView === 'posterior'">      
-    <div *ngIf="!current.footPicture.rear" text-center>
-      <br><br><br><br>       
-      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
-    </div>
-    <div class="foot-picture" *ngIf="current.footPicture.rear" [style.backgroundImage]="current.footPicture.rear">
-    </div>
-  <ion-fab 
-    vertical="bottom" 
-    horizontal="center" 
-    slot="fixed" 
-    *ngIf="!current.footPicture.rear">
-    <ion-fab-button (click)="takePicture()">
+<ion-content color="medium" *ngIf="current.footView === 'posterior'">
+  <div *ngIf="!current.footPicture.rear" text-center>
+    <br><br><br><br>
+    <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+  </div>
+  <div class="foot-picture" *ngIf="current.footPicture.rear" [style.backgroundImage]="current.footPicture.rear">
+  </div>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPicture.rear">
+    <ion-fab-button (click)="takePicture('rear')">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab 
-    vertical="bottom" 
-    horizontal="end" 
-    slot="fixed" 
-    *ngIf="current.footPicture.rear">
-    <ion-fab-button (click)="deletePicture()" size="small" color="light">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="current.footPicture.rear">
+    <ion-fab-button (click)="deletePicture('rear')" size="small" color="light">
       <ion-icon name="trash"></ion-icon>
     </ion-fab-button>
-  </ion-fab>  
+  </ion-fab>
 </ion-content>
 
-<ion-content color="medium" *ngIf="current.footView === 'medial'">     
-    <div *ngIf="!current.footPicture.medial" text-center>
-      <br><br><br><br>        
-      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
-    </div>
-    <div class="foot-picture" *ngIf="current.footPicture.medial" [style.backgroundImage]="current.footPicture.medial">
-    </div>
-  <ion-fab 
-    vertical="bottom" 
-    horizontal="center" 
-    slot="fixed" 
-    *ngIf="!current.footPicture.medial">
-    <ion-fab-button (click)="takePicture()">
+<ion-content color="medium" *ngIf="current.footView === 'medial'">
+  <div *ngIf="!current.footPicture.medial" text-center>
+    <br><br><br><br>
+    <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+  </div>
+  <div class="foot-picture" *ngIf="current.footPicture.medial" [style.backgroundImage]="current.footPicture.medial">
+  </div>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPicture.medial">
+    <ion-fab-button (click)="takePicture('medial')">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab 
-    vertical="bottom" 
-    horizontal="end" 
-    slot="fixed" 
-    *ngIf="current.footPicture.medial">
-    <ion-fab-button (click)="deletePicture()" size="small" color="light">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="current.footPicture.medial">
+    <ion-fab-button (click)="deletePicture('medial')" size="small" color="light">
       <ion-icon name="trash"></ion-icon>
     </ion-fab-button>
-  </ion-fab>   
+  </ion-fab>
+</ion-content>
+
+<ion-content color="medium" *ngIf="current.footView === 'posterior interno oblíquo'">
+  <div *ngIf="!current.footPicture.insideRearAngle" text-center>
+    <br><br><br><br>
+    <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+  </div>
+  <div class="foot-picture" *ngIf="current.footPicture.insideRearAngle" [style.backgroundImage]="current.footPicture.insideRearAngle">
+  </div>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPicture.insideRearAngle">
+    <ion-fab-button (click)="takePicture('insideRearAngle')">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="current.footPicture.insideRearAngle">
+    <ion-fab-button (click)="deletePicture('insideRearAngle')" size="small" color="light">
+      <ion-icon name="trash"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 <ion-footer>

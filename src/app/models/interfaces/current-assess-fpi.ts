@@ -3,7 +3,7 @@ import { SafeStyle } from '@angular/platform-browser';
 
 
 export interface CurrentAssessFpi {
-    athleteId: string;
+    // athleteId: string;
     assessment: { [observation: string]: { score: number } };
     footAssessed: FootSide;
     footPicture: {
@@ -15,4 +15,5 @@ export interface CurrentAssessFpi {
     footView: FootView;
     index?: number;
     observationSlide: number;
+    suggestOtherFootAssessement?: boolean;
 }

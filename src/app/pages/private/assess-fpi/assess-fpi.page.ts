@@ -9,7 +9,7 @@ import { FpiCriteriaInformationComponent } from './fpi-criteria-information/fpi-
 import { ResultModalComponent } from './result-modal/result-modal.component';
 import { fpiContents } from '../../shared/fpi-contents';
 import { FootSide, FootView } from '../../../models/enums/foot.enum';
-// import { AssessFpi } from '../../../models/interfaces/assess-fpi';
+import { AssessFpi } from '../../../models/interfaces/assess-fpi';
 import { CurrentAssessFpi } from '../../../models/interfaces/current-assess-fpi';
 
 @Component({
@@ -51,6 +51,9 @@ export class AssessFpiPage implements OnInit {
   private fpi: AssessFpi;*/
 
   /** objeto com os atributos de apoio ao teste FPI */
+  private fpi: AssessFpi;
+
+  /** objeto com os atributos de apoio ao teste FPI */
   private current: CurrentAssessFpi;
 
   // private current: {
@@ -79,21 +82,28 @@ export class AssessFpiPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.fpi = {
-    //   athleteId: 'idDoAtletaQueSeraAvaliado', // TODO: receber valor
-    // };
+    this.currentInit();
+    this.current.footAssessed = FootSide.Right;
 
-    this.current = {
+    this.fpi = {
       athleteId: 'idDoAtletaQueSeraAvaliado', // TODO: receber valor
-      assessment: {
+    };
+
+    }
+
+  currentInit() {
+    this.current = {
+      fpi: {
+        assessment: {
         [this.observationCriteria[0].value]: { score: -2 },
         [this.observationCriteria[1].value]: { score: -2 },
         [this.observationCriteria[2].value]: { score: -2 },
         [this.observationCriteria[3].value]: { score: -2 },
         [this.observationCriteria[4].value]: { score: -2 }
+        },
+        footPicture: { rear: undefined, medial: undefined, insideRearAngle: undefined },
+
       },
-      footAssessed: FootSide.Left, // TODO: receber valor
-      footPicture: { rear: undefined, medial: undefined, insideRearAngle: undefined },
       footView: FootView.Rear,
       observationSlide: 0
     };
@@ -130,29 +140,14 @@ export class AssessFpiPage implements OnInit {
     };
     const image = await Camera.getPhoto(options);
 
-    // if (this.current.footView === FootView.Rear) {
-    //   this.current.footPicture.rear = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
-    // } else if (this.current.footView === FootView.Medial) {
-    //   this.current.footPicture.medial = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
-    // } else if (this.current.footView === FootView.InsideRearAngle) {
-    //   this.current.footPicture.insideRearAngle = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
-    // }
-    this.current.footPicture[footview] = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
+    this.current.fpi.footPicture[footview] = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
 }
-
 
   /**
    * Exclui foto
    */
   deletePicture(footview: string) {
-    // if (this.current.footView === FootView.Rear) {
-    //   this.current.footPicture.rear = null;
-    // } else if (this.current.footView === FootView.Medial) {
-    //   this.current.footPicture.medial = null;
-    // } else if (this.current.footView === FootView.InsideRearAngle) {
-    //   this.current.footPicture.insideRearAngle = null;
-    // }
-    this.current.footPicture[footview] = null;
+    this.current.fpi.footPicture[footview] = null;
   }
 
   /**
@@ -162,19 +157,19 @@ export class AssessFpiPage implements OnInit {
   async setScore(activeIndex: Promise<number>) {
     switch (await activeIndex) {
       case (0):
-        this.current.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: -2 };
+        this.current.fpi.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: -2 };
         break;
       case (1):
-        this.current.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: -1 };
+        this.current.fpi.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: -1 };
         break;
       case (2):
-        this.current.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 0 };
+        this.current.fpi.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 0 };
         break;
       case (3):
-        this.current.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 1 };
+        this.current.fpi.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 1 };
         break;
       case (4):
-        this.current.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 2 };
+        this.current.fpi.assessment[this.observationCriteria[this.current.observationSlide].value] = { score: 2 };
         break;
       default:
         console.error('ERRO :(');
@@ -218,7 +213,7 @@ export class AssessFpiPage implements OnInit {
    * o resultado define o index
    */
   calculateFpiIndex() {
-    this.current.index = Object.values(this.current.assessment).reduce((total, value) =>
+    this.current.fpi.index = Object.values(this.current.fpi.assessment).reduce((total, value) =>
       total + value.score, 0);
   }
 
@@ -228,37 +223,49 @@ export class AssessFpiPage implements OnInit {
   footPostureResult() {
     this.calculateFpiIndex();
     switch (true) {
-      case (this.current.index <= -4):
-        this.current.footPosture = this.footPosture[0].value;
+      case (this.current.fpi.index <= -4):
+        this.current.fpi.posture = this.footPosture[0].value;
         break;
-      case (this.current.index <= -1):
-        this.current.footPosture = this.footPosture[1].value;
+      case (this.current.fpi.index <= -1):
+        this.current.fpi.posture = this.footPosture[1].value;
         break;
-      case (this.current.index <= 4):
-        this.current.footPosture = this.footPosture[2].value;
+      case (this.current.fpi.index <= 4):
+        this.current.fpi.posture = this.footPosture[2].value;
         break;
-      case (this.current.index <= 8):
-        this.current.footPosture = this.footPosture[3].value;
+      case (this.current.fpi.index <= 8):
+        this.current.fpi.posture = this.footPosture[3].value;
         break;
-      case (this.current.index >= 9):
-        this.current.footPosture = this.footPosture[4].value;
+      case (this.current.fpi.index >= 9):
+        this.current.fpi.posture = this.footPosture[4].value;
         break;
       default:
         console.error('ERRO :(');
     }
-    console.log(this.current.index);
-    console.log(this.current.footPosture);
-    console.log(this.current.assessment);
+    console.log(this.current.fpi.index);
+    console.log(this.current.fpi.posture);
+    console.log(this.current.fpi.assessment);
+    this.setFpi();
   }
 
   /**
-   * https://ionicframework.com/docs/api/modal
+   * https://ionicframework.com/docs/api/modal 
    */
   async presentResult() {
     const modal = await this.modalController.create({
       component: ResultModalComponent,
-      componentProps: { result: this.current }
+      componentProps: {
+        result: this.fpi,
+        currentFootAssessed: this.current.footAssessed,
+      }
     });
     return await modal.present();
+  }
+
+  setFpi() {
+    if (this.current.footAssessed === 'esquerdo') {
+      this.fpi.footLeft = this.current.fpi;
+    } else {
+      this.fpi.footRight = this.current.fpi;
+    }
   }
 }

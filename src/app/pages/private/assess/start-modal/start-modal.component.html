@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar *ngIf="!startAssess.athleteId">
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-searchbar placeholder="Escolha o atleta" [(ngModel)]="searchAthlete" clearIcon>
+    </ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="startAssess.athleteId">
+    <ion-buttons slot="start">
+      <ion-button (click)="backToAthletes()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ startAssess.athleteName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!startAssess.athleteId">
+  <!-- Method:  {{ startAssess.method }}<br>
+     ID:  {{ startAssess.athleteId }}<br>
+     Foot Side: {{ startAssess.footSide }}<br> -->
+  <ion-item-divider>
+  </ion-item-divider>
+  <ion-item color="primary" button (click)="presentModal()">
+    <ion-icon name="person-add" slot="end"></ion-icon>
+    <ion-label> NOVO ATLETA</ion-label>
+  </ion-item>
+  <ion-item button *ngFor="let athlete of athletes | async | filter: searchAthlete"
+    (click)="setStartAssessAthleteId(athlete.id); setStartAssessAthleteName(athlete.name)">
+    <ion-label>{{ athlete.name }}</ion-label>
+  </ion-item>
+</ion-content>
+
+<ion-content *ngIf="startAssess.athleteId">
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col size="12">Escolha o pé que será avaliado</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card (click)="setStartAssessFootSide('esquerdo')"
+          [color]=" startAssess.footSide === 'esquerdo' ? 'success' : ''">
+          <ion-card-content>
+            <ion-icon style="font-size: 100px" name="images" color="light"></ion-icon>
+            Esquerdo
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card (click)="setStartAssessFootSide('direito')"
+          [color]=" startAssess.footSide === 'direito' ? 'success' : ''">
+          <ion-card-content>
+            <ion-icon style="font-size: 100px" name="images" color="light"></ion-icon>
+            Direito
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer *ngIf="startAssess.athleteId">
+  <ion-button shape="round" expand="full" size="large" [disabled]="!startAssess.footSide"
+    (click)="closeModalAndStartAssessment()">
+    Iniciar {{ startAssess.method }}
+  </ion-button>
+</ion-footer>

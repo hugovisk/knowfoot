@@ -98,7 +98,8 @@ export class AthleteService {
     athlete.updatedAt = athlete.createdAt;
     athlete.isDeleted = false;
     try {
-      return await this.athletesCollection.doc(athlete.id).set(athlete);
+      await this.athletesCollection.doc(athlete.id).set(athlete);
+      return athlete.id;
     } catch (error) {
       console.log(error);
       throw error;

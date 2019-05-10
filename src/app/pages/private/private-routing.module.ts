@@ -58,7 +58,7 @@ const routes: Routes = [
     loadChildren: './profile/profile-signup-continuation/profile-signup-continuation.module#ProfileSignupContinuationPageModule'
   },
   { path: 'athlete-detail/:id', loadChildren: './athlete-detail/athlete-detail.module#AthleteDetailPageModule' },
-  { path: 'assess-fpi', loadChildren: './assess-fpi/assess-fpi.module#AssessFpiPageModule' },
+  { path: 'assess-fpi/:id/:foot', loadChildren: './assess-fpi/assess-fpi.module#AssessFpiPageModule' },
 ];
 
 @NgModule({

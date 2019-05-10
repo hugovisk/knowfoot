@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" class="ion-text-capitalize" color="primary">
+      <ion-button (click)="testeEnviar(result.foot)" class="ion-text-capitalize" color="primary">
         Finalizar
       </ion-button>
     </ion-buttons>    
@@ -17,7 +17,7 @@
         
 </ion-content>
 <ion-footer>
-    <ion-item detail lines="none" *ngIf="suggestNextAssessement">
+    <ion-item detail lines="none" *ngIf="suggestNextAssessement" (click)="nextFootAssessment()">
       <ion-icon slot="start" name="clipboard"></ion-icon>
       <ion-label>Avaliar pé {{ nextFootAssess }}</ion-label>
     </ion-item>

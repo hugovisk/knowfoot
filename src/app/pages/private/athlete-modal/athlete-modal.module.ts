@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { AthleteModalPage } from './athlete-modal.page';
 
-import { FilterPipe } from '../../../pipes/filter.pipe';
+// import { FilterPipe } from '../../../pipes/filter.pipe';
 
 const routes: Routes = [
   {
@@ -23,6 +23,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AthleteModalPage, FilterPipe]
+  declarations: [
+    AthleteModalPage,
+    // FilterPipe
+  ]
 })
 export class AthleteModalPageModule {}

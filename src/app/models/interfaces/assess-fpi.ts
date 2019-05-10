@@ -1,28 +1,40 @@
 import { FootSide, FootPosture } from '../enums/foot.enum';
-import { Observation, ObservationView } from '../enums/fpi.enum';
+import { AssessMethod } from '../enums/assess.enum';
 import * as firebase from 'firebase/app';
 
 
 export interface AssessFpi {
     athleteId?: string;
     assessId?: string;
-    // assessment?: { [observation: string]: {score: number} };
+    assessMethod?: string | AssessMethod;
     createdAt?: firebase.firestore.FieldValue | Date;
-    footLeft?: {
-        assessment?: { [observation: string]: {score: number} };
-        posture?: string | FootPosture;
-        imageUrl?: { rear: string, medial: string };
-        index?: number;
+    fpi?: {
+        foot?: {
+            [footSide: string]: {
+                assessment?: { [observation: string]: { score: number } };
+                posture?: string | FootPosture;
+                imageUrl?: {
+                    [footView: string]: {
+                        downloadUrl: string,
+                        path: string
+                    }
+                };
+                index?: number;
+                footPicture: {
+                    [footView: string]: {
+                        blob: Blob,
+                        metadata?: object
+                    }
+                };
+            };
+        }
     };
-    footRight?: {
-        assessment?: { [observation: string]: {score: number} };
-        posture?: string | FootPosture;
-        imageUrl?: { rear: string, medial: string };
-        index?: number;
-    };
-    // footAssessed?: FootSide;
-    // footPostureResult?: string | FootPosture;
-    // footImage?: any[]; // TODO: definir tipo
-    // indexResult?: number;
+    // footRight?: {
+    //     assessment?: { [observation: string]: {score: number} };
+    //     posture?: string | FootPosture;
+    //     imageUrl?: { [footView: string]: { downloadUrl: string , path: string } };
+    //     index?: number;
+    // };
+    isDeleted?: boolean;
     updatedAt?: firebase.firestore.FieldValue | Date;
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button (click)="testeEnviar(result.foot)" class="ion-text-capitalize" color="primary">
+      <ion-button (click)="testeEnviar()" class="ion-text-capitalize" color="primary">
         Finalizar
       </ion-button>
     </ion-buttons>    
@@ -12,13 +12,13 @@
 
 <ion-content text-center>
       <h1><ion-icon class="PROVISORIO" name="images" color="medium" [ngStyle]="{'font-size.px': 80}"></ion-icon></h1>
-        <p><small>Postura pé {{ currentFootAssessed }}</small></p>
+        <p><small>Postura pé {{ footPtBr }}</small></p>
         <h2><strong>{{ postureResult }}</strong></h2>
         
 </ion-content>
 <ion-footer>
     <ion-item detail lines="none" *ngIf="suggestNextAssessement" (click)="nextFootAssessment()">
       <ion-icon slot="start" name="clipboard"></ion-icon>
-      <ion-label>Avaliar pé {{ nextFootAssess }}</ion-label>
+      <ion-label>Avaliar pé {{ footNextPtBr }}</ion-label>
     </ion-item>
 </ion-footer>

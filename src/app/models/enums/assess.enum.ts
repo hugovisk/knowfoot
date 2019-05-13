@@ -1,4 +1,4 @@
 export const enum AssessMethod {
-    Fpi = 'fpi',
-    NavicularDrop = 'drop navicular'
+    Fpi = 'Fpi',
+    NavicularDrop = 'NavicularDrop'
 }

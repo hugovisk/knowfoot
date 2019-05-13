@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { AssessFpi } from './../../../../models/interfaces/assess-fpi';
 import { FootSide } from '../../../../models/enums/foot.enum';
 import { fpiContents } from '../../../shared/fpi-contents';
+import { formSelectsContent } from '../../../shared/form-selects-content';
 import { AssessFpiService } from '../../../../services/assess/assess-fpi.service';
 
 @Component({
@@ -15,7 +16,10 @@ export class ResultModalComponent implements OnInit {
   nextFootAssess: string;
   postureResult: string;
   postures = fpiContents.footPosture;
+  footSides = formSelectsContent.footDominants;
   suggestNextAssessement: boolean;
+  footPtBr: string;
+  footNextPtBr: string;
 
   @Input() result: AssessFpi;
   @Input() currentFootAssessed: FootSide;
@@ -27,36 +31,38 @@ export class ResultModalComponent implements OnInit {
 
 
   ngOnInit() {
-    this.setNextFootAssess();
     this.setPostureResult();
-    this.setSuggestNextAssessemet();
+    this.suggestNextAssessemet();
+    this.footPtBr = this.footSidePtBr(this.currentFootAssessed);
   }
 
   setNextFootAssess() {
     this.nextFootAssess = this.currentFootAssessed === FootSide.Left ? FootSide.Right : FootSide.Left;
+    this.footNextPtBr = this.footSidePtBr(this.nextFootAssess);
   }
 
   setPostureResult() {
-    console.log(this.result);
-    console.log(this.result.foot);
+    // console.log(this.result);
+    // console.log(this.result.foot);
     if (this.currentFootAssessed === FootSide.Left) {
-      this.postureResult = this.definePostureResult(this.result[FootSide.Left].posture);
+      this.postureResult = this.postureResultPtBr(this.result.foot[FootSide.Left].posture);
     } else {
-      this.postureResult = this.definePostureResult(this.result[FootSide.Right].posture);
+      this.postureResult = this.postureResultPtBr(this.result.foot[FootSide.Right].posture);
     }
   }
 
-  setSuggestNextAssessemet() {
+  suggestNextAssessemet() {
     // console.log(this.result[FootSide.Left]);
     // console.log(this.result[FootSide.Right].posture);
-    if (this.result[FootSide.Left] === undefined || this.result[FootSide.Right] === undefined ) {
+    if (this.result.foot[FootSide.Left] === undefined || this.result.foot[FootSide.Right] === undefined ) {
       this.suggestNextAssessement = true;
+      this.setNextFootAssess();
     } else {
       this.suggestNextAssessement = false;
     }
   }
 
-  definePostureResult(posture: string) {
+  postureResultPtBr(posture: string) {
     for (const postura of this.postures) {
       if (posture === postura.value) {
         return postura.viewValue;
@@ -64,9 +70,17 @@ export class ResultModalComponent implements OnInit {
     }
   }
 
-  testeEnviar(foot) {
-    // console.log('teste enviar');
-    // this.fpiService.verifyPictures(foot);
+  footSidePtBr(footSide: string) {
+    for (const lado of this.footSides) {
+      if (footSide === lado.value) {
+        return lado.viewValue;
+      }
+    }
+  }
+
+  testeEnviar() {
+    console.log('teste enviar');
+    this.fpiService.createAssess(this.result);
     this.closeModal();
   }
 

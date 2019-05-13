@@ -4,16 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IonSlides, ModalController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
-import { Plugins, CameraResultType, CameraSource, CameraOptions } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraPhoto } from '@capacitor/core';
 
 import { AssessFpiService } from '../../../services/assess/assess-fpi.service';
 
 import { FpiCriteriaInformationComponent } from './fpi-criteria-information/fpi-criteria-information.component';
 import { ResultModalComponent } from './result-modal/result-modal.component';
-import { fpiContents } from '../../shared/fpi-contents';
-import { FootSide, FootView } from '../../../models/enums/foot.enum';
-import { AssessFpi } from '../../../models/interfaces/assess-fpi';
+
 import { CurrentAssessFpi } from '../../../models/interfaces/current-assess-fpi';
+import { AssessFpi } from '../../../models/interfaces/assess-fpi';
+import { FootSide, FootView, FootPosture } from '../../../models/enums/foot.enum';
+import { AssessMethod } from '../../../models/enums/assess.enum';
+import { fpiContents } from '../../shared/fpi-contents';
+
 
 
 @Component({
@@ -23,8 +26,11 @@ import { CurrentAssessFpi } from '../../../models/interfaces/current-assess-fpi'
 })
 
 export class AssessFpiPage implements OnInit {
+
   /** queries no DOM para capturar elementos pelo id */
+  // cada criterio tem um slide
   @ViewChild('fpiSlides') fpiSlides: IonSlides;
+  // cada critério tem tem um slide com as pontuações
   @ViewChild('fpiScoresSlides00') fpiScoresSlides00: IonSlides;
   @ViewChild('fpiScoresSlides01') fpiScoresSlides01: IonSlides;
   @ViewChild('fpiScoresSlides02') fpiScoresSlides02: IonSlides;
@@ -45,41 +51,27 @@ export class AssessFpiPage implements OnInit {
   /** opções dos slides de pontuação da observação
    *  http://idangero.us/swiper/api/
    */
-  fpiScoreslideOptions = {
+  fpiScoreSlideOptions = {
     slidesPerView: 3,
     spaceBetween: 30,
     centeredSlides: true,
     slideToClickedSlide: true
   };
 
-  /** objeto com os atributos do teste FPI
-  private fpi: AssessFpi;*/
+  /** Objeto com os atributos de avaliação do método FPI */
+  private assessFpi: AssessFpi;
 
-  /** objeto com os atributos do teste FPI */
-  private assessement: AssessFpi;
-
-  /** objeto com os atributos de apoio ao teste FPI */
+  /** Obejto que armazena atributos temporários da avaliação corrente */
   private current: CurrentAssessFpi;
 
-  private footPictureActive: SafeStyle;
-  private footPictureView: {
-    insideRearAngle: SafeStyle,
-    rear: SafeStyle,
-    medial: SafeStyle
-  };
-
-  private footAssessed: FootSide | string;
-  // variaveis auxiliares
+  /**
+   * Váriavel auxiliar que armazena aninhamento dos atributos
+   * do pé que esta sendo avaliado no momento
+   */
   private currentFpi;
 
-  /** importação das descrições do criterios de observação */
+  /** Importação das descrições do criterios de observação */
   private observationCriteria = fpiContents.criterias;
-
-  /** importação das descrições do criterios de observação */
-  private footView = fpiContents.footView;
-
-  /** importação das classificações des posturas do pé */
-  private footPosture = fpiContents.footPosture;
 
   /** TODO: colocar figuras de comparacao do FPI */
   private fpiScoreImages00: number[] = [-2, -1, 0, 1, 2];
@@ -94,44 +86,44 @@ export class AssessFpiPage implements OnInit {
 
   ngOnInit() {
     const initialFootSide = this.route.snapshot.paramMap.get('foot');
-    this.setAthleteId();
-    this.currentInit(initialFootSide);
+    this.fpiOnInit();
+    this.fpiOnCurrentInit(initialFootSide);
   }
 
-  setAthleteId() {
-    this.assessement = {
-      athleteId: this.route.snapshot.paramMap.get('id')
+  /**
+  * Inicializa o objeto da avaliação FPI
+  */
+  fpiOnInit() {
+    this.assessFpi = {
+      athleteId: this.route.snapshot.paramMap.get('id'),
+      assessMethod: AssessMethod.Fpi,
+      foot: {}
     };
   }
 
-  currentInit(footSide: FootSide | string) {
-    this.footAssessed = footSide;
+  /**
+   * Inicializa valores da avaliação
+   *
+   * @param footSide Pé que está sendo avaliado
+   */
+  fpiOnCurrentInit(footSide: FootSide | string) {
     this.current = {
-      // footAssessed: footSide,
-      fpi: {
-        foot: {
-          [footSide]: {
-            assessment: {
-              [this.observationCriteria[0].value]: { score: -2 },
-              [this.observationCriteria[1].value]: { score: -2 },
-              [this.observationCriteria[2].value]: { score: -2 },
-              [this.observationCriteria[3].value]: { score: -2 },
-              [this.observationCriteria[4].value]: { score: -2 }
-            },
-            footPicture: {
-              [this.footView[0].value]: { blob: undefined, metadata: { customMetadata: undefined } },
-              [this.footView[1].value]: { blob: undefined, metadata: { customMetadata: undefined } },
-              [this.footView[2].value]: { blob: undefined, metadata: { customMetadata: undefined } }
-            }
-          }
-          // footPicture: {
-          //   rear: undefined,
-          //   medial: undefined,
-          //   insideRearAngle: undefined
-          // }
+      footAssessed: footSide,
+      footPictureActive: undefined,
+      footPictureView: {},
+      footView: FootView.Rear,
+      foot: {
+        [footSide]: {
+          assessment: {
+            [this.observationCriteria[0].value]: { score: -2 },
+            [this.observationCriteria[1].value]: { score: -2 },
+            [this.observationCriteria[2].value]: { score: -2 },
+            [this.observationCriteria[3].value]: { score: -2 },
+            [this.observationCriteria[4].value]: { score: -2 }
+          },
+          footPicture: {}
         }
       },
-      footView: this.footView[2].value,
       observationSlide: 0
     };
 
@@ -141,35 +133,25 @@ export class AssessFpiPage implements OnInit {
     this.fpiScoresSlides02.slideTo(0);
     this.fpiScoresSlides03.slideTo(0);
     this.fpiScoresSlides04.slideTo(0);
-    this.footPictureActive = undefined;
-    this.footPictureView = {
-      rear: undefined,
-      medial: undefined,
-      insideRearAngle: undefined
-    };
-    // auxiliar para encurtar nome da variavel que define o pé que esta sendo avaliado
-    this.currentFpi = this.current.fpi.foot[this.footAssessed];
+
+    this.currentFpi = this.current.foot[footSide];
   }
+
   /**
-   * Apresentação de instruções dos critérios de observação
-   * @param ev
+   * Captura a posição do slide ativo
+   * @param activeIndex
    *
-   * https://ionicframework.com/docs/api/popover
+   * https://ionicframework.com/docs/api/slides
    */
-  async presentInformation(ev: any) {
-    const popover = await this.popoverController.create({
-      component: FpiCriteriaInformationComponent,
-      event: ev,
-      translucent: true
-    });
-    return await popover.present();
+  async setCurrentObservationSlide(activeIndex: Promise<number>) {
+    this.current.observationSlide = await activeIndex;
   }
 
   /**
    * Tira foto
    * https://capacitor.ionicframework.com/docs/apis/camera/
    */
-  async takePicture(footview: string) {
+  async takePicture(footView: FootView) {
     const { Camera } = Plugins;
     const options: CameraOptions = {
       allowEditing: false,
@@ -182,56 +164,57 @@ export class AssessFpiPage implements OnInit {
     };
     const image = await Camera.getPhoto(options);
 
-    // console.log('Got image back', image.path, image.webPath, image.format, image.exif);cons
-    const blobTest = await fetch(image.webPath).then(r => r.blob());
-    const metadataTest = { contentType: 'image', customMetadata: image.exif };
+    this.processPicture(image, footView);
+  }
 
-    this.currentFpi.footPicture[footview] = {
+  /** Transforma a imagem em um arquivo blob, gera o caminho da imagem
+   * para apresentar na tela e armazena nas respectivas variaveis
+   * 
+   * https://developer.mozilla.org/en-US/docs/Web/API/Body/blob
+   * https://firebase.google.com/docs/storage/web/file-metadata
+   * https://angular.io/api/platform-browser/DomSanitizer
+   */
+  async processPicture(image: CameraPhoto, footView: FootView) {
+    this.currentFpi.footPicture[footView] = {
       blob: await fetch(image.webPath).then(r => r.blob()),
-      metadata: { customMetadata: image.exif }
+      metadata: { contentType: 'image', customMetadata: image.exif }
     };
 
-
-    // const url = await this.fpiService.uploadFootPicture(
-    //   footview,
-    //   'images/',
-    //   blobTest,
-    //   // metadataTest,
-    //   'Right'
-    // );
-
-    // console.log(url);
-    // this.upload(this.current.fpi.footPicture); // teste
-
-    // console.log('Got image', image);
-    // console.log('Got image back', image.exif);
-    // console.log('Blob image', blob);
-    // console.log('Got image base64', image.base64String);
-    // console.log('Got image dataUrl', image.dataUrl);
-
-    // this.current.fpi.footPicture[footview] = image.webPath.slice(22);
-
-    // Gera caminho da imagem para apresentar na tela.
-    // DomSanitizer valida o caminho para ser usado no DOM,
-    // o Angular bloqueia a injeção de valores suspeitos, o que
-    // ajuda a previnir Cross Site Scripting Securety Bugs (XSS),
-    // uso mal intencionado de injeção um javascript por URL
-    // this.footPictureActive = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
-    this.footPictureActive = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
-    this.footPictureView[footview] = this.footPictureActive;
+    this.current.footPictureActive = this.sanitizer.bypassSecurityTrustStyle(`url(${image.webPath})`);
+    this.current.footPictureView[footView] = this.current.footPictureActive;
   }
 
   /**
-   * Exclui foto
+   * Exclui imagem de visualiazção e arquivo de imagem que seria enviado
    */
-  deletePicture(footview: string) {
-    // this.current.fpi.footPicture[footview] = undefined;
-    this.currentFpi.footPicture[footview] = {
+  deletePicture(footView: FootView) {
+    this.currentFpi.footPicture[footView] = {
       blob: undefined,
-      metadata: { customMetadata: undefined }
+      metadata: undefined
     };
-    this.footPictureActive = undefined;
-    this.footPictureView[footview] = undefined;
+    this.current.footPictureActive = undefined;
+    this.current.footPictureView[footView] = undefined;
+  }
+
+  /**
+   * Gerencia a visualição da vista do pé corrente e a apresentação de fotos
+   */
+  changeFootViewPicture() {
+    setTimeout(() => { // delay para capturar o slide ativo após o avançar ou voltar
+      if (this.current.observationSlide === 4) {
+        this.current.footView = FootView.InsideRearAngle;
+        this.current.footPictureActive = this.current.footPictureView[FootView.InsideRearAngle];
+        // console.log('POSTERIOR INTERNO OBLÍQUO');
+      } else if (this.current.observationSlide === 3) {
+        this.current.footView = FootView.Medial;
+        this.current.footPictureActive = this.current.footPictureView[FootView.Medial];
+        // console.log('MEDIAL');
+      } else if (this.current.observationSlide === 2 && this.current.footView !== FootView.Rear) {
+        this.current.footView = FootView.Rear;
+        this.current.footPictureActive = this.current.footPictureView[FootView.Rear];
+        // console.log('POSTERIOR');
+      }
+    }, 50);
   }
 
   /**
@@ -263,67 +246,12 @@ export class AssessFpiPage implements OnInit {
   }
 
   /**
-   * Captura a posição do slide ativo
-   * @param activeIndex
-   *
-   * https://ionicframework.com/docs/api/slides
-   */
-  async setCurrentObservationSlide(activeIndex: Promise<number>) {
-    this.current.observationSlide = await activeIndex;
-  }
-
-  /** TODO: arrumar descricao do metodo que mudou
-   * 
-   * Altera a indicação da vista de obserção do pé avaliado.
-   * Para os critérios de observação Curvatura supra e infra maleolar lateral, Posição do
-   * calcâneo, Abdução e adução do antepé sobre o retropé, define a vista postorior do pé.
-   * Para Altura do arco longitudinal medial e Proeminência na região da ATN, define a
-   * vista medial do pé.
-   */
-  // changeFootViewPicture() {
-  //   setTimeout(() => { // delay para capturar o slide ativo após o avançar ou voltar
-  //     if (this.current.observationSlide === 4 && this.current.footView !== FootView.InsideRearAngle) {
-  //       this.current.footView = FootView.InsideRearAngle;
-  //       console.log('POSTERIOR INTERNO OBLÍQUO');
-  //     } else if (this.current.observationSlide === 3 && this.current.footView !== FootView.Medial) {
-  //       this.current.footView = FootView.Medial;
-  //       console.log('MEDIAL');
-  //     } else if (this.current.observationSlide === 2 && this.current.footView !== FootView.Rear) {
-  //       this.current.footView = FootView.Rear;
-  //       console.log('POSTERIOR');
-  //     }
-  //   }, 50);
-  // }
-  changeFootViewPicture() {
-    setTimeout(() => { // delay para capturar o slide ativo após o avançar ou voltar
-      if (this.current.observationSlide === 4 && this.current.footView !== this.footView[0].value) {
-        this.current.footView = this.footView[0].value;
-        this.footPictureActive = this.footPictureView.insideRearAngle;
-        console.log('POSTERIOR INTERNO OBLÍQUO');
-      } else if (this.current.observationSlide === 3 && this.current.footView !== this.footView[1].value) {
-        this.current.footView = this.footView[1].value;
-        this.footPictureActive = this.footPictureView.medial;
-        console.log('MEDIAL');
-      } else if (this.current.observationSlide === 2 && this.current.footView !== this.footView[2].value) {
-        this.current.footView = this.footView[2].value;
-        this.footPictureActive = this.footPictureView.rear;
-        console.log('POSTERIOR');
-      }
-    }, 50);
-  }
-
-  /**
    * Soma todos os valores definidos nas observações do teste FPI,
    * o resultado define o index
    */
   calculateFpiIndex() {
-    // console.log(this.currentFpi.assessment);
     this.currentFpi.index = Object.values(this.currentFpi.assessment)
-      .reduce((total, value) => {
-        // console.log(value);
-        return total + value.score;
-      }, 0);
-    // total + value.score, 0);
+      .reduce((total, value) => total + value['score'], 0);
   }
 
   /**
@@ -333,81 +261,70 @@ export class AssessFpiPage implements OnInit {
     this.calculateFpiIndex();
     switch (true) {
       case (this.currentFpi.index <= -4):
-        this.currentFpi.posture = this.footPosture[0].value;
+        this.currentFpi.posture = FootPosture.SupinatedHighly;
         break;
       case (this.currentFpi.index <= -1):
-        this.currentFpi.posture = this.footPosture[1].value;
+        this.currentFpi.posture = FootPosture.Supinated;
         break;
       case (this.currentFpi.index <= 4):
-        this.currentFpi.posture = this.footPosture[2].value;
+        this.currentFpi.posture = FootPosture.Neutral;
         break;
       case (this.currentFpi.index <= 8):
-        this.currentFpi.posture = this.footPosture[3].value;
+        this.currentFpi.posture = FootPosture.Pronated;
         break;
       case (this.currentFpi.index >= 9):
-        this.currentFpi.posture = this.footPosture[4].value;
+        this.currentFpi.posture = FootPosture.PronatedHighly;
         break;
       default:
         console.error('ERRO :(');
     }
     console.log(this.currentFpi.index);
     console.log(this.currentFpi.posture);
-    // console.log(this.current.fpi.assessment);
-    this.setFpiFootAssessed();
+    // console.log(this.current);
+    this.pushCurrentIntoFinalFpi();
   }
 
   /**
-   * Atribui os valores do teste corrente ao pé relacionado
-   * no objeto fpi
+   * Insere os FPI corrente no FPI final
    */
-  setFpiFootAssessed() {
-    console.log(this.current.fpi);
-    // if (this.current.footAssessed === 'esquerdo') {
-    this.assessement.fpi = this.current.fpi;
-    // } else {
-    //   this.fpi.footRight = this.current.fpi;
-    // }
-    console.log('ho')
+  pushCurrentIntoFinalFpi() {
+    this.assessFpi.foot[this.current.footAssessed] = this.current.foot[this.current.footAssessed];
   }
 
   /**
-   * https://ionicframework.com/docs/api/modal 
+   * Apresentação de instruções dos critérios de observação
+   * @param ev
+   *
+   * https://ionicframework.com/docs/api/popover
+   */
+  async presentInformation(ev: any) {
+    const popover = await this.popoverController.create({
+      component: FpiCriteriaInformationComponent,
+      event: ev,
+      translucent: true
+    });
+    return await popover.present();
+  }
+
+  /**
+   * https://ionicframework.com/docs/api/modal
    */
   async presentResult() {
     const modal = await this.modalController.create({
       component: ResultModalComponent,
       componentProps: {
-        result: this.assessement,
-        currentFootAssessed: this.footAssessed,
+        result: this.assessFpi,
+        currentFootAssessed: this.current.footAssessed,
       }
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    // console.log(data);
     if (data !== undefined) {
       if (data.nextAssessement) {
-        // this.current.footAssessed = data.nextAssessementFoot;
-        console.log(this.current.footAssessed);
-        this.currentInit(data.nextAssessementFoot);
+        // console.log(this.current.footAssessed);
+        this.fpiOnCurrentInit(data.nextAssessementFoot);
+        // console.log(this.current.footAssessed);
       }
     }
   }
-
-  upload(footPicture: Object) {
-    // const storagePath: AngularFireStorageReference = this.fireStorage.ref(
-    //   `${this.userId}/${athleteId}/${assessId}/footPicture/`
-    // );
-    const footPictures = Object.entries(footPicture);
-
-    for (const [view, picture] of footPictures) {
-      if (picture.blob !== undefined) {
-        console.log(view);
-        console.log(picture.blob);
-        console.log(picture.metadata);
-        console.log('::::::::::::');
-      }
-    }
-  }
-
 }
-

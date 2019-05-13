@@ -4,37 +4,29 @@ import * as firebase from 'firebase/app';
 
 
 export interface AssessFpi {
-    athleteId?: string;
     assessId?: string;
-    assessMethod?: string | AssessMethod;
+    athleteId: string;
+    assessMethod: string | AssessMethod;
     createdAt?: firebase.firestore.FieldValue | Date;
-    fpi?: {
-        foot?: {
-            [footSide: string]: {
-                assessment?: { [observation: string]: { score: number } };
-                posture?: string | FootPosture;
-                imageUrl?: {
-                    [footView: string]: {
-                        downloadUrl: string,
-                        path: string
-                    }
-                };
-                index?: number;
-                footPicture: {
-                    [footView: string]: {
-                        blob: Blob,
-                        metadata?: object
-                    }
-                };
+    foot?: {
+        [footSide: string]: {
+            assessment?: { [observation: string]: { score: number } };
+            posture?: string | FootPosture;
+            imageUrl?: {
+                [footView: string]: {
+                    downloadUrl: string,
+                    path: string
+                }
             };
-        }
+            index?: number;
+            footPicture?: {
+                [footView: string]: {
+                    blob?: Blob,
+                    metadata?: Object
+                }
+            };
+        };
     };
-    // footRight?: {
-    //     assessment?: { [observation: string]: {score: number} };
-    //     posture?: string | FootPosture;
-    //     imageUrl?: { [footView: string]: { downloadUrl: string , path: string } };
-    //     index?: number;
-    // };
     isDeleted?: boolean;
     updatedAt?: firebase.firestore.FieldValue | Date;
 }

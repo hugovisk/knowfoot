@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
 import { AssessFpi } from '../../models/interfaces/assess-fpi';
-import { FootSide } from '../../models/enums/foot.enum';
+// import { FootSide } from '../../models/enums/foot.enum';
 
 
 @Injectable({
@@ -19,7 +19,7 @@ export class AssessFpiService {
   private userId: string;
 
   /** Caminho para a coleção de avaliações dos atletas no firestore */
-  private assessCollection: AngularFirestoreCollection<AssessFpi>;
+  // private assessCollection: AngularFirestoreCollection<AssessFpi>;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -50,165 +50,93 @@ export class AssessFpiService {
  * 
  * @param assess objeto com as informações da avaliação do atleta
  */
-  // async createAssess(assess: AssessFpi): Promise<any> {
-  //   try {
-  //     this.assessCollection = this.firestore.collection<AssessFpi>(`/userProfile/${this.userId}/athletes/${assess.athleteId}/assess`);
+  async createAssess(assess: AssessFpi): Promise<any> {
+    try {
+      let assessCollection: AngularFirestoreCollection<AssessFpi>;
+      const assessPath = `/userProfile/${this.userId}/athletes/${assess.athleteId}/assess/`;
+      const footPicture: {[footView: string]: { blob?: Blob, metadata?: Object }} = {};
 
-  //     assess.assessId = await this.firestore.createId();
-  //     assess.createdAt = await firebase.firestore.FieldValue.serverTimestamp();
-  //     assess.updatedAt = assess.createdAt;
-  //     assess.isDeleted = false;
-
-  //     const footPicturesLeft = Object.entries(assess.footLeft.footPicture);
-  //     const footPicturesRight = Object.entries(assess.footLeft.footPicture);
-  //     const storagePath = `${this.userId}/${assess.athleteId}/${assess.assessId}/`;
-
-  //     for (const [view, picture] of footPicturesLeft) {
-  //       if (picture.blob !== undefined) {
-  //         assess.footLeft.imageUrl[view] = this.uploadFootPicture(view, storagePath, picture.blob, picture.metadata, 'Left');
-  //       }
-  //     }
-
-  //     for (const [view, picture] of footPicturesRight) {
-  //       if (picture.blob !== undefined) {
-  //         assess.footLeft.imageUrl[view] = this.uploadFootPicture(view, storagePath, picture.blob, picture.metadata, 'Right');
-  //       }
-  //     }
-
-
-  //     return await this.assessCollection.doc(assess.assessId).set(assess);
-  //     // return athlete.id;
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
-
-  verifyPictures(foot) {
-    console.log('verify');
-    console.log(foot[FootSide.Left]);
-    console.log(foot[FootSide.Right]);
-
-    if (foot[FootSide.Left] !== null) {
-      const footLeftPictures = Object.entries(foot[FootSide.Left].footPicture);
-      for (const [view, picture] of footLeftPictures) {
-        if (picture.blob !== undefined) {
-          console.log('call upload');
-          this.uploadFootPicture(view, 'images/', picture.blob, 'left');
+      /**
+       * se houver fotos as extrai para o objeto local `footPicture` e deleta o atributo
+       * no objeto do assess. Isto porque os arquivos de foto serão enviados para o storage
+       * depois da criação da avaliação no firestore e não é aceito esse tipo de arquivos
+       * no firestore.
+       */
+      Object.keys(assess.foot).forEach(side => {
+        if ('footPicture' in assess.foot[side]) {
+          footPicture[side] = assess.foot[side].footPicture;
         }
-      }
-    }
+        delete assess.foot[side].footPicture;
+      });
 
-    // if (footRight !== null) {
-    //   console.log('verift right');
-    //   const footRightPictures = Object.entries(footRight);
-    //   for (const [view, picture] of footRightPictures) {
-    //     if (picture.blob !== undefined) {
-    //       console.log('call upload');
-    //       this.uploadFootPicture(view, 'images/', picture.blob, 'right');
-    //     }
-    //   }
-    // }
+      assessCollection = this.firestore.collection<AssessFpi>(assessPath);
+
+      assess.assessId = await this.firestore.createId();
+      assess.createdAt = await firebase.firestore.FieldValue.serverTimestamp();
+      assess.updatedAt = assess.createdAt;
+      assess.isDeleted = false;
+
+      await assessCollection.doc(assess.assessId).set(assess);
+
+      // envio dos arquivos de imagem para o fireStorage
+      Object.keys(footPicture).forEach(side => {
+        Object.entries(footPicture[side]).forEach(([view, picture]) => {
+          if (picture['blob']) {
+            const storagePath = `${this.userId}/${assess.athleteId}/${assess.assessId}/foot${side}/`;
+            const storeDownloadUrl = `foot.${side}.imageUrl.${view}.downloadUrl`;
+            const storePathUrl = `foot.${side}.imageUrl.${view}.path`;
+
+            this.uploadPicture(view, picture['blob'], storagePath, assessCollection, assess.assessId, storeDownloadUrl, storePathUrl);
+          }
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
-  // gravaFoto(idDoTeste: string, urlImagem: string): Promise<any> {
-  //   const storageRef: AngularFireStorageReference = this.fireStorage.ref(
-  //     `${this.idDoAtleta}/${idDoTeste}/imagemX/`
-  //   );
-  // }
   /**
    * 
-   * @param athleteId 
-   * @param assessId 
-   * @param footPicture
+   * @param view vista do pé
+   * @param blob arquivo de imagem
+   * @param basePath caminho base para o firestorage
+   * @param collection referencia da coleção no cloud firestore
+   * @param assessId id da avaliação para update no avaliação
+   * @param storeDownloadUrl referencia do atributo downloadUrl
+   * @param storePathUrl referencia do atributo path
    * 
    * https://firebase.google.com/docs/storage/web/upload-files?hl=pt-Br
-   * https://firebase.google.com/docs/reference/js/firebase.storage.Storage#ref
+   * https://firebase.google.com/docs/reference/js/firebase.storage.Storage#ref 
    */
-  // imageUrl: Observable<string>;
-  uploadFootPicture(
+  uploadPicture(
     view: string,
-    basePath: string,
     blob: Blob,
-    footSide: string,
+    basePath: string,
+    collection: AngularFirestoreCollection<AssessFpi>,
+    assessId: string,
+    storeDownloadUrl: string,
+    storePathUrl: string
+    // metadata: Object, // TODO avaliar se eh necessario enviar metadata
   ) {
-    // return new Promise<string>((resolve, reject) => {
-    console.log('upload ' + footSide + view);
-
-    //   // const storagePath = `${this.userId}/${athleteId}/${assessId}/foot${footSide}/`;
-    const storageRef: AngularFireStorageReference = this.fireStorage.ref(
-      `${basePath}foot${footSide}/${Date.now()}_${view}.png`
-    );
-
-    // storageRef.put(blob).then((snapshot) => {
-    //   console.log('Uploaded a blob or file!');
-    //   console.log(snapshot);
-    //   snapshot.ref.getDownloadURL().then((url) => console.log(url));
-    // let isActive
+    const path = `${basePath}/${Date.now()}_${view}.png`;
+    const storageRef: AngularFireStorageReference = this.fireStorage.ref(path);
     const task = storageRef.put(blob);
-    // console.log('ho');
-    // task.snapshotChanges().pipe(
-    //   tap(snapshot => {
-    //     // isActive = snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
-    //     console.log(snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes);
-    //   }),
+    task.snapshotChanges().pipe(
+      // tap(snapshot => {
+      //   // isActive = snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
+      //   console.log(snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes);
+      // }),
 
-    //   finalize( async() => {
-    //     const url = await storageRef.getDownloadURL().toPromise();
-    //     // TODO: update o URL no firestore
-    //     // resolve (url);
-    //   })
-    // ).subscribe();
-    // console.log('lest go');
-    // }
-    // });
+      finalize(async () => {
+        const downloadUrl = await storageRef.getDownloadURL().toPromise();
+        collection.doc(assessId).update({
+          [storeDownloadUrl]: downloadUrl,
+          [storePathUrl]: path
+        });
+      })
+    ).subscribe();
   }
-
-
-  // task.snapshotChanges().pipe(
-  //   finalize(() => {
-  //     // const imageUrl = await storageRef.getDownloadURL().toPromise();
-  //     // resolve(imageUrl);
-  //     finalize(() => {
-  //       storageRef.getDownloadURL().subscribe(url=>{this.imageUrl = url});
-  //   })
-  //   }),
-
-
-
-
-
-
-  // let snapshot: Observable<any>;
-
-  // task.snapshotChanges().pipe(
-  //   finalize( async() => {
-  //     await storageRef.getDownloadURL().toPromise();
-  //   })
-  // )
-  // await storageRef.put(blob);
-  // return storageRef.getDownloadURL();
-
-  // } catch (error) {
-  //   throw error;
-  // }
-
-  // const footPictures = Object.entries(footPicture);
-
-  // for (const [view, picture] of footPictures) {
-  //   if (picture.blob !== undefined) {
-  //     const storageRef: AngularFireStorageReference = this.fireStorage.ref(
-  //       `${storagePath}${view}FootPicture.png`
-  //     );
-
-
-
-  //     console.log(view);
-  //     console.log(picture.blob);
-  //     console.log(picture.metadata);
-  //     console.log('::::::::::::');
-  //   }
-  // }
 }
 
 

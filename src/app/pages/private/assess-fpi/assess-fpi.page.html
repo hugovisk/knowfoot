@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>FPI  <ion-chip color="dark"><ion-label text-capitalize>Pé {{ footAssessed }}</ion-label></ion-chip>
+    <ion-title>FPI  
+      <ion-chip color="dark">
+        <ion-label text-capitalize>Pé {{ current.footAssessed === 'Right' ? 'direito' : 'esquerdo' }}</ion-label>
+      </ion-chip>
     </ion-title>
     <ion-buttons slot="start" *ngIf="current.observationSlide === 0">
       <ion-button [routerLink]="['/main/assess']" routerDirection="back">
@@ -51,18 +54,18 @@
 </ion-item>
 
 <ion-content color="medium">
-  <div *ngIf="!footPictureActive" text-center>
+  <div *ngIf="!current.footPictureActive" text-center>
     <br><br><br><br>
     <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
   </div>
-  <div class="foot-picture" *ngIf="footPictureActive" [style.backgroundImage]="footPictureActive">
+  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
   </div>
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!footPictureActive">
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPictureActive">
     <ion-fab-button (click)="takePicture(current.footView)">
       <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="footPictureActive">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="current.footPictureActive">
     <ion-fab-button (click)="deletePicture(current.footView)" size="small" color="light">
       <ion-icon name="trash"></ion-icon>
     </ion-fab-button>
@@ -73,7 +76,7 @@
   <ion-slides #fpiSlides [options]="fpiSlideOptions" pager="true" noSwipingClass
     (ionSlideWillChange)="setCurrentObservationSlide(fpiSlides.getActiveIndex())">
     <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>
@@ -96,7 +99,7 @@
       </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides01.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>
@@ -119,7 +122,7 @@
       </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides02 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides02 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides02.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>
@@ -142,7 +145,7 @@
       </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides03 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides03 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides03.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>
@@ -165,7 +168,7 @@
       </ion-slides>
     </ion-slide>
     <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides04 [options]="fpiScoreslideOptions"
+      <ion-slides class="score-slide" #fpiScoresSlides04 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides04.getActiveIndex())">
         <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
           <ion-grid>

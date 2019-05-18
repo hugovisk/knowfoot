@@ -1,6 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import localePtExtra from '@angular/common/locales/extra/pt';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -16,6 +19,10 @@ import { environment } from '../environments/environment';
 // import { AthleteModalPageModule } from './pages/private/athlete-modal/athlete-modal.module';
 // import { ResultModalComponent } from './pages/private/assess-fpi/result-modal/result-modal.component';
 // import { FpiCriteriaInformationComponent } from './pages/private/assess-fpi/fpi-criteria-information/fpi-criteria-information.component';
+
+// traduzir data pipes para pt-BR
+// https://angular.io/guide/i18n#angular-and-i18n
+registerLocaleData(localePt, 'pt', localePtExtra);
 
 @NgModule({
   declarations: [
@@ -38,7 +45,8 @@ import { environment } from '../environments/environment';
     // AthleteModalPageModule,
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LOCALE_ID, useValue: 'pt' }
   ],
   bootstrap: [AppComponent]
 })

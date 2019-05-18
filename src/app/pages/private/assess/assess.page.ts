@@ -32,7 +32,7 @@ export class AssessPage implements OnInit {
     const modal = await this.modalController.create({
       component: AthleteModalPage,
       componentProps: {
-        methodType: 123
+        methodType: 123 // tirar isso
       }
     });
     return await modal.present();
@@ -48,11 +48,12 @@ export class AssessPage implements OnInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
+    // console.log('data');
     // console.log(data);
-    if (data !== undefined) {
+    if (data) { // TODO verificar esse if
       const idAndFoot = `${data.currentAsseess.athleteId}/${data.currentAsseess.footSide}`;
       if (data.currentAsseess.method === AssessMethod.Fpi) {
-        // console.log(this.current.footAssessed);
+        // console.log(idAndFoot);
         this.router.navigateByUrl(`/private/assess-fpi/${idAndFoot}`);
       } else if (data.currentAsseess.method === AssessMethod.NavicularDrop) {
         this.router.navigateByUrl(`/private/assess-drop/${idAndFoot}`);

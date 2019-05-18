@@ -25,17 +25,29 @@ ion-chip{
     padding: 6px 0;
 }
 
-.foot-sides{
-    width: 50%;
-    float: left;
-    //display: inline-block;
+.assess-footer {
+    margin: 0px 0px 10px 16px;
+        small{
+           vertical-align: middle;
+        }
 }
 
-.foot{
-    content: "";
-    clear: both;
-    display: table;
-    width: 100%;
+// .foot-sides{
+//     width: 50%;
+//     float: left;
+//     //display: inline-block;
+// }
+
+// .foot{
+//     content: "";
+//     clear: both;
+//     display: table;
+//     width: 100%;
+// }
+
+.btn-more{
+    position: absolute;
+    right: 0;
 }
 
 

@@ -18,8 +18,10 @@ export class AssessFpiService {
   /** ID do usuário */
   private userId: string;
 
-  /** Caminho para a coleção de avaliações dos atletas no firestore */
-  // private assessCollection: AngularFirestoreCollection<AssessFpi>;
+  // private assessPath: string;
+
+  /** Caminho para a coleção de atletas no firestore */
+  private assessOrderByNewestCollection: AngularFirestoreCollection<AssessFpi>;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -54,7 +56,7 @@ export class AssessFpiService {
     try {
       let assessCollection: AngularFirestoreCollection<AssessFpi>;
       const assessPath = `/userProfile/${this.userId}/athletes/${assess.athleteId}/assess/`;
-      const footPicture: {[footView: string]: { blob?: Blob, metadata?: Object }} = {};
+      const footPicture: { [footView: string]: { blob?: Blob, metadata?: Object } } = {};
 
       /**
        * se houver fotos as extrai para o objeto local `footPicture` e deleta o atributo
@@ -136,6 +138,46 @@ export class AssessFpiService {
         });
       })
     ).subscribe();
+  }
+
+  /**
+ * 
+ * @param athleteId chave do atleta
+ * @param assessId chava da avaliação que deixará de ser listada
+ * 
+ */
+  async removeAssess(athleteId: string, assessId: string): Promise<any> {
+    try {
+      const assessPath = this.getAssessPath(athleteId);
+      const assessCollection = this.firestore.collection<AssessFpi>(assessPath);
+
+      return await assessCollection.doc(assessId).update({ isDeleted: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  getAssessOrderByNewest(athleteId: string): Observable<any> {
+    const assessPath = this.getAssessPath(athleteId);
+    this.assessOrderByNewestCollection =
+      this.firestore.collection<AssessFpi>(assessPath, ref =>
+        // necessario criar index no firestore para esta query
+        ref.where('isDeleted', '==' , false).orderBy('createdAt', 'desc')
+      );
+
+      return this.assessOrderByNewestCollection.valueChanges();
+  }
+
+  getAssessList(athleteId: string): Observable<any> {
+    const assessPath = this.getAssessPath(athleteId);
+    const assessCollection =
+      this.firestore.collection<AssessFpi>(assessPath);
+
+      return assessCollection.valueChanges();
+  }
+
+  getAssessPath(athleteId: string): string {
+    return `/userProfile/${this.userId}/athletes/${athleteId}/assess/`;
   }
 }
 

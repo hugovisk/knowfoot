@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { ModalController, LoadingController, AlertController } from '@ionic/angular';
 
 import { AssessFpi } from './../../../../models/interfaces/assess-fpi';
 import { FootSide } from '../../../../models/enums/foot.enum';
 import { fpiContents } from '../../../shared/fpi-contents';
 import { formSelectsContent } from '../../../shared/form-selects-content';
 import { AssessFpiService } from '../../../../services/assess/assess-fpi.service';
+
 
 @Component({
   selector: 'app-result-modal',
@@ -26,8 +28,11 @@ export class ResultModalComponent implements OnInit {
 
   constructor(
     public modalController: ModalController,
-    private fpiService: AssessFpiService
-    ) { }
+    public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    private fpiService: AssessFpiService,
+    private router: Router
+  ) { }
 
 
   ngOnInit() {
@@ -54,7 +59,7 @@ export class ResultModalComponent implements OnInit {
   suggestNextAssessemet() {
     // console.log(this.result[FootSide.Left]);
     // console.log(this.result[FootSide.Right].posture);
-    if (this.result.foot[FootSide.Left] === undefined || this.result.foot[FootSide.Right] === undefined ) {
+    if (this.result.foot[FootSide.Left] === undefined || this.result.foot[FootSide.Right] === undefined) {
       this.suggestNextAssessement = true;
       this.setNextFootAssess();
     } else {
@@ -78,11 +83,32 @@ export class ResultModalComponent implements OnInit {
     }
   }
 
-  testeEnviar() {
-    console.log('teste enviar');
-    this.fpiService.createAssess(this.result);
-    this.closeModal();
+/**
+ *
+ */
+  async endAssess() {
+    const loading = await this.loadingCtrl.create();
+    await loading.present();
+    try {
+      await this.fpiService.createAssess(this.result);
+      await loading.dismiss();
+      this.router.navigateByUrl('main/assess');
+      this.closeModal();
+    } catch (error) {
+      await loading.dismiss();
+      const alert = await this.alertCtrl.create({
+        message: error,
+        buttons: [{ text: 'Ok', role: 'cancel' }],
+      });
+      await alert.present();
+    }
   }
+
+  // testeEnviar() {
+  //   console.log('teste enviar');
+  //   this.fpiService.createAssess(this.result);
+  //   this.closeModal();
+  // }
 
   async closeModal() {
     await this.modalController.dismiss();

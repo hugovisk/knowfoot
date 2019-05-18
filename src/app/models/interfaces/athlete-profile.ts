@@ -7,14 +7,14 @@ export interface AthleteProfile {
     age?: number;
     birthDate: firebase.firestore.Timestamp | Date;
     createdAt?: firebase.firestore.FieldValue;
-    contact: boolean;
+    // contact: boolean;
     contactEmail?: string;
-    contactPhone?: string;
+    // contactPhone?: string;
     footDominant: FootSide;
     footInjuries: boolean;
     footInjuriesLeft?: FootInjurie[];
     footInjuriesRight?: FootInjurie[];
-    furtherInformation?: string;
+    // furtherInformation?: string;
     gender: Gender;
     heightInCm: number;
     id?: string;

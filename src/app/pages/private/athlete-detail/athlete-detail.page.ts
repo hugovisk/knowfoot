@@ -1,16 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IonSlides } from '@ionic/angular';
+// import { IonSlides } from '@ionic/angular';
 
 import { AthleteService } from '../../../services/athlete/athlete.service';
 import { AthleteProfile } from '../../../models/interfaces/athlete-profile';
+import { AssessFpiService } from '../../../services/assess/assess-fpi.service';
+import { AssessFpi } from '../../../models/interfaces/assess-fpi';
+
 import { Observable } from 'rxjs';
 
 import { FootSide } from '../../../models/enums/foot.enum';
-import { Sport, SportPraticeFrequency, SportPraticeTime } from '../../../models/enums/sport.enum';
+// import { Sport, SportPraticeFrequency, SportPraticeTime } from '../../../models/enums/sport.enum';
 import { formSelectsContent } from '../../shared/form-selects-content';
-import { FootInjurie } from '../../../models/enums/foot.enum';
+// import { FootInjurie } from '../../../models/enums/foot.enum';
+import { fpiContents } from '../../shared/fpi-contents';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-athlete-detail',
@@ -19,7 +25,7 @@ import { FootInjurie } from '../../../models/enums/foot.enum';
 })
 export class AthleteDetailPage implements OnInit {
 
-  @ViewChild('slides') slides: IonSlides;
+  // @ViewChild('slides') slides: IonSlides;
 
   // public athlete: Observable<AthleteProfile>;
   athlete: AthleteProfile;
@@ -33,10 +39,15 @@ export class AthleteDetailPage implements OnInit {
   footSideInjuries: string;
   sport: string;
 
-  private currentSegment = 'assess';
+  postures = fpiContents.footPosture;
+
+  assessList: Observable<AssessFpi>;
+
+  // private currentSegment = 'assess';
 
   constructor(
     private athleteService: AthleteService,
+    private assessService: AssessFpiService,
     private route: ActivatedRoute
   ) { }
 
@@ -50,22 +61,25 @@ export class AthleteDetailPage implements OnInit {
     this.athleteService.getAthlete(athleteId).subscribe((res: AthleteProfile) => {
       this.athlete = res;
       this.athlete.age = this.athleteService.athleteAge(res.birthDate);
-      this.defineSports(res.sport);
-      this.defineFootDominant(res.footDominant);
-      this.definePraticeFrequency(res.sportPraticeFrequency);
-      this.definePraticeTime(res.sportPraticeTime);
-      this.defineFootInjuries(res.footInjuriesRight, FootSide.Right);
-      this.defineFootInjuries(res.footInjuriesLeft, FootSide.Left);
-      this.defineFootInjuriesQuantity(res.footInjuriesLeft, res.footInjuriesRight);
-      this.defineFootSideInjuries(res.footInjuriesLeft, res.footInjuriesRight);
+      this.sportsPtBr(res.sport);
+      this.footDominantPtBr(res.footDominant);
+      this.praticeFrequencyPtBr(res.sportPraticeFrequency);
+      this.praticeTimePtBr(res.sportPraticeTime);
+      this.footInjuriesPtBr(res.footInjuriesRight, FootSide.Right);
+      this.footInjuriesPtBr(res.footInjuriesLeft, FootSide.Left);
+      this.footInjuriesQuantityPtBr(res.footInjuriesLeft, res.footInjuriesRight);
+      this.footSideInjuriesPtBr(res.footInjuriesLeft, res.footInjuriesRight);
     });
+    this.assessList = this.assessService.getAssessOrderByNewest(athleteId);
+    // this.assessList = this.assessService.getAssessList(athleteId);
   }
-
-  defineFootDominant(side: FootSide) {
+  // go horse pra traduzir retornos do firebase, desse jeito é horrivel para observables
+  // pq faz varias requisições da funcao sem necessidade, talvez seja melhor um pipe para traduzir
+  footDominantPtBr(side: FootSide) {
     this.footDominant = side === FootSide.Right ? 'Destro' : 'Canhoto';
   }
 
-  definePraticeFrequency(frequency: string) {
+  praticeFrequencyPtBr(frequency: string) {
     if (frequency === 'MoreThanThreePerWeek') {
       this.praticeFrequency = 'Muito ativo';
     } else if (frequency === 'TwoOrTreePerWeek') {
@@ -75,7 +89,7 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-  definePraticeTime(time: string) {
+  praticeTimePtBr(time: string) {
     if (time === 'LessThanSixMonths') {
       this.praticeTime = 'iniciante';
     } else if (time === 'BetweenSixAndTwentyFourMonths') {
@@ -85,7 +99,7 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-  defineFootInjuries(injuries: string[], footSide: FootSide) {
+  footInjuriesPtBr(injuries: string[], footSide: FootSide) {
     if (injuries) {
       for (const injury of injuries) {
         for (const lesao of this.content.footInjuries) {
@@ -101,7 +115,7 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-  defineSports(sports: string) {
+  sportsPtBr(sports: string) {
     for (const esporte of this.content.sports) {
       if (sports === esporte.value) {
         this.sport = esporte.viewValue;
@@ -110,14 +124,14 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-  defineFootInjuriesQuantity(injuriesLeft: string[], injuriesRight: string[]) {
+  footInjuriesQuantityPtBr(injuriesLeft: string[], injuriesRight: string[]) {
     const injuriesQuantityLeft = injuriesLeft ? injuriesLeft.length : 0;
     const injuriesQuantityRight = injuriesRight ? injuriesRight.length : 0;
 
     this.injuriesQuantity = injuriesQuantityLeft + injuriesQuantityRight;
   }
 
-  defineFootSideInjuries(injuriesLeft: string[], injuriesRight: string[]) {
+  footSideInjuriesPtBr(injuriesLeft: string[], injuriesRight: string[]) {
     if (injuriesLeft && injuriesRight) {
       return this.footSideInjuries = 'nos pés';
     } else if (injuriesLeft) {
@@ -127,11 +141,20 @@ export class AthleteDetailPage implements OnInit {
     }
   }
 
-  segmentChanged(ev: any) {
-    this.slides.slideTo(ev.detail.value === 'assess' ? 0 : 1);
+  postureResultPtBr(posture: string) {
+    for (const postura of this.postures) {
+      if (posture === postura.value) {
+        // console.log(postura.viewValue); // melhorar como traduzir
+        return postura.viewValue;
+      }
+    }
   }
+ 
+  // segmentChanged(ev: any) {
+  //   this.slides.slideTo(ev.detail.value === 'assess' ? 0 : 1);
+  // }
 
-  async setSegment(activeIndex: Promise<number>) {
-    this.currentSegment = await activeIndex === 0 ? 'assess' : 'profile';
-  }
+  // async setSegment(activeIndex: Promise<number>) {
+  //   this.currentSegment = await activeIndex === 0 ? 'assess' : 'profile';
+  // }
 }

@@ -97,108 +97,58 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>AVALIAÇÕES</ion-col>
+      <ion-col>{{ (assessList | async)?.length > 0 ? 'AVALIAÇÕES':'Nenhuma avaliação'}}</ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngFor="let assess of assessList | async">
       <ion-col>
         <ion-card>
           <ion-card-header class="assess-header">
-            <ion-card-subtitle>
-              <!-- <div class="ion-float-left"><strong>
-                  <ion-text color="dark">Método FPI</ion-text>
-                </strong></div> -->
-              <div class="ion-float-right">
-                <!-- <small><strong><ion-text color="medium">01 jan, 2019</ion-text></strong></small> -->
-                <ion-buttons slot="end">
+            <!-- <ion-card-subtitle>     slot="end"            -->
+                <ion-buttons class="btn-more">
                   <ion-button type="button">
                     <ion-icon slot="icon-only" name="more" color="medium"></ion-icon>
                   </ion-button>
                 </ion-buttons>
-              </div>
-            </ion-card-subtitle>
+                <!--<div >
+              </div> -->
+            <!-- </ion-card-subtitle> -->
           </ion-card-header>
           <ion-card-content>
-            <div class="foot">
-              <div class="foot-sides" text-right>
-                <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
-                ESQ
-              </div>
-              <div class="foot-sides" text-left>
-                <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
-                DIR
-              </div>
-            </div>
-            <div class="foot" text-center>
-              <br>
-                <div class="foot-sides">
-                  <p><small>Pisada esquerda</small></p>
-                  <h2><strong>NEUTRA</strong></h2>
-                </div>
-                <div class="foot-sides">
-                  <p><small>Pisada direita</small></p>
-                  <h2><strong>PRONADA</strong></h2> 
-                </div>                  
-             </div>
-             <br>
-            <div>
-                <ion-icon name="clipboard"></ion-icon>
-                  <small>                  
-                  Avaliado com método DROP NAVICULAR • 01 abr, 2019</small>
-              </div>
-          </ion-card-content>         
+              <ion-row>
+                <ion-col>
+                  <div>
+                    <div text-right>
+                      <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
+                      ESQ
+                    </div>
+                    <ion-text text-center [color]="assess.foot.Left ? 'dark':''">
+                      <p><small>Pé esquerdo</small></p>
+                      <h2><strong>{{ assess.foot.Left ? postureResultPtBr(assess.foot.Left.posture) : 'Não Avaliado'}}</strong></h2>
+                    </ion-text>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div>
+                    <div text-left>
+                      <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
+                      DIR
+                    </div>
+                    <ion-text text-center [color]="assess.foot.Right ? 'dark':''">
+                      <p><small>Pé direito</small></p>
+                      <h2><strong>{{ assess.foot.Right ? postureResultPtBr(assess.foot.Right.posture) : 'Não Avaliado'}}</strong></h2>
+                    </ion-text>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-card-content>
+            <div class="assess-footer">
+              <ion-icon name="clipboard"></ion-icon>
+              <small> Avaliado com método {{ assess.assessMethod }} •
+                {{ assess.createdAt.toDate() | date:'d MMM, y' }}</small>
+            </div>         
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row>
-        <ion-col>
-          <ion-card>
-            <ion-card-header class="assess-header">
-              <ion-card-subtitle>
-                <!-- <div class="ion-float-left"><strong>
-                    <ion-text color="dark">Método FPI</ion-text>
-                  </strong></div> -->
-                <div class="ion-float-right">
-                  <!-- <small><strong><ion-text color="medium">01 jan, 2019</ion-text></strong></small> -->
-                  <ion-buttons slot="end">
-                    <ion-button type="button">
-                      <ion-icon slot="icon-only" name="more" color="medium"></ion-icon>
-                    </ion-button>
-                  </ion-buttons>
-                </div>
-              </ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="foot">
-                <div class="foot-sides" text-right>
-                  <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
-                  ESQ
-                </div>
-                <div class="foot-sides" text-left>
-                  <ion-icon class="PROVISORIO" name="images" color="medium"></ion-icon><br>
-                  DIR
-                </div>
-              </div>
-              <div class="foot" text-center>
-                <br>
-                  <div class="foot-sides">
-                    <p><small>Pisada esquerda</small></p>
-                    <h2><strong>NEUTRA</strong></h2>
-                  </div>
-                  <div class="foot-sides">
-                    <p><small>Pisada direita</small></p>
-                    <h2><strong>PRONADA</strong></h2> 
-                  </div>                  
-               </div>
-               <br>
-              <div>
-                  <ion-icon name="clipboard"></ion-icon>
-                    <small>                  
-                    Avaliado com método DROP NAVICULAR • 01 abr, 2019</small>
-                </div>
-            </ion-card-content>         
-          </ion-card>
-        </ion-col>
-      </ion-row>
   </ion-grid>
 
   <!-- <ion-grid>

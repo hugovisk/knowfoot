@@ -1,0 +1,7 @@
+{
+  "name": "knowfoot",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

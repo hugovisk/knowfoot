@@ -11,4 +11,8 @@
 @import '~@ionic/angular/css/flex-utils.css';
 
 // https://material.angular.io/guide/theming
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+.header-md:after {
+    background-image: none;
+}

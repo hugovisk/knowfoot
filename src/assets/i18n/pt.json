@@ -1,3 +1,39 @@
 {
-  "TITLE": "Minha aplicação i18n (pt)"
+  "TITLE": "Minha aplicação i18n (pt)",
+  "landing": {
+    "welcome": "Boas-vindas ao KnowFoot",
+    "instructions": "Entre ou registre-se para começar",
+    "signin": "Registre-se",
+    "login": "Entrar"
+  },
+  "login": {
+    "button": {
+      "login": "entrar",
+      "forgetPassword": "Esqueceu a senha?"
+    },
+    "instructions": "Entre com seu email e senha para começar",
+    "input": {
+      "password": "Senha"
+    },
+    "error": {
+      "email": {
+        "required": "Insira um email válido",
+        "email": "Insira um email com formato inválido"
+      },
+      "name": {
+        "required": "Qual o seu nome?",
+        "minlength": "Necessário mínimo de 3 caracteres",
+        "maxlength": "Não exceda 40 caracteres",
+        "pattern": "Use somente letras"
+      },
+      "password": {
+        "required": "Defina sua senha de acesso",
+        "minlength": "Necessário mínimo de 4 caracteres"
+      }
+    }
+  },
+  "resetPassword": {
+    "instructions": "Entre com o email da sua conta para recuperar a senha",
+    "button": "Enviar "
+  }
 }

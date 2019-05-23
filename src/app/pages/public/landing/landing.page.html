@@ -1,0 +1,17 @@
+
+<ion-content>
+    <ion-img src="/assets/logo-nome_knowfoot.svg"></ion-img>
+</ion-content>
+<ion-footer padding> 
+    <mat-card >
+        <mat-card-header text-center>          
+          <mat-card-title>{{ 'landing.welcome' | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ 'landing.instructions' | translate }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions text-center>
+            <div margin><button mat-stroked-button color="primary" text-uppercase [routerLink]="['/login']"><strong>{{ 'landing.login' | translate}}</strong></button></div>
+            <mat-divider [inset]="true"></mat-divider>
+            <div margin><button mat-raised-button color="primary" text-uppercase><strong>{{ 'landing.signin' | translate }}</strong></button></div>           
+        </mat-card-actions>
+      </mat-card>
+</ion-footer>

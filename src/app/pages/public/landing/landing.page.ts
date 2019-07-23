@@ -7,6 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingPage implements OnInit {
 
+  userOnboardOpts = {
+    speed: 400,
+    loop: true,
+    autoplay: {
+      delay: 10000,
+      disableOnInteraction: false,
+    },
+  };
+
   constructor() { }
 
   ngOnInit() {

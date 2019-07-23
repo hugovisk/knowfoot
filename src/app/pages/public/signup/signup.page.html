@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title>
+      <img src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg" />
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="landing"></ion-back-button>
+      </ion-buttons>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <mat-vertical-stepper linear>
+    <mat-step>
+      <form [formGroup]="profileForm">
+        <ng-template matStepLabel>
+          Preencha seu perfil
+        </ng-template>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'signup.input.name' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">person</mat-icon>
+          <input matInput formControlName="name">
+          <!-- <mat-error *ngIf="input.name.invalid && input.name.touched">
+                      {{ 'signup.error.name.' + getErrorMessage('name') | translate}}
+                    </mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'signup.input.birthdate' | translate }}</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" (focus)="picker.open()">
+          <mat-icon matPrefix class="prefix">today</mat-icon>
+          <mat-datepicker touchUi #picker startView="multi-year" [startAt]="startDate"></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'signup.input.education' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">school</mat-icon>
+          <mat-select>
+            <mat-option *ngFor="let educationLevel of educationLevels | keyvalue" [value]="educationLevel.value">
+              {{ 'signup.education.' + educationLevel.value | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'signup.input.occupation' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">assignment_ind</mat-icon>
+          <mat-select>
+            <mat-option *ngFor="let occupation of occupations | keyvalue" [value]="occupation.value">
+              {{ 'signup.occupation.' + occupation.value | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div text-right>
+          <button mat-button color="primary" matStepperNext disabled>
+            <mat-icon class="icon-size">create</mat-icon>
+            Criar conta
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="registerForm">
+      <form [formGroup]="registerForm">
+        <ng-template matStepLabel>
+          Preencha seu email e defina uma senha <br>
+          <small>estas serão suas credenciais de acesso ao aplicativo</small>
+        </ng-template>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'login.input.email' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">alternate_email</mat-icon>
+          <input matInput placeholder="seu@email.com" formControlName="email" type="email" inputmode="email">
+          <!-- <mat-error *ngIf="input.email.invalid && input.email.touched">
+                      {{ 'login.error.email.' + getErrorMessage('email') | translate}}
+                    </mat-error> -->
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'login.input.password' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">lock</mat-icon>
+          <!-- [placeholder]="'login.input.password' | translate" -->
+          <input matInput placeholder="entre 4 e 16 caracteres" formControlName="password"
+            [type]="hide ? 'password' : 'text'" inputmode="password">
+          <mat-icon matSuffix class="sulffix" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+          </mat-icon>
+          <!-- <mat-error *ngIf="input.password.invalid && input.password.touched">
+                      {{ 'login.error.password.' + getErrorMessage('password') | translate}}.
+                          <a (click)="resetPassword()">{{ 'login.button.forgetPassword' | translate }}</a>
+                    </mat-error> -->
+        </mat-form-field>
+        <div text-right>
+          <button mat-button color="primary" matStepperNext disabled>
+            <mat-icon class="icon-size">create</mat-icon>
+            Criar conta
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+  </mat-vertical-stepper>
+</ion-content>

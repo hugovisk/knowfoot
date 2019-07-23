@@ -5,6 +5,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: 'landing', loadChildren: './pages/public/landing/landing.module#LandingPageModule' },
   { path: 'login', loadChildren: './pages/public/login/login.module#LoginPageModule' },
+  { path: 'signup', loadChildren: './pages/public/signup/signup.module#SignupPageModule' },
 ];
 
 @NgModule({

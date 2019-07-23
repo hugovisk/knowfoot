@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
-import { 
+import {
   MatButtonModule,
   MatCardModule,
   MatDividerModule,
   MatFormFieldModule,
   MatInputModule,
-  MatIconModule
+  MatIconModule,
+  MatDatepickerModule,
+  MatSelectModule
  } from '@angular/material';
+
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 const materialComponents = [
   MatButtonModule,
@@ -14,8 +18,11 @@ const materialComponents = [
   MatDividerModule,
   MatFormFieldModule,
   MatInputModule,
-  MatIconModule
-]
+  MatIconModule,
+  MatDatepickerModule,
+  MatMomentDateModule,
+  MatSelectModule
+];
 
 @NgModule({
   imports: [materialComponents],

@@ -1,17 +1,64 @@
+<!-- <ion-header>
+  <ion-toolbar mode="ios">
+      <ion-title>
+          <img class="logo-header" src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg"/>
+      </ion-title>       
+  </ion-toolbar>
+</ion-header> -->
 
 <ion-content>
-    <ion-img src="/assets/logo-nome_knowfoot.svg"></ion-img>
+  <div class="container">
+    <ion-img class="logo-header" src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg"></ion-img>
+
+  </div> <!-- <ion-img src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg"></ion-img> -->
+  <ion-slides pager="true" [options]="userOnboardOpts" class="userOnboard">
+    <ion-slide>
+      <div class="container">
+        <img class="img-slide-01" src="/assets/user-onboard_slide-02.svg" />
+        <h3 class="value-prop">
+            Bem-vindo ao Knowfoot, <br>
+            avalie a postura do pé de forma rápida e fácil
+        </h3>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="container">
+        <img class="img-slide-01" src="/assets/user-onboard_slide-01.svg" />
+        <h3 class="value-prop">
+          Obtenha a classificação do pé entre Neutro, Supinado ou Pronado
+        </h3>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="container">
+        <img class="img-slide-03" src="/assets/user-onboard_slide-03.svg" />
+        <h4 class="value-prop">
+          Métodos amplamente validados pela comunidade científica:<br>Foot Posture Index (FPI)<br>Drop Navicular
+        </h4>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="container">
+        <img class="img-slide-04" src="/assets/user-onboard_slide-04.svg" />
+        <h3 class="value-prop-slide-04">
+          Todos os dados coletados são armazenados e organizados em prontuários de fácil acesso
+        </h3>
+      </div>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
-<ion-footer padding> 
-    <mat-card >
-        <mat-card-header text-center>          
-          <mat-card-title>{{ 'landing.welcome' | translate }}</mat-card-title>
-          <mat-card-subtitle>{{ 'landing.instructions' | translate }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-actions text-center>
-            <div margin><button mat-stroked-button color="primary" text-uppercase [routerLink]="['/login']"><strong>{{ 'landing.login' | translate}}</strong></button></div>
-            <mat-divider [inset]="true"></mat-divider>
-            <div margin><button mat-raised-button color="primary" text-uppercase><strong>{{ 'landing.signin' | translate }}</strong></button></div>           
-        </mat-card-actions>
-      </mat-card>
+<ion-footer padding>
+    <div class="container">
+      <a [routerLink]="['/signup']" mat-flat-button color="primary">
+          <mat-icon>how_to_reg</mat-icon>
+        <span class="txt-size">{{ 'landing.signin' | translate }}</span>
+      </a>
+      <a mat-button color="primary" [routerLink]="['/login']">
+        <span class="serif txt-size">
+          <span class="color-grey">Já tenho uma conta,</span>
+         {{ 'landing.login' | translate}}
+        </span>
+      </a>
+    </div>
+
 </ion-footer>

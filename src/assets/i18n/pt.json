@@ -3,37 +3,68 @@
   "landing": {
     "welcome": "Boas-vindas ao KnowFoot",
     "instructions": "Entre ou registre-se para começar",
-    "signin": "Registre-se",
-    "login": "Entrar"
+    "signin": "Comece já criando sua conta",
+    "login": "entrar"
   },
   "login": {
     "button": {
-      "login": "entrar",
+      "login": "Entrar",
       "forgetPassword": "Esqueceu a senha?"
     },
-    "instructions": "Entre com seu email e senha para começar",
+    "instructions": "Entre com suas credenciais e comece a avaliar",
     "input": {
-      "password": "Senha"
+      "password": "Senha",
+      "email": "Email"
     },
     "error": {
       "email": {
-        "required": "Insira um email válido",
-        "email": "Insira um email com formato inválido"
-      },
-      "name": {
-        "required": "Qual o seu nome?",
-        "minlength": "Necessário mínimo de 3 caracteres",
-        "maxlength": "Não exceda 40 caracteres",
-        "pattern": "Use somente letras"
+        "required": "Insira o email registrado para sua conta",
+        "email": "Insira um email com formato válido"
       },
       "password": {
-        "required": "Defina sua senha de acesso",
+        "required": "Insira sua senha de acesso",
         "minlength": "Necessário mínimo de 4 caracteres"
       }
     }
   },
-  "resetPassword": {
-    "instructions": "Entre com o email da sua conta para recuperar a senha",
-    "button": "Enviar "
+  "signup": {
+    "button": {
+      "register": "Criar conta",
+      "enter": "Entrar"
+    },
+    "input": {
+      "name": "Nome",
+      "birthdate": "Data de aniversário",
+      "education": "Escolaridade",
+      "occupation": "Profissão"
+    },
+    "education": {
+      "ElementarySchool": "Fundamental",
+      "HighSchool": "Médio",
+      "HigherEducation": "Superior",
+      "HigherEducationHealthArea": "Superior (Área da saúde)",
+      "PostGraduate": "Pós-Graduação",
+      "PostGraduteHealthArea": "Pós-Graduação (Área da saúde)",
+      "Others": "Outros"
+    },
+    "occupation": {
+      "Doctor": "Médico",
+      "Physiotherapist": "Fisioterapeuta",
+      "PhysicalEducator": "Educador Físico",
+      "SalesMan": "Vendedor",
+      "HealthAreaStudent": "Estudante (Área da Saúde)",
+      "Student": "Estudante",
+      "Others": "Outros"
+    },
+    "error": {
+      "email": {
+        "required": "Insira o email registrado para sua conta",
+        "email": "Insira um email com formato válido"
+      },
+      "password": {
+        "required": "Insira sua senha de acesso",
+        "minlength": "Necessário mínimo de 4 caracteres"
+      }
+    }
   }
 }

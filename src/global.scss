@@ -11,8 +11,16 @@
 @import '~@ionic/angular/css/flex-utils.css';
 
 // https://material.angular.io/guide/theming
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+//@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+@import "./theme/knowfoot-app-theme.scss";
 
 .header-md:after {
     background-image: none;
 }
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }

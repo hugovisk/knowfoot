@@ -1,0 +1,25 @@
+@import '~@angular/material/theming';
+
+img {
+    margin-top: 8px;
+    overflow: hidden;
+    width: 130px;
+  }
+
+.mat-form-field {
+    width: 100%;
+}
+
+.prefix {
+    // color: rgb(187, 197, 207);
+    color: $dark-disabled-text;
+    margin: 0 7px 0 0;
+}
+
+small {
+  color: $dark-secondary-text;
+}
+
+.icon-size {
+  font-size: 20px;
+}

@@ -15,21 +15,28 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
+/**
+ * Define no input de senha o valor do atributo type
+ * e no botao de troca visibilidade o icone mostrado.
+ * `true` caracteres não visíveis
+ */
   hide = true;
 
-  constructor(
-    public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
-    private formBuilder: FormBuilder,
-    // private authService: AuthService,
-    private router: Router, 
-    private translate: TranslateService
-  ) { }
+  /** tipos de erros de validacao do formulario
+   * TODO: mudar para models
+   */
+  formErrorTypes = {
+    email: [
+      { type: 'required' },
+      { type: 'email' }
+    ],
+    password: [
+      { type: 'required' },
+      { type: 'minlength' }
+    ]
+  };
 
-  ngOnInit() {
-  }
-
+  /** Definição do formulario e validações */
   loginForm = this.formBuilder.group({
     email: ['', [
       Validators.required,
@@ -41,6 +48,18 @@ export class LoginPage implements OnInit {
     ]]
   });
 
+  constructor(
+    public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    private formBuilder: FormBuilder,
+    // private authService: AuthService,
+    private router: Router,
+    private translate: TranslateService
+  ) { }
+
+  ngOnInit() {
+  }
+
   /**
    * Getter para acessar os controls do campo do formulario de forma resumida,
    * ex.: input.name, ao invez de registerForm.controls.name
@@ -50,44 +69,35 @@ export class LoginPage implements OnInit {
   get input() {
     return this.loginForm.controls;
   }
-
-  formErrorMessages = {
-    'name': [
-      { type: 'required', message: 'Qual o seu nome?' },
-      { type: 'minlength', message: 'Necessário mínimo de 3 caracteres' },
-      { type: 'maxlength', message: 'Não exceda 40 caracteres' },
-      { type: 'pattern', message: 'Use somente letras' }
-    ],
-    'email': [
-      { type: 'required', message: 'Insira um email inválido' },
-      { type: 'email', message: 'Insira um email com formato inválido' }
-    ],
-    'password': [
-      { type: 'required', message: 'Defina sua senha de acesso' },
-      { type: 'minlength', message: 'Necessário mínimo de 4 caracteres' }
-    ]
-  };
-
-  getErrorMessage(field) {
-    console.log(field)
-    for (const error of this.formErrorMessages[field]) {
-      console.log(error.type);
+  /**
+   * recebe o campo inválido e retorna o tipo do erro
+   * @param field
+   */
+  getErrorMessage(field: string) {
+    // console.log(field);
+    for (const error of this.formErrorTypes[field]) {
+      // console.log(error.type);
       if (this.input[field].hasError(error.type)) {
         return error.type;
       }
     }
   }
-
-
-
-  /** 
+  /**
    * Transfere o conteudo do formulario para a variavel registerPayload
    * TODO: validar errors
    */
   async loginUser() {
-    const user: UserProfile = this.loginForm.value;
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
+    if (this.loginForm.invalid) {
+      console.log('invalido');
+      // this.input.email.markAsTouched();
+      this.input.password.markAsTouched();
+    } else {
+      console.log('valido');
+    }
+    
+    // const user: UserProfile = this.loginForm.value;
+    // const loading = await this.loadingCtrl.create({});
+    // await loading.present();
 
     // try {
     //   await this.authService.loginUser(user.email, user.password);
@@ -108,9 +118,12 @@ export class LoginPage implements OnInit {
    * Envia link de redefinicao de senha para email informado
    */
   async resetPassword() {
+    console.log('touched');
     if (this.input.email.valid) {
       const user: UserProfile = this.loginForm.value;
-      const loading = await this.loadingCtrl.create();
+      const loading = await this.loadingCtrl.create({
+        message: 'Hellooo' // TODO: ajustar msg
+      });
 
       try {
         await loading.present();
@@ -130,8 +143,7 @@ export class LoginPage implements OnInit {
           ],
         });
         await alert.present();
-      }
-      catch (error) {
+      } catch (error) {
         await loading.dismiss();
         const errorAlert = await this.alertCtrl.create({
           message: error,

@@ -1,31 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
-
 
 import { LoadingController, AlertController } from '@ionic/angular';
 
 import { EducationLevel, Occupation } from '../../../models/enums/user.enum';
+import { formErrorTypes } from '../../../models/objects/form-error-type.object'
 
 import * as moment from 'moment';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
-  styleUrls: ['./signup.page.scss'],
-  // providers: [{
-  //   provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
-  // }]
+  styleUrls: ['./signup.page.scss']
 })
 export class SignupPage implements OnInit {
   signupForm: FormGroup;
-  // registerForm: FormGroup;
 
+  /** validação do formulario de dados do usuário */
   profileComplete = false;
 
+  /** conteudo dos selects */
   educationLevels = EducationLevel;
   occupations = Occupation;
 
@@ -36,84 +33,13 @@ export class SignupPage implements OnInit {
    */
   hide = true;
 
+  /** configuração de data inicial, maxima e minima do datepicker  */
   startDate = moment().subtract(39, 'years');
   minDate = moment().subtract(100, 'years');
   maxDate = moment().subtract(16, 'years');
 
-  /** tipos de erros de validacao do formulario
-   * TODO: mudar para models
-   */
-  formErrorTypes = {
-    birthdate: [
-      { type: 'required' },
-      { type: 'matDatepickerParse' },
-      { type: 'matDatepickerMax' },
-      { type: 'matDatepickerMin' }
-    ],
-    education: [
-      { type: 'required' }
-    ],
-    email: [
-      { type: 'required' },
-      { type: 'email' }
-    ],
-    name: [
-      { type: 'required' },
-      { type: 'minlength' },
-      { type: 'maxlength' },
-      { type: 'pattern' }
-    ],
-    password: [
-      { type: 'required' },
-      { type: 'minlength' }
-    ],
-    occupation: [
-      { type: 'required' }
-    ],
-  };
-
-  // signupForm = this.formBuilder.group({
-  //   birthdate: ['', Validators.required],
-  //   education: ['', Validators.required],
-  //   email: ['', [
-  //     Validators.required,
-  //     Validators.email
-  //   ]],
-  //   name: ['', [
-  //     Validators.required,
-  //     Validators.minLength(3),
-  //     Validators.maxLength(40),
-  //     Validators.pattern('[a-zA-ZÀ-ÿ \']*')// permitido somente letras e espaco
-  //   ]],
-  //   occupation: ['', Validators.required],
-  //   password: ['', [
-  //     Validators.required,
-  //     Validators.minLength(4)
-  //   ]]
-  // });
-
-  // registerForm = this.formBuilder.group({
-  //   email: ['', [
-  //     Validators.required,
-  //     Validators.email
-  //   ]],
-  //   password: ['', [
-  //     Validators.required,
-  //     Validators.minLength(4)
-  //   ]]
-  // });
-
-  // profileForm = this.formBuilder.group({
-  //   name: ['', [
-  //     Validators.required,
-  //     Validators.minLength(3),
-  //     Validators.maxLength(40),
-  //     Validators.pattern('[a-zA-ZÀ-ÿ \']*')// permitido somente letras e espaco
-  //   ]],
-  //   birthDate: ['', Validators.required],
-  //   education: ['', Validators.required],
-  //   occupation: ['', Validators.required]
-  // });
+  /** tipos de erros de validacao do formulario */
+  formErrors = formErrorTypes;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -124,53 +50,26 @@ export class SignupPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.profileForm = this.formBuilder.group({
-    //   name: ['', [
-    //     Validators.required,
-    //     Validators.minLength(3),
-    //     Validators.maxLength(40),
-    //     Validators.pattern('[a-zA-ZÀ-ÿ \']*') // permitido somente letras e espaco
-    //   ]],
-    //   birthDate: ['', Validators.required],
-    //   education: ['', Validators.required],
-    //   occupation: ['', Validators.required]
-    // });
-
-    // this.registerForm = this.formBuilder.group({
-    //   email: ['', [
-    //     Validators.required,
-    //     Validators.email
-    //   ]],
-    //   password: ['', [
-    //     Validators.required,
-    //     Validators.minLength(4)
-    //   ]]
-    // });
-
-      this.signupForm = this.formBuilder.group({
-    birthdate: ['', Validators.required],
-    education: ['', Validators.required],
-    email: ['', [
-      Validators.required,
-      Validators.email
-    ]],
-    name: ['', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(40),
-      Validators.pattern('[a-zA-ZÀ-ÿ \']*')// permitido somente letras e espaco
-    ]],
-    occupation: ['', Validators.required],
-    password: ['', [
-      Validators.required,
-      Validators.minLength(4)
-    ]]
-  });
-
-}
-
-  
-
+    this.signupForm = this.formBuilder.group({
+      birthdate: ['', Validators.required],
+      education: ['', Validators.required],
+      email: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      name: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(40),
+        Validators.pattern('[a-zA-ZÀ-ÿ \']*')// permitido somente letras e espaco
+      ]],
+      occupation: ['', Validators.required],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(4)
+      ]]
+    });
+  }
   /**
    * Getter para acessar os controls do campo do formulario de forma resumida,
    * ex.: input.name, ao invez de registerForm.controls.name
@@ -187,7 +86,7 @@ export class SignupPage implements OnInit {
    */
   getErrorMessage(field: string) {
     // console.log(this.input.field.getError());
-    for (const error of this.formErrorTypes[field]) {
+    for (const error of this.formErrors[field]) {
       if (this.input[field].hasError(error.type)) {
         // console.log(error.type);
         return error.type;
@@ -235,7 +134,7 @@ export class SignupPage implements OnInit {
     // }
   }
 
-  /** helper para manter a ordem do pipe keyvalue */
+  /** helper para manter a ordenação do pipe keyvalue */
   keepOrder = (a, b) => {
     return a;
   }

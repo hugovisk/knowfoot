@@ -86,7 +86,7 @@
         <mat-form-field appearance="outline">
           <mat-label>{{ 'signup.input.email' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">alternate_email</mat-icon>
-          <input matInput placeholder="seu@email.com" formControlName="email" type="email" inputmode="email">
+          <input matInput formControlName="email" type="email" inputmode="email">
           <mat-error *ngIf="input.email.invalid && input.email.touched">
             {{ 'signup.error.email.' + getErrorMessage('email') | translate}}
           </mat-error>

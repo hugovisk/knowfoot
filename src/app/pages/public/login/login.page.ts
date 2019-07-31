@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { LoadingController, AlertController } from '@ionic/angular';
 
 // import { AuthService } from '../../../services/user/auth/auth.service';
 import { UserProfile } from '../../../models/interfaces/user-profile';
-import { LoadingController, AlertController } from '@ionic/angular';
-// import { formErrorMessages } from '../../shared/form-error-mesages';
+import { formErrorTypes } from '../../../models/objects/form-error-type.object'
+
 import { TranslateService } from '@ngx-translate/core';
 
 
@@ -15,38 +17,17 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-/**
- * Define no input de senha o valor do atributo type
- * e no botao de troca visibilidade o icone mostrado.
- * `true` caracteres não visíveis
- */
+  loginForm: FormGroup;
+
+  /**
+   * Define no input de senha o valor do atributo type
+   * e no botao de troca visibilidade o icone mostrado.
+   * `true` caracteres não visíveis
+   */
   hide = true;
 
-  /** tipos de erros de validacao do formulario
-   * TODO: mudar para models
-   */
-  formErrorTypes = {
-    email: [
-      { type: 'required' },
-      { type: 'email' }
-    ],
-    password: [
-      { type: 'required' },
-      { type: 'minlength' }
-    ]
-  };
-
-  /** Definição do formulario e validações */
-  loginForm = this.formBuilder.group({
-    email: ['', [
-      Validators.required,
-      Validators.email
-    ]],
-    password: ['', [
-      Validators.required,
-      Validators.minLength(4)
-    ]]
-  });
+  /** tipos de erros de validacao do formulario */
+  formErrors = formErrorTypes;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -58,13 +39,24 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    /** Definição do formulario e validações */
+    this.loginForm = this.formBuilder.group({
+      email: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(4)
+      ]]
+    });
   }
 
   /**
    * Getter para acessar os controls do campo do formulario de forma resumida,
    * ex.: input.name, ao invez de registerForm.controls.name
-   * 
-   * https://angular.io/api/forms/AbstractControl 
+   *
+   * https://angular.io/api/forms/AbstractControl
    */
   get input() {
     return this.loginForm.controls;
@@ -75,7 +67,7 @@ export class LoginPage implements OnInit {
    */
   getErrorMessage(field: string) {
     // console.log(field);
-    for (const error of this.formErrorTypes[field]) {
+    for (const error of this.formErrors[field]) {
       // console.log(error.type);
       if (this.input[field].hasError(error.type)) {
         return error.type;
@@ -94,7 +86,7 @@ export class LoginPage implements OnInit {
     } else {
       console.log('valido');
     }
-    
+
     // const user: UserProfile = this.loginForm.value;
     // const loading = await this.loadingCtrl.create({});
     // await loading.present();
@@ -152,7 +144,5 @@ export class LoginPage implements OnInit {
         await errorAlert.present();
       }
     }
-
   }
-
 }

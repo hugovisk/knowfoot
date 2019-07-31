@@ -1,11 +1,18 @@
 @import '~@angular/material/theming';
 
-.mat-card-header { 
-    justify-content: center; 
+p {
+  font-family: 'Bree Serif', serif;
+  color: $dark-secondary-text;
+  margin-top: 10px;
 }
 
+a {
+  width: 90%;
+}
+
+
 .footer-md:before {
-    background-image: none;
+  background-image: none;
 }
 
 .logo-header {
@@ -14,9 +21,9 @@
   width: 150px;
 }
 
-  ion-slides {
-    --bullet-background:black;
-    --bullet-background-active: #3298be;
+ion-slides {
+  --bullet-background: black;
+  --bullet-background-active: #3298be;
 }
 
 .color-grey {
@@ -31,49 +38,37 @@
   font-size: 16px;
 }
 
-  .userOnboard {
-      height: 76%;
-  }  
+.userOnboard {
+  height: 76%;
+}
 
-  .img-slide-01 {
-    width: 80%;
-    height: 100%;
-    overflow: hidden;
-  }
+.img-slide-01 {
+  width: 80%;
+  height: 100%;
+  overflow: hidden;
+}
 
-  .img-slide-03 {
-    width: 70%;
-    height: 100%;
-    overflow: hidden;
-  }
+.img-slide-03 {
+  width: 70%;
+  height: 100%;
+  overflow: hidden;
+}
 
-  .img-slide-04 {
-    width: 70%;
-    height: 90%;
-    overflow: hidden;
-  }  
+.img-slide-04 {
+  width: 70%;
+  height: 90%;
+  overflow: hidden;
+}
 
+.value-prop {
+  font-family: 'Bree Serif', serif;
+  color: $dark-secondary-text;
+  width: 80%;
+  margin-top: 0;
+}
 
-  .value-prop {
-    font-family: 'Bree Serif', serif;
-    color: $dark-secondary-text;
-    width: 80%;
-    margin-top: 0;
-  }
-
-  .value-prop-slide-04 {
-    font-family: 'Bree Serif', serif;
-    color: $dark-secondary-text;
-    margin-top: 10px;
-  }
-
- p{
-    font-family: 'Bree Serif', serif;
-    color:$dark-secondary-text;
-    margin-top: 10px;
-  }
-
-  a {
-    width: 90%;
-  }
-
+.value-prop-slide-04 {
+  font-family: 'Bree Serif', serif;
+  color: $dark-secondary-text;
+  margin-top: 10px;
+}

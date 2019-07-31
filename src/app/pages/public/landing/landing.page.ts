@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingPage implements OnInit {
 
+  /**
+   * configurações do slide
+   * http://idangero.us/swiper/api/
+   */
   userOnboardOpts = {
     speed: 400,
     loop: true,

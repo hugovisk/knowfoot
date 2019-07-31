@@ -33,7 +33,7 @@ export enum Occupation {
     Physiotherapist = 'Physiotherapist',
     PhysicalEducator = 'PhysicalEducator',
     SalesMan = 'SalesMan',
-    HealthAreaStudent = 'HealthAreaStudent',
+    StudentHealthArea = 'StudentHealthArea',
     Student = 'Student',
     Others = 'Others'
 }

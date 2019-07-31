@@ -13,7 +13,7 @@ img {
 .prefix {
     // color: rgb(187, 197, 207);
     color: $dark-disabled-text;
-    margin: 0 7px 0 0;
+    margin: 0 10px 0 0;
 }
 
 small {
@@ -22,4 +22,21 @@ small {
 
 .icon-size {
   font-size: 20px;
+}
+
+p {
+  color: $dark-secondary-text;
+  font-size: 12px;
+  margin-top: 5px;
+  
+}
+
+.title {
+  color: rgba(rgb(0, 0, 0), 0.7);
+  font-family: 'Bree Serif', serif;
+  margin: 0;
+}
+
+.signup-btn {
+  width: 100%;
 }

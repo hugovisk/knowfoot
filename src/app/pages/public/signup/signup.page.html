@@ -12,88 +12,110 @@
 </ion-header>
 
 <ion-content>
-  <mat-vertical-stepper linear>
-    <mat-step>
-      <form [formGroup]="profileForm">
+  <div text-center>
+    <p></p>
+    <h5 class="title">{{ 'signup.title' | translate }}</h5>
+    <p>{{ 'signup.targetAudience' | translate }}</p>
+  </div>
+  <form [formGroup]="signupForm">
+    <mat-vertical-stepper #stepper linear>
+      <mat-step [completed]="profileComplete" state="phone">
         <ng-template matStepLabel>
-          Preencha seu perfil
+          {{ 'signup.profileForm.title' | translate }} <br>
+          <small>{{ 'signup.profileForm.subtitle' | translate }} </small>
         </ng-template>
         <mat-form-field appearance="outline">
           <mat-label>{{ 'signup.input.name' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">person</mat-icon>
           <input matInput formControlName="name">
-          <!-- <mat-error *ngIf="input.name.invalid && input.name.touched">
-                      {{ 'signup.error.name.' + getErrorMessage('name') | translate}}
-                    </mat-error> -->
+          <mat-error *ngIf="input.name.invalid && input.name.touched">
+            {{ 'signup.error.name.' + getErrorMessage('name') | translate}}
+          </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>{{ 'signup.input.birthdate' | translate }}</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" (focus)="picker.open()">
-          <mat-icon matPrefix class="prefix">today</mat-icon>
+          <input matInput formControlName="birthdate" [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+            [placeholder]="'signup.dateFormat'| translate" inputmode="numeric">
+          <mat-icon matPrefix class="prefix">cake</mat-icon>
+          <mat-datepicker-toggle matSuffix [for]="picker" class="sulffix"></mat-datepicker-toggle>
           <mat-datepicker touchUi #picker startView="multi-year" [startAt]="startDate"></mat-datepicker>
+          <mat-error *ngIf="input.birthdate.invalid && input.birthdate.touched">
+            {{ 'signup.error.birthdate.' + getErrorMessage('birthdate') | translate}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ 'signup.input.education' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">school</mat-icon>
-          <mat-select>
-            <mat-option *ngFor="let educationLevel of educationLevels | keyvalue" [value]="educationLevel.value">
+          <mat-select formControlName="education">
+            <mat-option *ngFor="let educationLevel of educationLevels | keyvalue: keepOrder"
+              [value]="educationLevel.value">
               {{ 'signup.education.' + educationLevel.value | translate }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="input.education.invalid && input.education.touched">
+            {{ 'signup.error.education.' + getErrorMessage('education') | translate}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ 'signup.input.occupation' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">assignment_ind</mat-icon>
-          <mat-select>
-            <mat-option *ngFor="let occupation of occupations | keyvalue" [value]="occupation.value">
+          <mat-select formControlName="occupation">
+            <mat-option *ngFor="let occupation of occupations | keyvalue: keepOrder" [value]="occupation.value">
               {{ 'signup.occupation.' + occupation.value | translate }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="input.occupation.invalid && input.occupation.touched">
+            {{ 'signup.error.occupation.' + getErrorMessage('occupation') | translate}}
+          </mat-error>
         </mat-form-field>
         <div text-right>
-          <button mat-button color="primary" matStepperNext disabled>
-            <mat-icon class="icon-size">create</mat-icon>
-            Criar conta
-          </button>
+          <a mat-flat-button type="button" color="primary" (click)="profileValidationCheck(stepper)"
+            [disabled]="input.name.invalid || input.birthdate.invalid || input.education.invalid || input.occupation.invalid">
+            {{ 'signup.button.next' | translate }}
+            <mat-icon class="icon-size">chevron_right</mat-icon>
+          </a>
         </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="registerForm">
-      <form [formGroup]="registerForm">
+      </mat-step>
+      <mat-step>
         <ng-template matStepLabel>
-          Preencha seu email e defina uma senha <br>
-          <small>estas serão suas credenciais de acesso ao aplicativo</small>
+          <div (click)="profileValidationCheck(stepper)">
+            {{ 'signup.registerForm.title' | translate }} <br>
+            <small>{{ 'signup.registerForm.subtitle' | translate }}</small>
+          </div>
         </ng-template>
         <mat-form-field appearance="outline">
-          <mat-label>{{ 'login.input.email' | translate }}</mat-label>
+          <mat-label>{{ 'signup.input.email' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">alternate_email</mat-icon>
           <input matInput placeholder="seu@email.com" formControlName="email" type="email" inputmode="email">
-          <!-- <mat-error *ngIf="input.email.invalid && input.email.touched">
-                      {{ 'login.error.email.' + getErrorMessage('email') | translate}}
-                    </mat-error> -->
+          <mat-error *ngIf="input.email.invalid && input.email.touched">
+            {{ 'signup.error.email.' + getErrorMessage('email') | translate}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>{{ 'login.input.password' | translate }}</mat-label>
+          <mat-label>{{ 'signup.input.password' | translate }}</mat-label>
           <mat-icon matPrefix class="prefix">lock</mat-icon>
-          <!-- [placeholder]="'login.input.password' | translate" -->
-          <input matInput placeholder="entre 4 e 16 caracteres" formControlName="password"
+          <input matInput [placeholder]="'signup.input.passwordPlaceholder' | translate" formControlName="password"
             [type]="hide ? 'password' : 'text'" inputmode="password">
           <mat-icon matSuffix class="sulffix" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
           </mat-icon>
-          <!-- <mat-error *ngIf="input.password.invalid && input.password.touched">
-                      {{ 'login.error.password.' + getErrorMessage('password') | translate}}.
-                          <a (click)="resetPassword()">{{ 'login.button.forgetPassword' | translate }}</a>
-                    </mat-error> -->
+          <mat-error *ngIf="input.password.invalid && input.password.touched">
+            {{ 'signup.error.password.' + getErrorMessage('password') | translate}}
+          </mat-error>
         </mat-form-field>
-        <div text-right>
-          <button mat-button color="primary" matStepperNext disabled>
-            <mat-icon class="icon-size">create</mat-icon>
-            Criar conta
-          </button>
+        <div class="signTerms" margin-bottom>
+          <small>{{ 'signup.agreement.txt1' | translate }}
+            <a [routerLink]="['/privacy-policy']">{{ 'signup.agreement.privacy' | translate }}</a>
+            {{ 'signup.agreement.txt2' | translate }}
+            <a [routerLink]="['/terms-and-conditions']">{{ 'signup.agreement.service' | translate }}</a>
+            {{ 'signup.agreement.txt3' | translate }}</small>
         </div>
-      </form>
-    </mat-step>
-
-  </mat-vertical-stepper>
+        <div text-right>
+          <a class="signup-btn" mat-flat-button color="primary" [disabled]="signupForm.invalid">
+            <mat-icon class="icon-size">create</mat-icon>
+            {{ 'signup.button.register' | translate }}
+          </a>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+  </form>
 </ion-content>

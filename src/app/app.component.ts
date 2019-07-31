@@ -24,12 +24,8 @@ export class AppComponent {
       SplashScreen.hide().catch(error => {
         console.warn(error);
       });
-      // StatusBar.hide().catch(error => {
-      //   console.warn(error);
-      // });
-      // definição do idioma de exibição para o ngx-translate
+      // definição do idioma de exibição para o ngx-translate manualmmente
       this.translate.setDefaultLang('pt');
     });
-    
   }
 }

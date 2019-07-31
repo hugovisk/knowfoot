@@ -4,7 +4,6 @@
 
 @include mat-core();
 
-
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -19,20 +18,6 @@ $knowfoot-app-backfround: mat-palette($knowfoot-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $theme: mat-light-theme($knowfoot-app-primary, $knowfoot-app-accent, $knowfoot-app-warn);
 
-// // Define a custom typography config that overrides the font-family as well as the
-// // `headlines` and `body-1` levels.
-// $bree: mat-typography-config(
-//   $font-family: 'Bree Serif, serif',
-//   $headline: mat-typography-level(32px, 48px, 700),
-//   $body-1: mat-typography-level(16px, 24px, 500)
-// );
-
-// $custom-typography: mat-typography-config(
-//   $font-family: 'Roboto, monospace',
-//   $headline: mat-typography-level(32px, 48px, 700),
-//   $body-1: mat-typography-level(16px, 24px, 500)
-// );
-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
@@ -40,5 +25,4 @@ $theme: mat-light-theme($knowfoot-app-primary, $knowfoot-app-accent, $knowfoot-a
 
 @include knowfoot-basecolors($theme);
 
-// @include mat-base-typography($bree);
 

@@ -1,17 +1,32 @@
 {
-  "TITLE": "Minha aplicação i18n (pt)",
   "landing": {
-    "welcome": "Boas-vindas ao KnowFoot",
-    "instructions": "Entre ou registre-se para começar",
     "signin": "Comece já criando sua conta",
-    "login": "entrar"
+    "haveAccount": "Já tenho uma conta, ",
+    "login": "entrar",
+    "slide1": {
+      "welcome": "Bem-vindo ao Knowfoot,",
+      "propValue": "avalie a postura do pé de forma rápida e fácil"
+    },
+    "slide2": {
+      "propValue": "Obtenha a classificação do pé entre Neutro, Supinado ou Pronado"
+    },
+    "slide3": {
+      "propValue": "Métodos amplamente validados pela comunidade científica:",
+      "fpi": "Foot Posture Index (FPI)",
+      "drop": "Drop Navicular"
+    },
+    "slide4": {
+      "propValue": "Todos os dados coletados são armazenados e organizados em prontuários de fácil acesso"
+    }
   },
+
   "login": {
+    "title": "Ótimo que está de volta!",
     "button": {
       "login": "Entrar",
       "forgetPassword": "Esqueceu a senha?"
     },
-    "instructions": "Entre com suas credenciais e comece a avaliar",
+    "instructions": "Entre com suas credenciais e comece uma avaliação",
     "input": {
       "password": "Senha",
       "email": "Email"
@@ -27,17 +42,32 @@
       }
     }
   },
+
   "signup": {
+    "title": "Vamos começar!",
+    "targetAudience": "*Este app é direcionado a profissionais da área de saúde",
+    "profileForm": {
+      "title": "Nos conte um pouco sobre você",
+      "subtitle": "Isso nos ajuda a melhorar sua experiencia no app :)"
+    },
+    "registerForm": {
+      "title": "Preencha seu email e defina uma senha",
+      "subtitle": "estas serão suas credenciais de acesso ao aplicativo"
+    },
     "button": {
-      "register": "Criar conta",
-      "enter": "Entrar"
+      "next": "Próximo",
+      "register": "Criar conta"
     },
     "input": {
       "name": "Nome",
-      "birthdate": "Data de aniversário",
+      "birthdate": "Data de nascimento",
       "education": "Escolaridade",
-      "occupation": "Profissão"
+      "occupation": "Profissão",
+      "password": "Senha",
+      "passwordPlaceholder": "entre 4 e 16 caracteres",
+      "email": "Email"
     },
+    "dateFormat": "dd-mm-aaaa",
     "education": {
       "ElementarySchool": "Fundamental",
       "HighSchool": "Médio",
@@ -52,19 +82,44 @@
       "Physiotherapist": "Fisioterapeuta",
       "PhysicalEducator": "Educador Físico",
       "SalesMan": "Vendedor",
-      "HealthAreaStudent": "Estudante (Área da Saúde)",
+      "StudentHealthArea": "Estudante (Área da Saúde)",
       "Student": "Estudante",
       "Others": "Outros"
     },
     "error": {
+      "birthdate": {
+        "required": "Gostariamos de saber sua faixa etária",
+        "matDatepickerParse": "Entre uma data válida",
+        "matDatepickerMax": "Aplicativo para maiores de 18 anos",
+        "matDatepickerMin": "Você é um fantasma?"
+      },
+      "education": {
+        "required": "Qual a sua formação?"
+      },
       "email": {
-        "required": "Insira o email registrado para sua conta",
+        "required": "Registre um email para sua conta",
         "email": "Insira um email com formato válido"
       },
+      "name": {
+        "required": "Nos diga como quer ser chamado",
+        "maxlength": "Máximo de 40 caracteres",
+        "minlength": "Necessário mínimo de 3 caracteres",
+        "pattern": "O nome deve conter somente letras"
+      },
       "password": {
-        "required": "Insira sua senha de acesso",
+        "required": "Defina sua senha de acesso",
         "minlength": "Necessário mínimo de 4 caracteres"
+      },
+      "occupation": {
+        "required": "Qual sua área de atuação?"
       }
+    },
+    "agreement": {
+      "txt1": "Ao criar minha conta, concordo com a ",
+      "privacy": "Política de privacidade",
+      "txt2": "e",
+      "service": "Termos de serviço",
+      "txt3": " do KnowFoot."
     }
   }
 }

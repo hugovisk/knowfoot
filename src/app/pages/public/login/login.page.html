@@ -1,77 +1,65 @@
 <ion-header>
-    <ion-toolbar mode="ios">
-        <ion-title>
-            <img src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg"/>
-        </ion-title>       
-        <ion-buttons slot="start">
-            <ion-buttons slot="start">
-                <ion-back-button defaultHref="landing"></ion-back-button>
-            </ion-buttons>
-        </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar mode="ios">
+    <ion-title>
+      <img src="/assets/logo-nome_knowfoot_color_b11669afc83c4898afcb088c8adf7d70.svg" />
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="landing"></ion-back-button>
+      </ion-buttons>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <ion-grid fixed>
-    <ion-row >
+    <ion-row>
       <ion-col size="12" text-center>
         <h5 class="title">
-              Ótimo que está de volta!
-          </h5>
-          <p>{{'login.instructions' | translate}}</p>
-      </ion-col>          
+          {{'login.title' | translate}}
+        </h5>
+        <p>{{'login.instructions' | translate}}</p>
+      </ion-col>
     </ion-row>
 
     <form [formGroup]="loginForm">
       <ion-row>
-        <!-- <mat-form-field appearance="outline">
-          <span matPrefix><mat-icon>email</mat-icon>&nbsp;</span>
-          <input matInput placeholder="E-mail" formControlName="email" type="email" inputmode="email" autofocus>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'login.input.email' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">alternate_email</mat-icon>
+          <input matInput formControlName="email" type="email" inputmode="email" autofocus>
           <mat-error *ngIf="input.email.invalid && input.email.touched">
             {{ 'login.error.email.' + getErrorMessage('email') | translate}}
           </mat-error>
-        </mat-form-field> -->
-        <mat-form-field appearance="outline">
-            <mat-label>{{ 'login.input.email' | translate }}</mat-label>
-           <mat-icon matPrefix class="prefix">alternate_email</mat-icon>
-            <input matInput placeholder="seu@email.com" formControlName="email" type="email" inputmode="email" autofocus>
-            <mat-error *ngIf="input.email.invalid && input.email.touched">
-              {{ 'login.error.email.' + getErrorMessage('email') | translate}}
-            </mat-error>
-            <!-- <mat-hint>Entre com suas credenciais para começar</mat-hint> -->
-          </mat-form-field>
+        </mat-form-field>
       </ion-row>
       <ion-row>
         <mat-form-field appearance="outline">
-            <mat-label>{{ 'login.input.password' | translate }}</mat-label>
-            <mat-icon matPrefix class="prefix">lock</mat-icon>
-            <!-- [placeholder]="'login.input.password' | translate" -->
-          <input matInput  formControlName="password" [type]="hide ? 'password' : 'text'" inputmode="password">
-          <mat-icon matSuffix class="sulffix" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-label>{{ 'login.input.password' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">lock</mat-icon>
+          <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" inputmode="password">
+          <mat-icon matSuffix class="sulffix" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+          </mat-icon>
           <mat-error *ngIf="input.password.invalid && input.password.touched">
             {{ 'login.error.password.' + getErrorMessage('password') | translate}}.
-                <a (click)="resetPassword()">{{ 'login.button.forgetPassword' | translate }}</a>
+            <a (click)="resetPassword()">{{ 'login.button.forgetPassword' | translate }}</a>
           </mat-error>
           <mat-hint align="end">
-              <a (click)="resetPassword()">
-                 {{ 'login.button.forgetPassword' | translate }}
-                </a>
+            <a (click)="resetPassword()">
+              {{ 'login.button.forgetPassword' | translate }}
+            </a>
           </mat-hint>
         </mat-form-field>
       </ion-row>
     </form>
   </ion-grid>
-
 </ion-content>
 
 <ion-footer>
-  <!-- <ion-toolbar> -->
-<div class="container">
+  <div class="container">
     <a mat-flat-button color="primary" (click)="loginUser()" [disabled]="loginForm.invalid">
       <span class="txt-size">{{ 'login.button.login' | translate }}</span>
-      <mat-icon>arrow_right_alt</mat-icon> 
+      <mat-icon>arrow_right_alt</mat-icon>
     </a>
-</div>
-
-  <!-- </ion-toolbar> -->
+  </div>
 </ion-footer>

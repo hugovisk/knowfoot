@@ -44,11 +44,11 @@
 
 <ion-footer padding>
   <div class="container">
-    <a [routerLink]="['/signup']" mat-flat-button color="primary">
+    <a [routerLink]="['/tabs']" mat-flat-button color="primary">
       <mat-icon>how_to_reg</mat-icon>
       <span class="txt-size">{{ 'landing.signin' | translate }}</span>
     </a>
-    <a mat-button color="primary" [routerLink]="['/login']">
+    <a class="btn-login" mat-button color="primary" [routerLink]="['/login']">
       <span class="serif txt-size">
         <span class="color-grey">{{ 'landing.haveAccount' | translate}}</span>
         {{ 'landing.login' | translate}}

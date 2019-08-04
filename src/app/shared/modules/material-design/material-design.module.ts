@@ -7,7 +7,7 @@ import {
   MatInputModule,
   MatIconModule,
   MatDatepickerModule,
-  MatSelectModule
+  MatSelectModule,
  } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';

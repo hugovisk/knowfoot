@@ -11,7 +11,7 @@ export const environment = {
     projectId: 'know-foot',
     storageBucket: 'know-foot.appspot.com',
     messagingSenderId: '844658852975',
-    appId: '1:844658852975:web:95335e90bbef9a46'
+    // appId: '1:844658852975:web:95335e90bbef9a46'
   }
 };
 

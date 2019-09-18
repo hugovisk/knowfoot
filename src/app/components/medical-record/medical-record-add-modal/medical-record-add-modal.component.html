@@ -1,0 +1,225 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- TODO: Solicitar confirmação para ação de 
+      fechar se algum campo estiver preenchido -->
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <h5 class="title">{{ 'medical-record.title' | translate }}</h5>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="medicalRecordForm">
+    <mat-vertical-stepper #stepper linear>
+      <mat-step [completed]="profileComplete">
+        <ng-template matStepLabel>{{ 'medical-record.stepper.personal' | translate }}</ng-template>
+
+        <mat-radio-group color="primary" formControlName="gender" class="radio-btn">
+          <label class="radio-btn-label">{{ 'medical-record.input.gender' | translate }}</label>
+          <mat-icon class="radio-btn-prefix">wc</mat-icon>
+          <mat-radio-button *ngFor="let gender of genders | keyvalue: keepOrder" [value]="gender.value">
+            {{ 'medical-record.gender.' + gender.value | translate}}
+          </mat-radio-button>
+          <span class="radio-btn-error" *ngIf="input.gender.invalid && input.gender.touched">
+            {{ 'medical-record.error.gender.' + getErrorMessage('gender') | translate }}
+          </span>
+        </mat-radio-group>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'medical-record.input.name' | translate }}</mat-label>
+          <mat-icon matPrefix class="prefix">person</mat-icon>
+          <input matInput formControlName="name">
+          <mat-error *ngIf="input.name.invalid && input.name.touched">
+            {{ 'medical-record.error.name.' + getErrorMessage('name') | translate}}
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- TODO: investigar porque o mat-datepicker-toggle dispara validacao do primeiro input do form -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'medical-record.input.birthdate' | translate }}</mat-label>
+          <input matInput formControlName="birthdate" [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+            [placeholder]="'medical-record.input.birthdatePlaceholder'| translate" inputmode="numeric">
+          <mat-icon matPrefix class="prefix">cake</mat-icon>
+          <mat-datepicker-toggle matSuffix [for]="picker" class="sulffix"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #picker startView="multi-year" [startAt]="startDate"></mat-datepicker>
+          <mat-error *ngIf="input.birthdate.invalid && input.birthdate.touched">
+            {{ 'medical-record.error.birthdate.' + getErrorMessage('birthdate') | translate}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="height-weigth-size">
+          <mat-label>{{ 'medical-record.input.weightInKg' | translate }}</mat-label>
+          <input matInput formControlName="weightInKg" min="0" max="200" type="number" inputmode="numeric"
+            [placeholder]="'medical-record.input.weightPlaceholder' | translate">
+          <mat-icon matPrefix class="prefix">local_mall</mat-icon>
+          <small matSuffix>Kg</small>
+          <mat-error *ngIf="input.weightInKg.invalid && input.weightInKg.touched">
+            {{ 'medical-record.error.weightInKg.' + getErrorMessage('weightInKg') | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="height-weigth-size">
+          <mat-label>{{ 'medical-record.input.heightInCm' | translate }}</mat-label>
+          <input matInput formControlName="heightInCm" min="0" max="250" type="number" inputmode="numeric"
+            [placeholder]="'medical-record.input.heightPlaceholder' | translate" placeholder="Centimetros">
+          <mat-icon matPrefix class="prefix height-icon ">straighten</mat-icon>
+          <small matSuffix>Cm</small>
+          <mat-error *ngIf="input.heightInCm.invalid && input.heightInCm.touched">
+            {{ 'medical-record.error.heightInCm.' + getErrorMessage('heightInCm') | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-radio-group color="primary" formControlName="footDominant" class="radio-btn">
+          <label class="radio-btn-label">{{ 'medical-record.input.footDominant' | translate }}</label>
+          <mat-icon class="radio-btn-prefix">swap_horiz</mat-icon>
+          <mat-radio-button *ngFor="let footSide of footSides | keyvalue: keepOrder" [value]="footSide.value">
+            {{ 'medical-record.footDominant.' + footSide.value | translate }}
+          </mat-radio-button>
+          <span class="radio-btn-error" *ngIf="input.footDominant.invalid && input.footDominant.touched">
+            {{ 'medical-record.error.footDominant.' + getErrorMessage('footDominant') | translate}}
+          </span>
+        </mat-radio-group>
+
+        <div text-right>
+          <a mat-stroked-button type="button" color="primary" (click)="profileValidationCheck(stepper)" [disabled]="input.name.invalid || input.birthdate.invalid ||
+            input.gender.invalid || input.weightInKg.invalid || 
+            input.heightInCm.invalid || input.footDominant.invalid">
+            {{ 'medical-record.button.next' | translate }}
+            <mat-icon class="icon-size">chevron_right</mat-icon>
+          </a>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          <div>
+            {{ 'medical-record.stepper.injurie' | translate }} <br>
+            <small>{{ 'medical-record.stepper.optional' | translate }}</small>
+          </div>
+        </ng-template>
+
+        <div class="slide-toggle">
+          <div float-left>{{ 'medical-record.input.footInjurie' | translate }}</div>
+          <div text-right>
+            <mat-slide-toggle formControlName="footInjuries" color="primary"></mat-slide-toggle>
+          </div>
+        </div>
+
+        <div *ngIf="input.footInjuries.value" [@inOutAnimation]>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'medical-record.input.footInjurieLeft' | translate }}</mat-label>
+            <mat-icon matPrefix class="prefix">enhanced_encryption</mat-icon>
+            <mat-select #injuriesLeft formControlName="footInjuriesLeft" multiple>
+              <mat-option value="None" (click)="optionalInjurieFormNone('footInjuriesLeft')">
+                {{ 'medical-record.footInjurie.None' | translate }}
+              </mat-option>
+              <mat-option *ngFor="let footInjurie of footInjuries | keyvalue: keepOrder" [value]="footInjurie.value"
+                [disabled]="footInjuriesOptionsDisabled.left">
+                {{ 'medical-record.footInjurie.' + footInjurie.value | translate }}
+              </mat-option>
+              <div text-right padding>
+                <button mat-button color="primary" (click)="injuriesLeft.close()">
+                  <mat-icon>done</mat-icon> OK
+                </button>
+              </div>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'medical-record.input.footInjurieRight' | translate }}</mat-label>
+            <mat-icon matPrefix class="prefix">enhanced_encryption</mat-icon>
+            <mat-select #injuriesRight formControlName="footInjuriesRight" multiple>
+              <mat-option value="None" (click)="optionalInjurieFormNone('footInjuriesRight')">
+                {{ 'medical-record.footInjurie.None' | translate }}
+              </mat-option>
+              <mat-option *ngFor="let footInjurie of footInjuries | keyvalue: keepOrder" [value]="footInjurie.value"
+                [disabled]="footInjuriesOptionsDisabled.right">
+                {{ 'medical-record.footInjurie.' + footInjurie.value | translate }}
+              </mat-option>
+              <div text-right padding>
+                <button mat-button color="primary" (click)="injuriesRight.close()">
+                  <mat-icon>done</mat-icon> OK
+                </button>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div text-right>
+          <a class="signup-btn" mat-stroked-button color="primary" [disabled]="medicalRecordForm.invalid">
+            <mat-icon class="icon-size">create</mat-icon>
+            {{ 'signup.button.register' | translate }}
+          </a>
+        </div> -->
+        <div text-right>
+          <button type="button" mat-stroked-button color="primary" matStepperNext>
+            {{ (input.footInjuries.value ? 'medical-record.button.next' : 'medical-record.button.nextNoInjuries') | translate}}
+            <mat-icon class="icon-size">chevron_right</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          <div>
+            {{ 'medical-record.stepper.sport' | translate }} <br>
+            <small>{{ 'medical-record.stepper.optional' | translate }}</small>
+          </div>
+        </ng-template>
+
+        <div class="slide-toggle">
+          <div float-left>{{ 'medical-record.input.sportPratice' | translate }}</div>
+          <div text-right>
+            <mat-slide-toggle formControlName="sportPratice" color="primary"></mat-slide-toggle>
+          </div>
+        </div>
+
+        <div *ngIf="input.sportPratice.value" [@inOutAnimation]>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'medical-record.input.sport' | translate }}</mat-label>
+            <mat-icon matPrefix class="prefix">directions_run</mat-icon>
+            <mat-select formControlName="sport">
+              <mat-option *ngFor="let sport of sports | keyvalue: keepOrder" [value]="sport.value">
+                {{ 'medical-record.sport.' + sport.value | translate }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="input.sport.invalid && input.sport.touched">
+              {{ 'medical-record.error.sport.' + getErrorMessage('sport') | translate}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'medical-record.input.sportPraticeTime' | translate }}</mat-label>
+            <mat-icon matPrefix class="prefix">history</mat-icon>
+            <mat-select formControlName="sportPraticeTime">
+              <mat-option *ngFor="let sportPraticeTime of sportPraticeTimes | keyvalue: keepOrder"
+                [value]="sportPraticeTime.value">
+                {{ 'medical-record.sportPraticeTime.' + sportPraticeTime.value | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'medical-record.input.sportPraticeFrequency' | translate }}</mat-label>
+            <mat-icon matPrefix class="prefix">timeline</mat-icon>
+            <mat-select formControlName="sportPraticeFrequency">
+              <mat-option *ngFor="let sportPraticeFrequency of sportPraticeFrequencies | keyvalue: keepOrder"
+                [value]="sportPraticeFrequency.value">
+                {{ 'medical-record.sportPraticeFrequency.' + sportPraticeFrequency.value | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+    <div margin>
+      <a class="btn-create" mat-flat-button color="primary" [disabled]="medicalRecordForm.invalid">
+        <mat-icon class="icon-size">create</mat-icon>
+        {{ 'medical-record.button.register' | translate }}
+      </a>
+    </div>
+  </form>
+</ion-content>

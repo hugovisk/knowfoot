@@ -26,4 +26,29 @@ export const formErrorTypes = {
     occupation: [
         { type: 'required' }
     ],
+    gender: [
+        { type: 'required' }
+    ],
+    weightInKg: [
+        { type: 'required' },
+        { type: 'min' },
+        { type: 'max' }
+    ],
+    heightInCm: [
+        { type: 'required' },
+        { type: 'min' },
+        { type: 'max' }
+    ],
+    footDominant: [
+        { type: 'required' }
+    ],
+    sport: [
+        { type: 'required' }
+    ],
+    sportPraticeFrequency: [
+        { type: 'required' }
+    ],
+    sportPraticeTime: [
+        { type: 'required' }
+    ],
 };

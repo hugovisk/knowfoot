@@ -7,9 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { SignupPage } from './signup.page';
 
-import { MaterialDesignModule } from '../../../shared/modules/material-design/material-design.module';
-import { MatStepperModule } from '@angular/material';
-import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../../../modules/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -24,9 +22,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule,
-    MaterialDesignModule,
-    MatStepperModule
+    SharedModule
   ],
   declarations: [SignupPage]
 })

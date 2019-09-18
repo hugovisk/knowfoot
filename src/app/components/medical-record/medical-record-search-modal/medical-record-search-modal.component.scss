@@ -1,0 +1,27 @@
+.search-input {
+    width: 90%;
+}
+
+h6 {
+    color: rgba(rgb(0, 0, 0), 0.7);
+    font-family: 'Bree Serif', serif;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  ngx-avatar {
+      margin-right: 16px;
+  }
+
+  .mat-list .mat-list-item {
+    height: 64px;
+  }
+
+  .add-btn {
+    width: 90%;
+    margin: 16px 0;
+  }
+
+  .footer-md:before {
+    background-image: none;
+  }

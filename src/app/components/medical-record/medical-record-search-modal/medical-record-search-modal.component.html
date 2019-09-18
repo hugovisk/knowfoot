@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <mat-form-field class="search-input" floatLabel="never">
+      <input matInput #searchInput="matInput" type="search" placeholder="Busque o paciente"
+        [formControl]="searchControl" autofocus="true" autocomplete="off">
+      <button mat-button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear"
+        (click)="searchControl.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- <p>bind: {{ searchControl.value }}</p> -->
+  <div *ngIf="searching" class="container" [@inOutAnimation]>
+    <!-- <mat-progress-bar mode="query"></mat-progress-bar> -->
+    <ion-spinner name="dots"></ion-spinner>
+  </div>
+
+
+  <h6 matSubheader>
+    {{ searchedPatients.length !== 0 ? (searchedPatients.length === 1 ? 'Paciente': 'Pacientes ('+searchedPatients.length+')') : 'Nenhum Paciente encontrado :('}}
+
+  </h6>
+  <mat-divider></mat-divider>
+  <!-- <div class="container add-btn" *ngIf="searchedPatients.length === 0">
+    <button mat-stroked-button color="primary" 
+      (click)="searchControl.setValue('')">
+      <mat-icon>person_add</mat-icon>
+      Adicionar
+    </button>
+  </div> -->
+  <!-- <p>{{searchedPatients.length === 20}}</p> -->
+  <mat-list>
+    <mat-list-item *ngFor="let item of searchedPatients" (click)="closeModalAndRetrievePatient(item)" matRipple>
+      <ngx-avatar size="45" textSizeRatio="4" [name]="item.name"></ngx-avatar>
+      <p>{{item.name}}</p>
+    </mat-list-item>
+  </mat-list>
+
+</ion-content>
+<ion-footer *ngIf="searchedPatients.length === 0">
+  <div class="container" >
+    <button class=" add-btn" mat-stroked-button color="primary" (click)="searchControl.setValue('')">
+      <mat-icon>person_add</mat-icon>
+      Cadastrar novo paciente
+    </button>
+  </div>
+</ion-footer>

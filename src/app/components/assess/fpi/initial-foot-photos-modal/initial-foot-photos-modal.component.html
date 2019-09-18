@@ -1,0 +1,82 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+<button mat-button (click)="displayOptFootSide('Fpi')">show it</button>
+<ion-content>
+    <pre>{{ test | json }}</pre>
+    <!-- <div>{{ history.testState$ .data }}</div> -->
+  <!-- <img [src]="photo" *ngIf="photo"> -->
+  <!-- <iframe src="../../../../../assets/vr.html"></iframe> -->
+  <div id="cameraPreview" class="teste"></div>
+  
+  <ion-chip>
+    <ion-label>{{ currentView }}</ion-label>
+  </ion-chip>
+  <img class="img-guide" [src]="'/assets/svg/foot-view-guide_' + currentView + '.svg'" />
+  <ion-chip class="foot-side">
+     <img [src]="'/assets/svg/footstep_' + currentFootSide + '.svg'" />
+    <ion-label class="ion-text-uppercase"><small>{{ 'Foot ' + currentFootSide }}</small></ion-label>
+  </ion-chip>
+  <img src="" alt="">
+  <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="takePhoto()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+</ion-content>
+<ion-footer>
+  <ion-grid fixed>   
+    <ion-row class="ion-text-center">
+      <ion-col size="4" class="ion-align-self-center">
+        <div>
+          <div class="taken-picture" [style.backgroundImage]="lastTakedPhoto">
+            <!-- <div class="foot-photo" *ngIf="foot[footSide.Right].view[footView.Posterior]"
+              [style.backgroundImage]="foot[footSide.Right].view[footView.Posterior]">
+            </div> -->
+          </div>
+          <button mat-icon-button class="btn-delete-last-photo"
+          *ngIf="foot[currentFootSide].view[footView.Posterior]"
+          (click)="deleteLastTakedPhoto()">
+              <mat-icon>delete_forever</mat-icon>
+          </button>
+        </div>
+        <!-- {{footView.Posterior}} -->
+      </ion-col>
+      <ion-col size="4">
+        <!-- <div class="foot-photo"  *ngIf="foot[footSide.Right].view[footView.ObliquePosteriortoMedial]"
+          [style.backgroundImage]="foot[footSide.Right].view[footView.ObliquePosteriortoMedial]">          
+          </div>
+          {{footView.ObliquePosteriortoMedial}}  -->
+
+          <button class="camera-shutter" (click)="takePhoto()">
+            <img [src]="'/assets/svg/foot-view_' + currentView + '.svg'" />
+          </button>
+        <!-- <ion-fab vertical="center" horizontal="center">
+          <ion-fab-button (click)="takePhoto()">
+            <ion-icon name="camera"></ion-icon>
+          </ion-fab-button>
+        </ion-fab> -->
+      </ion-col>
+      <ion-col size="4" class="ion-align-self-center">
+        <!-- <div class="foot-photo" *ngIf="foot[footSide.Right].view[footView.Medial]"
+          [style.backgroundImage]="foot[footSide.Right].view[footView.Medial]">
+        </div>
+        {{footView.Medial}} -->
+        <div class="next-view">
+          <!-- 1/3 -->
+          {{ takedPhotosNumber + '/3'}}
+          <!-- <img src="/assets/svg/foot-view_PosteriorToMedial.svg" /> -->
+        </div>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row class="ion-text-center">
+      <ion-col size="12"><small>{{ currentView }}</small></ion-col> 
+    </ion-row> -->
+  </ion-grid>
+</ion-footer>

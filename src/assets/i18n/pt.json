@@ -121,5 +121,111 @@
       "service": "Termos de serviço",
       "txt3": " do KnowFoot."
     }
+  },
+
+  "medical-record": {
+    "title": "Novo Prontuário de Paciente",
+    "registerForm": {
+      "title": "Preencha seu email e defina uma senha",
+      "subtitle": "estas serão suas credenciais de acesso ao aplicativo"
+    },
+    "button": {
+      "next": "Prosseguir",
+      "nextNoInjuries": "Sem lesão, prosseguir",
+      "nextNoSportPratice": "Não pratica, prosseguir",
+      "register": "Registrar prontuário"
+    },
+    "input": {
+      "name": "Nome do paciente",
+      "birthdate": "Data de nascimento",
+      "birthdatePlaceholder": "dd-mm-aaaa",
+      "gender": "Sexo",
+      "weightInKg": "Peso",
+      "weightPlaceholder": "00",
+      "heightInCm": "Altura",
+      "heightPlaceholder": "000",
+      "footDominant": "Pé dominante",
+      "footInjurie": "Incluir lesões no pé",
+      "footInjurieLeft": "Lesões pé esquedo",
+      "footInjurieRight": "Lesões pé direito",
+      "sportPratice": "Incluir pratica de esporte",
+      "sport": "Esporte",
+      "sportPraticeTime": "Tempo de pratica",
+      "sportPraticeFrequency": "Frequência de pratica"
+    },
+    "stepper": {
+      "personal": "Informações Pessoais",
+      "injurie": "Informações sobre lesão nos pés",
+      "sport": "Informações sobre pratica de esporte",
+      "optional": "Opcional"
+    },
+    "gender": {
+      "Female": "Feminino",
+      "Male": "Masculino"
+    },
+    "footDominant": {
+      "Left": "Esquerdo",
+      "Right": "Direito"
+    },
+    "footInjurie": {
+      "AnkleSprain": "Entorse de tornozelo",
+      "PlantarFasciitis": "Fascite plantar",
+      "CalcaneanSpur": "Esporão de calcâneo",
+      "Metatarsalgia": "Metatarsalgia",
+      "Other": "Outra(s)",
+      "None": "Nenhuma"
+    },
+    "sport": {
+      "Soccer": "Futebol",
+      "Running": "Corrida",
+      "Triathlon": "Triathlon",
+      "Cycling": "Ciclismo",
+      "Swimming": "Natação",
+      "Basketball": "Basquete",
+      "MartialArts": "Artes Marciais",
+      "Volleyball": "Vôlei",
+      "Other": "Outro(s)",
+      "None": "Nenhum"
+    },
+    "sportPraticeTime": {
+      "LessThanSixMonths": "Menos de 6 meses",
+      "BetweenSixAndTwentyFourMonths": "Entre 6 e 24 meses",
+      "MoreThanTwoYears": "Mais de 2 anos"
+    },
+    "sportPraticeFrequency": {
+      "OnePerWeek": "1 vez por semana",
+      "TwoOrTreePerWeek": "2 a 3 vezes por semana",
+      "MoreThanThreePerWeek": "Mais de 3 vezes por semana"
+    },
+    "error": {
+      "name": {
+        "required": "O paciente precisa de um nome",
+        "maxlength": "Máximo de 40 caracteres",
+        "minlength": "Necessário mínimo de 3 caracteres",
+        "pattern": "O nome deve conter somente letras"
+      },
+      "birthdate": {
+        "required": "Importante saber a idade do paciente",
+        "matDatepickerParse": "Entre uma data válida",
+        "matDatepickerMax": "Muito novo para fazer prontuário",
+        "matDatepickerMin": "Essa pessoa tem mais de 100 anos mesmo?"
+      },
+      "gender": {
+        "required": "Informação de gênero necessária"
+      },
+      "weightInKg": {
+        "required": "Registre o peso",
+        "min": "Maior que zero",
+        "max": "Menor que 250kg"
+      },
+      "heightInCm": {
+        "required": "Registre a altura",
+        "min": "Maior que zero",
+        "max": "Menor que 250cm"
+      },
+      "footDominant": {
+        "required": "Informação de pé dominante necessária"
+      }
+    }
   }
 }

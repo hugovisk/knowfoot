@@ -5,9 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { LandingPage } from './landing.page';
-import { TranslateModule } from '@ngx-translate/core';
 
-import { MaterialDesignModule } from '../../../shared/modules/material-design/material-design.module';
+import { SharedModule } from '../../../modules/shared/shared.module';
 
 
 const routes: Routes = [
@@ -22,8 +21,7 @@ const routes: Routes = [
     CommonModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule,
-    MaterialDesignModule
+    SharedModule
   ],
   declarations: [LandingPage]
 })

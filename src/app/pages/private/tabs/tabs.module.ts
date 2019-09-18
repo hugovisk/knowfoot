@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TabsPage } from './tabs.page';
 
-import { MaterialDesignModule } from '../../../shared/modules/material-design/material-design.module';
+import { MaterialDesignModule } from '../../../modules/material-design/material-design.module';
 
 
 const routes: Routes = [

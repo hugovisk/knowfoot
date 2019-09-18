@@ -7,9 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { LoginPage } from './login.page';
 
-import { MaterialDesignModule } from '../../../shared/modules/material-design/material-design.module';
+import { SharedModule } from '../../../modules/shared/shared.module';
 
-import { TranslateModule } from '@ngx-translate/core';
 
 
 const routes: Routes = [
@@ -25,8 +24,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    TranslateModule,
-    MaterialDesignModule
+    SharedModule
   ],
   declarations: [LoginPage]
 })

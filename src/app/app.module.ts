@@ -21,6 +21,8 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { CameraPreviewWeb } from 'capacitor-camera-preview';
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -49,7 +51,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: LOCALE_ID, useValue: 'pt' }
+    { provide: LOCALE_ID, useValue: 'pt' },
+    CameraPreviewWeb
   ],
   bootstrap: [AppComponent]
 })

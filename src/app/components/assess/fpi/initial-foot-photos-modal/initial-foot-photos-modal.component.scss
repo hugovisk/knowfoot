@@ -1,0 +1,153 @@
+iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+html,
+body,
+.ion-app,
+.ion-content {
+    background-color: transparent;
+}
+
+// .foot-photo {
+//     height: 55px;
+//     background: no-repeat center center / cover;
+// }
+
+ion-footer {
+    height: 120px;
+}
+
+// .test {
+//     // position: absolute;
+//     overflow: hidden;
+//     display: block;
+//     height: 300px;
+//     opacity: .5;
+// }
+
+// video {
+//     overflow: hidden;
+//     height: 300px !important;
+// }
+
+// #cameraPreview {
+//    // atibutos colocados direto no js do plugin
+// }
+
+.taken-picture,
+.next-view {
+    margin: auto;
+    height: 45px;
+    width: 45px;
+    border: solid 3px lightgrey;
+    border-radius: 10px;
+    line-height: 40px
+}
+
+.taken-picture {
+    background: no-repeat center center / cover;
+}
+
+.next-view {
+    background-color: #eeeeee;
+    // margin: auto;
+    // height: 45px;
+    // width: 45px;
+    // border: solid 3px lightgrey;
+    // border-radius: 50%;
+    line-height: 40px;
+    color: #555;
+    font-size: 12px;
+
+    img {
+        opacity: 0.7;
+    }
+}
+
+.btn-delete-last-photo{
+    position: absolute;
+    top: 12%;
+    right: 0;
+    color: #AAA;
+}
+
+.camera-shutter {
+    background-color: white; //var(--ion-color-primary);
+    color: rgba(0, 0, 0, 0.87);
+    box-sizing: border-box;
+    // position: absolute;
+    // -webkit-user-select: none;
+    // -moz-user-select: none;
+    // -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: solid 4px var(--ion-color-primary);
+    // -webkit-tap-highlight-color: transparent;
+    // display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    // vertical-align: baseline;
+    // text-align: center;
+    // margin: 0;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    // border-radius: 4px;
+    overflow: visible;
+    transform: translate3d(0, 0, 0);
+    transition: background .4s cubic-bezier(.25, .8, .25, 1), box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+    min-width: 0;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    padding: 0;
+    flex-shrink: 0;
+
+    img {
+        width: 110%;
+        height: auto;
+        overflow: hidden;
+    }
+}
+
+.img-guide {
+    position: absolute;
+    bottom: 0;
+    // left: calc(50% - 50px);
+    left: 0;
+    width: 100%;
+    // height: 100px;
+}
+
+
+
+
+.foot-side {
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -42px;
+    padding: 4px 12px;
+    line-height: 14px;
+    font-size: 14px;
+    height: 26px;
+
+    img {
+        height: 16px;
+        padding-right: 5px;
+    }
+
+
+}
+
+::ng-deep .test-modal{
+    --width: 90%;
+    --height:75%;
+    --border-radius: 2%;
+    }

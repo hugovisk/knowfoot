@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'landing', loadChildren: './pages/public/landing/landing.module#LandingPageModule' },
   { path: 'login', loadChildren: './pages/public/login/login.module#LoginPageModule' },
   { path: 'signup', loadChildren: './pages/public/signup/signup.module#SignupPageModule' },
+  { path: 'assess-fpi', loadChildren: './pages/private/assess-fpi/assess-fpi.module#AssessFpiPageModule' },
   // { path: 'tabs', loadChildren: './pages/private/tabs/tabs.module#TabsPageModule' },
 ];
 

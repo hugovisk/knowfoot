@@ -1,0 +1,91 @@
+<!-- <p>
+  {{ assessMethod }}
+</p> -->
+<ion-content class="ion-padding ion-text-center">
+  <!-- TODO: ask for confirmation close assess and back to home -->
+  <div class="btn-close">
+    <button mat-icon-button aria-label="close" (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="basic-instruction">
+    <div *ngIf="!assessedFoot">
+      <img class="img-patient-position" src="/assets/svg/patient-fpi-position.svg" />
+      <div class="img-patient-position-bg"></div>
+      <h4>Posicione <span *ngIf="!noPhotos">e fotografe</span></h4>
+      <p class="ion-text-justify">
+        Com o individuo descalço, posicione-o em pé sob apoio bipodal, permanecendo estático durante
+        <span *ngIf="noPhotos">a avaliação</span>
+        <span *ngIf="!noPhotos">a sequencia de fotos.</span>
+      </p>
+      <!-- <p class="ion-text-justify">Siga as indicações de enquadramento das fotos.</p> -->
+    </div>
+    <div *ngIf="assessedFoot">
+      <h1>
+        <mat-icon class=icon-swap-foot>swap_horiz</mat-icon>
+      </h1>
+      <h4>Fotografar o pé {{ nextAssessFootSide }}? <br /><small>(recomendado)</small></h4>
+      <p class="ion-text-justify">
+        Faça a avaliação em ambos os pés. O corpo é assimétrico e pode haver diferença na classificação de cada pé.
+      </p>
+    </div>
+
+  </div>
+  <!-- <p>Acompanhe as indicações das imagens requeridas</p> -->
+</ion-content>
+<ion-footer>
+  <ion-grid fixed *ngIf="!assessedFoot">
+    <!-- <ion-row>
+      <ion-col size="12"><small>Selecione o pé</small></ion-col>
+    </ion-row> -->
+    <mat-checkbox [(ngModel)]="noPhotos">Avaliar sem fotografar</mat-checkbox>
+    <ion-row>
+      <ion-col size="6">
+        <button mat-flat-button color="primary" class="side-btn" (click)="closeModalAndRetrieveFootSide(footSide.Left)">
+          <img class="img-btn" src="/assets/svg/footstep_Left.svg" />
+          <mat-icon>arrow_left</mat-icon>Esquerdo
+        </button>
+      </ion-col>
+      <ion-col size="6">
+        <button mat-flat-button color="primary" class="side-btn"
+          (click)="closeModalAndRetrieveFootSide(footSide.Right)">
+          Direito<mat-icon>arrow_right</mat-icon>
+
+          <img class="img-btn" src="/assets/svg/footstep_Right.svg" />
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid fixed *ngIf="assessedFoot">
+    <!-- <ion-row>
+      <ion-col size="12"><small>Selecione o pé</small></ion-col>
+    </ion-row> -->
+    <ion-row>
+      <!-- <ion-col size="6" >
+        <button mat-stroked-button color="primary" class="side-btn" (click)="closeModalAndRetrieveFootSide(footSide.Left)">
+          <mat-icon>arrow_left</mat-icon> prosseguir
+        </button>
+      </ion-col> -->
+      <ion-col size="12">
+        <button mat-flat-button color="primary" class="side-btn"
+          (click)="closeModalAndRetrieveFootSide(nextAssessFootSide)">
+          <img class="img-btn" [src]="'/assets/svg/footstep_'+ nextAssessFootSide +'.svg'" />
+          &nbsp; Fotografar pé {{ nextAssessFootSide }}
+        </button>
+      </ion-col>
+      <!-- <ion-col size="12" *ngIf="nextAssessFootSide === footSide.Right">
+        <button mat-flat-button color="primary" class="side-btn"
+          (click)="closeModalAndRetrieveFootSide(footSide.Right)">
+          Direito <mat-icon>arrow_right</mat-icon>
+          <img class="img-btn" src="/assets/svg/footstep_Right.svg" />
+        </button>
+      </ion-col> -->
+      <ion-col size="12">
+        <button mat-button color="primary" class="side-btn" (click)="closeModalAndRetrieveFootSide(footSide.Left)">
+          Irei avaliar somente o pé {{ nextAssessFootSide === 'footSide.Right' ? footSide.Left : footSide.Right }}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

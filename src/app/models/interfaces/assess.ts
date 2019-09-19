@@ -3,7 +3,7 @@ import { AssessMethod } from '../enums/assess.enum';
 import * as firebase from 'firebase/app';
 
 
-export interface Assess {
+export interface AssessProps {
     assessId?: string;
     athleteId: string;
     assessMethod: string | AssessMethod;

@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-brow
 import { ModalController } from '@ionic/angular';
 import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
 import { FootView, FootSide } from '../../../../models/enums/foot.enum';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { OptFootSideModalComponent } from '../../../../components/assess/opt-foot-side-modal/opt-foot-side-modal.component';
@@ -18,16 +18,15 @@ const { CameraPreview } = Plugins;
   styleUrls: ['./initial-foot-photos-modal.component.scss'],
 })
 export class InitialFootPhotosModalComponent implements OnInit {
-  // private testState$: Observable<object>;
-  testDataPass;
 
-  // private photo: SafeResourceUrl;
-  private footView = FootView;
-  private footSide = FootSide;
-  private currentView: FootView;
-  private currentFootSide: FootSide;
-  private takedPhotosNumber: number;
-  private lastTakedPhoto: SafeResourceUrl;
+  testDataPass; // TESTE
+
+  public footView = FootView;
+  public footSide = FootSide;
+  private _currentView: FootView;
+  private _currentFootSide: FootSide;
+  private _lastTakedPhoto;
+
   private foot: {
     [sideKey: string]: {
       view?: { [viewKey: string]: SafeResourceUrl }
@@ -38,15 +37,31 @@ export class InitialFootPhotosModalComponent implements OnInit {
     public modalController: ModalController,
     public activatedRoute: ActivatedRoute,
     private sanitizer: DomSanitizer
-  ) {
-    this.setCurrentFootSide(FootSide.Right);
+  ) { }
+
+  set currentView(view: FootView) { this._currentView = view; }
+  get currentView() { return this._currentView; }
+
+  set currentFootSide(side: FootSide) { this._currentFootSide = side; }
+  get currentFootSide() { return this._currentFootSide; }
+
+  set lastTakedPhoto(footView) { this._lastTakedPhoto = this.foot[this.currentFootSide].view[footView]; }
+  get lastTakedPhoto() { return this._lastTakedPhoto; }
+
+  /** Conta a quantidade de fotos no objeto foot do pe corrente */
+  get takedPhotosCount() {
+    return (Object.keys(this.foot[this.currentFootSide].view).length);
+  }
+  /** Define quantas fotos ja foram tiradas, inicia em 1 termina em 3 */
+  get takedPhotosDisplayNumber() {
+    return this.takedPhotosCount < 3 ? this.takedPhotosCount + 1 : this.takedPhotosCount;
   }
 
   ngOnInit() {
     this.displayOptFootSide(AssessMethod.Fpi);
     this.testGetData();
-    this.footOnInit();
-    this.footPhotosInit();
+    this.footPhotosOnInit();
+    this.footSidePhotosInit();
     const cameraOptions = {
       parent: 'cameraPreview',
       className: 'test'
@@ -54,20 +69,23 @@ export class InitialFootPhotosModalComponent implements OnInit {
     CameraPreview.start(cameraOptions);
   }
 
-  /** inicializa objeto que armazena fotos das vistas de cada pé */
-  footOnInit() {
+  /**
+   * inicializa objeto que armazena fotos das vistas de cada pé
+   * e define pé inicial somente para pré-carregar imagens da interface
+   */
+  footPhotosOnInit() {
     this.foot = {
       [FootSide.Right]: { view: {} },
       [FootSide.Left]: { view: {} }
     };
+    this.currentFootSide = FootSide.Right;
   }
 
-  footPhotosInit() {
-    this.setCurrentView(FootView.Posterior);
-    this.lastTakedPhoto = undefined;
-    this.countTakedPhotos();
+  /** Define a vista inicial e limpa historico de photos tiradas */
+  footSidePhotosInit() {
+    this.currentView = FootView.Posterior;
+    this.lastTakedPhoto = null;
   }
-
 
   /** teste recebimento de dados do modal de definiçao do metodo */
   testGetData() {
@@ -82,20 +100,7 @@ export class InitialFootPhotosModalComponent implements OnInit {
   }
 
 
-  /** Define a vista que a proxima foto deve ser tirada */
-  setCurrentView(view: FootView) {
-    this.currentView = view;
-  }
-
-  /** Define o pé que está sendo fotografado */
-  setCurrentFootSide(side: FootSide) {
-    this.currentFootSide = side;
-  }
-
-
-  /**
-   * Apresenta escolha do pé que será fotografado
-   */
+  /** Apresenta modal para escolha de pé que será avaliado */
   async displayOptFootSide(method: AssessMethod, foots?) {
     const modal = await this.modalController.create({
       component: OptFootSideModalComponent,
@@ -103,18 +108,16 @@ export class InitialFootPhotosModalComponent implements OnInit {
         assessMethod: method,
         assessedFoot: foots
       },
-      cssClass: 'test-modal',
+      cssClass: 'test-modal', // TESTE
       backdropDismiss: false
     });
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    // console.log(data);
-    if (data) { // pode ser que retorne undefined
-      this.setCurrentFootSide(data.footSide);
-      this.footPhotosInit();
-      // this.currentFootSide = data.footSide;
+    if (data) { // valiadação pois pode retornar undefined
+      this.currentFootSide = data.footSide;
+      this.footSidePhotosInit();
     }
-    console.log(data.patient);
+    console.log(data.patient); // TESTE
   }
 
   /** fecha esse modal */
@@ -122,12 +125,11 @@ export class InitialFootPhotosModalComponent implements OnInit {
     await this.modalController.dismiss();
   }
 
-
+  /** tira a foto */
   async takePhoto() {
-    if (this.takedPhotosNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
+    if (this.takedPhotosDisplayNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
       const result = await CameraPreview.capture();
       this.photoAndViewManagement(result.value);
-
     } else {
       console.error('ERROR!');
     }
@@ -144,25 +146,22 @@ export class InitialFootPhotosModalComponent implements OnInit {
     switch (this.currentView) {
       case (FootView.Posterior):
         this.addPhoto(this.currentFootSide, FootView.Posterior, photo);
-        this.updateLastTakedPhoto(FootView.Posterior);
-        this.setCurrentView(FootView.PosteriorToMedial);
+        this.lastTakedPhoto = FootView.Posterior;
+        this.currentView = FootView.PosteriorToMedial;
         break;
       case (FootView.PosteriorToMedial):
         this.addPhoto(this.currentFootSide, FootView.PosteriorToMedial, photo);
-        this.updateLastTakedPhoto(FootView.PosteriorToMedial);
-        this.setCurrentView(FootView.Medial);
+        this.lastTakedPhoto = FootView.PosteriorToMedial;
+        this.currentView = FootView.Medial;
         break;
       case (FootView.Medial):
         this.addPhoto(this.currentFootSide, FootView.Medial, photo);
-        this.updateLastTakedPhoto(FootView.Medial);
+        this.lastTakedPhoto = FootView.Medial;
         this.displayOptFootSide(AssessMethod.Fpi, this.foot);
-        // this.setCurrentView(null);
         break;
       default:
         console.error('ERRO :(');
     }
-
-    this.countTakedPhotos();
   }
 
   /**
@@ -171,12 +170,8 @@ export class InitialFootPhotosModalComponent implements OnInit {
    */
   addPhoto(footSide: FootSide, footView: FootView, cameraResult: string) {
     this.foot[footSide].view[footView] =
-      this.sanitizer.bypassSecurityTrustStyle(`url(data:image/png;base64,${cameraResult})`);
-  }
-
-  /** Define a imagem que será apresentada nas fotos tiradas */
-  updateLastTakedPhoto(footView: FootView) {
-    this.lastTakedPhoto = this.foot[this.currentFootSide].view[footView];
+      this.sanitizer
+        .bypassSecurityTrustStyle(`url(data:image/png;base64,${cameraResult})`);
   }
 
   /**
@@ -188,22 +183,12 @@ export class InitialFootPhotosModalComponent implements OnInit {
   deleteLastTakedPhoto() {
     if (this.currentView === FootView.Medial) {
       delete this.foot[this.currentFootSide].view[FootView.PosteriorToMedial];
-      this.updateLastTakedPhoto(FootView.Posterior);
-      this.setCurrentView(FootView.PosteriorToMedial);
+      this.lastTakedPhoto = FootView.Posterior;
+      this.currentView = FootView.PosteriorToMedial;
     } else {
       delete this.foot[this.currentFootSide].view[FootView.Posterior];
       this.lastTakedPhoto = null;
-      this.setCurrentView(FootView.Posterior);
+      this.currentView = FootView.Posterior;
     }
-    this.countTakedPhotos();
   }
-
-  /** Conta a quantidade de fotos no objeto foot do pe corrente e
-   * define quantas ja foram tiradas, inicia em 1 termina em 3
-   */
-  countTakedPhotos() {
-    const countPhotos = (Object.keys(this.foot[this.currentFootSide].view).length);
-    this.takedPhotosNumber = countPhotos < 3 ? countPhotos + 1 : countPhotos;
-  }
-
 }

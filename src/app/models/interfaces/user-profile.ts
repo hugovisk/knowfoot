@@ -1,7 +1,7 @@
 import { EducationLevel, Occupation  } from '../enums/user.enum';
 import { firestore } from 'firebase/app';
 
-export interface UserProfile {
+export interface UserProfileProps {
     creationDate?: firestore.FieldValue;
     name: string;
     email: string;

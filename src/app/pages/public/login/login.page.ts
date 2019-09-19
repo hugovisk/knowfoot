@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingController, AlertController } from '@ionic/angular';
 
 // import { AuthService } from '../../../services/user/auth/auth.service';
-import { UserProfile } from '../../../models/interfaces/user-profile';
+import { UserProfileProps } from '../../../models/interfaces/user-profile';
 import { formErrorTypes } from '../../../models/objects/form-error-type.object'
 
 import { TranslateService } from '@ngx-translate/core';
@@ -112,7 +112,7 @@ export class LoginPage implements OnInit {
   async resetPassword() {
     console.log('touched');
     if (this.input.email.valid) {
-      const user: UserProfile = this.loginForm.value;
+      const user: UserProfileProps = this.loginForm.value;
       const loading = await this.loadingCtrl.create({
         message: 'Hellooo' // TODO: ajustar msg
       });

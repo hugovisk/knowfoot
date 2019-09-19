@@ -11,15 +11,26 @@ export class OptFootSideModalComponent implements OnInit {
   @Input() assessMethod;
   @Input() assessedFoot?;
 
-
+  /** opcao de não tirar fotos para a avaliação fpi */
   noPhotos = false;
 
+  /** objeto com lados dos pés */
   footSide = FootSide;
 
   constructor(public modalController: ModalController) { }
 
-  ngOnInit() {
-    // this.checkAssessedFoot();
+  ngOnInit() { }
+
+  get nextAssessFootSide(): FootSide {
+    return this.isFootRightPhotosEmpty ? FootSide.Right : FootSide.Left;
+  }
+
+  get isFootRightPhotosEmpty() {
+    return !Object.keys(this.assessedFoot[FootSide.Right].view).length;
+  }
+
+  get askForOtherFootAssess() {
+    return this.assessedFoot ? true : false;
   }
 
   // TODO: if noPhotos true, close camera preview and start fpi assess
@@ -33,14 +44,6 @@ export class OptFootSideModalComponent implements OnInit {
     await this.modalController.dismiss();
   }
 
-  get nextAssessFootSide(): FootSide {
-    const isFootRightEmpty = !Object.keys(this.assessedFoot[FootSide.Right].view).length;
-    return isFootRightEmpty ? FootSide.Right : FootSide.Left;
-  }
-
-  get askForOtherFootAssess() {
-    return this.assessedFoot ? true : false;
-  }
-
+  // TODO: information popup about the methods
 
 }

@@ -3,7 +3,7 @@ import { Gender } from '../enums/gender.enum';
 import { Sport, SportPraticeFrequency, SportPraticeTime } from '../enums/sport.enum';
 import * as firebase from 'firebase/app';
 
-export interface MedicalRecord {
+export interface MedicalRecordProps {
     age?: number;
     birthDate: firebase.firestore.Timestamp | Date;
     createdAt?: firebase.firestore.FieldValue;

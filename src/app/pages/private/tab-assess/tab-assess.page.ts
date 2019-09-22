@@ -9,6 +9,8 @@ import { MedicalRecordAddModalComponent
 import { InfoAssessComponent } from '../../../components/information/info-assess/info-assess.component';
 import { OptMethodModalComponent } from '../../../components/assess/opt-method-modal/opt-method-modal.component';
 
+import { CameraComponent } from '../../../components/camera/camera.component';
+
 @Component({
   selector: 'app-tab-assess',
   templateUrl: './tab-assess.page.html',
@@ -26,7 +28,7 @@ export class TabAssessPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.displayMethodOpt({name: 'Hugo Melo'});
+    // this.displayMethodOpt({name: 'Hugo Melo'});
   }
 
   /**

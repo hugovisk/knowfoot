@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
+// import {
+//   CameraPreview,
+//   CameraPreviewPictureOptions,
+//   CameraPreviewOptions,
+//   CameraPreviewDimensions
+// } from '@ionic-native/camera-preview/ngx';
 import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
 import { FootView, FootSide } from '../../../../models/enums/foot.enum';
 // import { Observable } from 'rxjs';
@@ -23,20 +29,20 @@ export class InitialFootPhotosModalComponent implements OnInit {
 
   public footView = FootView;
   public footSide = FootSide;
-  private _currentView: FootView;
-  private _currentFootSide: FootSide;
-  private _lastTakedPhoto;
-
-  private foot: {
+  public foot: {
     [sideKey: string]: {
       view?: { [viewKey: string]: SafeResourceUrl }
     }
   };
+  private _currentView: FootView;
+  private _currentFootSide: FootSide;
+  private _lastTakedPhoto;
 
   constructor(
     public modalController: ModalController,
     public activatedRoute: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    // private cameraPreview: CameraPreview
   ) { }
 
   set currentView(view: FootView) { this._currentView = view; }
@@ -58,10 +64,11 @@ export class InitialFootPhotosModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.displayOptFootSide(AssessMethod.Fpi);
+    // this.displayOptFootSide(AssessMethod.Fpi);
     this.testGetData();
     this.footPhotosOnInit();
     this.footSidePhotosInit();
+    // this.startCamera();
     const cameraOptions = {
       parent: 'cameraPreview',
       className: 'test'
@@ -86,6 +93,27 @@ export class InitialFootPhotosModalComponent implements OnInit {
     this.currentView = FootView.Posterior;
     this.lastTakedPhoto = null;
   }
+
+  // async startCamera() {
+  //   const cameraPreviewOpts: CameraPreviewOptions = {
+  //     x: 0,
+  //     y: 0,
+  //     width: 300,
+  //     height: 300,
+  //     camera: 'rear',
+  //     tapPhoto: true,
+  //     previewDrag: true,
+  //     toBack: true,
+  //     alpha: 1
+  //   };
+
+  //   try {
+  //     const res = await this.cameraPreview.startCamera(cameraPreviewOpts);
+  //     console.log(res);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
   /** teste recebimento de dados do modal de definiçao do metodo */
   testGetData() {
@@ -128,8 +156,8 @@ export class InitialFootPhotosModalComponent implements OnInit {
   /** tira a foto */
   async takePhoto() {
     if (this.takedPhotosDisplayNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
-      const result = await CameraPreview.capture();
-      this.photoAndViewManagement(result.value);
+      // const result = await CameraPreview.capture();
+      // this.photoAndViewManagement(result.value);
     } else {
       console.error('ERROR!');
     }

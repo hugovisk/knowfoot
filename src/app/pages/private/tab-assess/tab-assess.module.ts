@@ -17,6 +17,9 @@ import { MedicalRecordAddModalComponent
 import { InfoAssessComponent } from '../../../components/information/info-assess/info-assess.component';
 import { OptMethodModalComponent } from '../../../components/assess/opt-method-modal/opt-method-modal.component';
 
+
+import { CameraComponent } from '../../../components/camera/camera.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -45,7 +48,8 @@ const routes: Routes = [
     MedicalRecordSearchModalComponent,
     MedicalRecordAddModalComponent,
     InfoAssessComponent,
-    OptMethodModalComponent
+    OptMethodModalComponent,
+    CameraComponent
   ]
 })
 export class TabAssessPageModule {}

@@ -1,0 +1,19 @@
+.webcam-wrapper {
+    display: inline-block;
+    position: relative;
+    line-height: 0;
+    background-color: lime;
+}
+
+.taken-picture {
+    height: 120px;
+    width: 120px;
+    background-color: white;
+    float: right;
+    background-position: center;
+}
+
+video {
+    overflow: hidden;
+    transform-origin: '0px 0px';
+}

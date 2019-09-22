@@ -1,0 +1,5 @@
+
+<div class="camera-wrapper">
+  <video #cameraStream autoplay width="130" height="130" (click)="takeSnapShot()"></video>
+  <div class="taken-picture" [style.backgroundImage]="image">
+</div>

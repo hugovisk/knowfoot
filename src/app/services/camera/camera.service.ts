@@ -5,7 +5,6 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
   providedIn: 'root'
 })
 
-
 /**
  * USER CAMERA LIVE VIEW
  * Author: Hugo Melo
@@ -14,141 +13,166 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
  *
  * DESCRIPTION
  * Access camera and take snap shots through browser with HTML5 video and canvas elements
- * for Augmented reality on knowfoot hybrid app
+ * for knowfoot hybrid app
  *
  * FATURES
  * - Camera live view [✓]
  * - Image capture [✓]
- * - Present preview before salve captured image [✗]
- * - Access the back camera, fall back to default camera [✗]
- * - Auto adjust width, height and center of live view [✗]
- * - Capture image with predefined options TODO: define those option like - rosolution, width, height, quality, mimetype [✗]
+ * - Present preview before salve captured image [✓]
+ * - Access the back camera, fall back to default camera [✓]
+ * - Auto adjust width, height of live view [✓]
+ * - Capture image with predefined options: width, height, quality, mimetype [✓]
  * - Optimization of image data via capture off lossless pixel data for better post-processing. [✗]
- * - Use of WebRTC/UserMedia API TODO: implements WebRTC adpter https://github.com/webrtc/adapter [✗]
- * - TODO: Define better image file format jpg or png smaller size and better quality. [✗]
+ * - TODO: Use of WebRTC/UserMedia API TODO: implements WebRTC adpter https://github.com/webrtc/adapter
+ * - TODO: Define better image file format jpg or png smaller size and better quality.
+ * - TODO: Improve error handling [✗]
+ * - TODO: Enumrate enviroment cameras and choose last [✗]
  */
 
 export class CameraService {
   private videoElement: HTMLVideoElement;
-  cameraTracks: MediaStreamTrack[];
-  // cameraTrack: MediaStreamTrack;
-  constrains: MediaTrackConstraints;
-
-  props = {
-    cameraHeight: 160,
-    cameraWidth: 120,
-    captureHeight: 130,
-    captureWidth: 130,
-    mimeType: 'image/png',
-    imageQuality: 1,
-    constraints: {
-      width: { ideal: 260 }, // capture width
-      height: { ideal: 260 } // capture heigth 
-    }
-  };
+  private cameraTracks: MediaStreamTrack[];
 
   constructor(private sanitizer: DomSanitizer) { }
 
   private set cameraPreview(videoElement) { this.videoElement = videoElement; }
   private get cameraPreview() { return this.videoElement; }
 
-  private get cameraHeight() { return this.cameraPreview.height; }
-  private get cameraWidth() { return this.cameraPreview.width; }
+  private get cameraHeight() { return screen.availHeight - 120; }
+  private get cameraWidth() { return screen.availWidth; }
 
   public startPreview(videoElement: ElementRef) {
+    if (!videoElement || !videoElement.nativeElement) {
+      return console.error('ERRO: Não foi possivel vincular a camera ao elemento no DOM');
+    }
     this.cameraPreview = videoElement.nativeElement;
-    // this.adjustScale();
-    this.getCameraStream();
+    this.cameraStream();
   }
 
-  public stopPreview() {
-    this.cameraTracks.forEach(track => { track.stop(); });
-  }
-
-  public snapShot() {
-    const mimeType = 'image/png';
-    const quality = 1;
-
-    const canvas = document.createElement('canvas');
-    canvas.width = this.props.captureWidth; // this.cameraWidth;
-    canvas.height = this.props.cameraHeight; // this.cameraHeight;
-    console.log(this.cameraWidth + ' x ' + this.cameraHeight);
-
-    canvas.getContext('2d').
-      drawImage(this.cameraPreview, 0, 0, this.cameraWidth, this.cameraHeight);
-
-    const image = canvas.toDataURL(mimeType, quality);
-    this.stopPreview();
-
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${image})`);
-  }
-
-  // public snap() {
-  //   const mimeType = 'image/png';
-  //   const quality = 1;
-
-  //   const canvas = document.createElement('canvas');
-  //   canvas.width = this.props.captureWidth; // this.cameraWidth;
-  //   canvas.height = this.props.cameraHeight; // this.cameraHeight;
-  //   console.log(this.cameraWidth + ' x ' + this.cameraHeight);
-
-  //   // print snapshot as image
-  //   canvas.getContext('2d').drawImage(this.cameraPreview, 0, 0);
-
-  //   // const image = canvas.toDataURL(mimeType, quality);
-  //   // get the ImageData object from the canvas' context.
-  //   const image: ImageData = 
-  //     canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-  //   this.stopPreview();
-
-  //   return this.sanitizer.bypassSecurityTrustStyle(`url(${image})`);
-  // }
-
-
-
-  private async getCameraStream() {
+  /**
+   * Acessa camera do dispositivo e transmite conteudo para elemento de video no DOM
+   *
+   * https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices
+   * https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+   * https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+   * https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTracks
+   */
+  private async cameraStream(): Promise<void> {
     try {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: this.props.constraints });
+        const constraints: MediaTrackConstraints = {
+          facingMode: 'enviroment', // acessa camera traseira se disponivel
+          // width: screen.availHeight - 120,
+          // height: screen.availWidth
+          height: screen.availHeight - 120,
+          width: screen.availWidth
+        };
+
+        // inicia camera e acessa o conteudo transmitido por ela
+        const stream = await navigator.mediaDevices.getUserMedia({ video: constraints });
+        // mostra conteudo do stream da camera no elemento de video do HTML
+        this.cameraPreview.srcObject = stream;
+        // armazena todas transmissoes ativas
         this.cameraTracks = stream.getVideoTracks();
-        // this.cameraTrack = stream.getVideoTracks()[0];
-        this.displayCameraStream(stream);
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-  private displayCameraStream(stream: MediaStream) {
-    this.cameraPreview.srcObject = stream;
+  /**
+   * Encerra o acesso a camera
+   */
+  public stopPreview(): void {
+    this.cameraTracks.forEach(track => { track.stop(); });
   }
 
-  adjustScale() {
-    // adjust scale if dest_width or dest_height is different
-    const scaleX = this.props.cameraWidth / this.props.captureWidth;
-    const scaleY = this.props.cameraHeight / this.props.captureHeight;
-    if ((scaleX !== 1.0) || (scaleY !== 1.0)) {
-      this.cameraPreview.style.transform = `scaleX(${scaleX}) scaleY(${scaleY})`;
+  /**
+   * Captura frame do stream da camera e trata para inserção em background-image no css
+   * @returns url com dataURL base64 da imagem sanitizada para inserção no DOM
+   */
+  public snapShot(): SafeStyle {
+    const canvas = this.drawCanvas(this.cameraPreview, this.cameraWidth, this.cameraHeight);
+    // const canvas = this.drawCanvas(this.cameraPreview, 200, 200);
+    this.stopPreview();
+    const image = canvas.toDataURL('image/png', 1);
+
+    return this.sanitizer.bypassSecurityTrustStyle(`url(${image})`);
+  }
+
+
+  /**
+   * Ajusta/captura imagem para tamanho solicitado dentro do elemento canvas
+   *
+   * @param image imagem que será pintada no canvas
+   * @param width largura final da imagem
+   * @param height altura final da imagem
+   * @returns elemento canvas com imagem pintada
+   *
+   * https://www.nashvail.me/blog/canvas-image/
+   * https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+   * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+   * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect
+   * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+   */
+  private drawCanvas(image, width: number, height: number): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const canvasContext = canvas.getContext('2d');
+    canvasContext.clearRect(0, 0, width, height);
+
+    if (image.width !== width && image.height !== height) {
+      // console.log('escalado');
+      const ratio = Math.min(image.width / width, image.height / height);
+      const sw = width * ratio; // largura que sera retirada da imagem original
+      const sh = height * ratio; // altura que sera retirada da imagem original
+      const sx = (image.width - sw) / 2; // quanto será recortado a esquerda de forma a centralizar imagem final
+      const sy = (image.height - sh) / 2; // quanto será recortado acima de forma a centralizar imagem final
+      canvasContext.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
+    } else {
+      // console.log('nao escalado');
+      canvasContext.drawImage(image, 0, 0, width, height);
     }
+    return canvas;
   }
 
-  cropAndScale() {
-    const props = {
-      image: new Image(),
-      ratio: 0,
-      sw: 0,
-      sh: 0,
-      sx: 0,
-      sy: 0
-    }
+  // TODO: smartphones hj podem ter mais de uma camera traseira.
+  // Pegar cameras traseiras disponiveis e escolher a ultima pois,
+  // provavelmente será a camera padrao normal
+  // detectAvailableCameras > switchToLastVideoInput 
 
-    // crop and scale image for final size
-    props.ratio = Math.min(props.image.width / this.props.captureWidth, props.image.height / this.props.captureHeight);
-    props.sw = this.props.captureWidth * props.ratio;
-    props.sh = this.props.captureHeight * props.ratio;
-    props.sx = (props.image.width - props.sw) / 2;
-    props.sy = (props.image.height - props.sh) / 2;
+  // async getDeviceList () {
+  //   await navigator.mediaDevices.getUserMedia({
+  //     video: true,
+  //     audio: true
+  //   })
 
-    return props;
-  }
+  //   deviceList = await navigator.mediaDevices.enumerateDevices();
+  //   cameraList = deviceList.filter(item => item.kind === 'videoinput');
+  //   cameraInfoMap = new Map(cameraList.map(info => [info.deviceId, info]));
+  // }
+
+  // TODO verificar o sistema do usuario para saber se acesso é por smartphone
+  // get isAndroid() {
+  //   return /Android/i.test(navigator.userAgent);
+  // }
+
+  // get isiOS() {
+  //   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // }
+
+  // get isIosSafari() {
+  //   return /iPhone/.test(navigator.userAgent) &&
+  //     /Safari/.test(navigator.userAgent) &&
+  //     !(/CriOS/.test(navigator.userAgent)) &&
+  //     !(/FxiOS/.test(navigator.userAgent));
+  // }
+
+  // get isMobile() {
+  //   return this.isAndroid || this.isiOS;
+  // }
+
+
+
 }

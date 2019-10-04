@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 // import {
@@ -7,15 +7,17 @@ import { ModalController } from '@ionic/angular';
 //   CameraPreviewOptions,
 //   CameraPreviewDimensions
 // } from '@ionic-native/camera-preview/ngx';
-import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
+// import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
 import { FootView, FootSide } from '../../../../models/enums/foot.enum';
 // import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { OptFootSideModalComponent } from '../../../../components/assess/opt-foot-side-modal/opt-foot-side-modal.component';
 import { AssessMethod } from '../../../../models/enums/assess.enum';
+import { CameraService } from '../../../../services/camera/camera.service';
+import { Camera } from '@capacitor/core';
 
-const { CameraPreview } = Plugins;
+// const { CameraPreview } = Plugins;
 
 
 @Component({
@@ -23,7 +25,12 @@ const { CameraPreview } = Plugins;
   templateUrl: './initial-foot-photos-modal.component.html',
   styleUrls: ['./initial-foot-photos-modal.component.scss'],
 })
-export class InitialFootPhotosModalComponent implements OnInit {
+export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
+  @ViewChild('cameraStream', { static: false })
+  private cameraStream: ElementRef;
+
+  // @ViewChild('content', { static: false })
+  // private content: ElementRef;
 
   testDataPass; // TESTE
 
@@ -34,6 +41,15 @@ export class InitialFootPhotosModalComponent implements OnInit {
       view?: { [viewKey: string]: SafeResourceUrl }
     }
   };
+  public cameraSize = {
+    // width: screen.height - 190,
+    // height: screen.width
+    height: screen.availHeight - 120, // 120px rodapé, 70px android botton nav buttons
+    width: screen.availWidth
+  };
+  capturePreview: SafeStyle;
+  testCrop: SafeStyle;
+
   private _currentView: FootView;
   private _currentFootSide: FootSide;
   private _lastTakedPhoto;
@@ -42,6 +58,7 @@ export class InitialFootPhotosModalComponent implements OnInit {
     public modalController: ModalController,
     public activatedRoute: ActivatedRoute,
     private sanitizer: DomSanitizer,
+    private camera: CameraService
     // private cameraPreview: CameraPreview
   ) { }
 
@@ -62,19 +79,42 @@ export class InitialFootPhotosModalComponent implements OnInit {
   get takedPhotosDisplayNumber() {
     return this.takedPhotosCount < 3 ? this.takedPhotosCount + 1 : this.takedPhotosCount;
   }
-
+  ngAfterViewInit() {
+    this.camera.startPreview(this.cameraStream);
+    // setTimeout(() => {
+      // console.log(this.content.nativeElement.offsetWidth);
+    // }, 200);
+  }
   ngOnInit() {
     // this.displayOptFootSide(AssessMethod.Fpi);
     this.testGetData();
     this.footPhotosOnInit();
     this.footSidePhotosInit();
+    // this.camStart();
     // this.startCamera();
-    const cameraOptions = {
-      parent: 'cameraPreview',
-      className: 'test'
-    };
-    CameraPreview.start(cameraOptions);
+    // const cameraOptions = {
+    //   parent: 'cameraPreview',
+    //   className: 'test'
+    // };
+    // CameraPreview.start(cameraOptions);
   }
+
+  // async camStart() {
+  //   // camera options (Size and location). In the following example,
+  //   // the preview uses the rear camera and display the preview in the back of the webview
+  //   const cameraPreviewOpts: CameraPreviewOptions = {
+  //     x: 0,
+  //     y: 0,
+  //     width: screen.width,
+  //     height: screen.height - 190,
+  //     camera: 'rear',
+  //     tapPhoto: true,
+  //     previewDrag: true,
+  //     toBack: true,
+  //     alpha: 1
+  //   };
+  //   await this.cameraPreview.startCamera(cameraPreviewOpts)
+  // }
 
   /**
    * inicializa objeto que armazena fotos das vistas de cada pé
@@ -154,10 +194,12 @@ export class InitialFootPhotosModalComponent implements OnInit {
   }
 
   /** tira a foto */
-  async takePhoto() {
+ takePhoto() {
     if (this.takedPhotosDisplayNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
       // const result = await CameraPreview.capture();
       // this.photoAndViewManagement(result.value);
+      this.capturePreview =  this.camera.snapShot();
+      // this.testCrop =  this.camera.imageCapture;
     } else {
       console.error('ERROR!');
     }

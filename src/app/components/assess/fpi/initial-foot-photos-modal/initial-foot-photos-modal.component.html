@@ -7,23 +7,29 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header> -->
-<button mat-button (click)="displayOptFootSide('Fpi')">show it</button>
+<!-- <button mat-button (click)="displayOptFootSide('Fpi')">show it</button> -->
 <ion-content>
-  <pre>{{ testDataPass | json }}</pre>
+  <div class="camera-wrapper" #content>
+    <!-- <div class="test-crop" [style.backgroundImage]="testCrop"></div> -->
+    <div *ngIf="capturePreview" class="capture-preview" [style.backgroundImage]="capturePreview">
+    </div>
+  <!-- <pre>{{ testDataPass | json }}</pre> -->
   <!-- <div>{{ history.testState$ .data }}</div> -->
   <!-- <img [src]="photo" *ngIf="photo"> -->
   <!-- <iframe src="../../../../../assets/vr.html"></iframe> -->
-  <div id="cameraPreview" class="teste"></div>
-
-  <ion-chip>
+  <!-- <div id="cameraPreview" class="teste"></div> -->
+  <video #cameraStream autoplay muted playsinline [width]="cameraSize.width" [height]="cameraSize.height"></video>
+  </div>
+  <!-- [height]="cameraSize.height" [width]="cameraSize.width" -->
+  <!-- <ion-chip>
     <ion-label>{{ currentView }}</ion-label>
-  </ion-chip>
+  </ion-chip> -->
   <img class="img-guide" [src]="'/assets/svg/foot-view-guide_' + currentView + '.svg'" />
   <ion-chip class="foot-side">
     <img [src]="'/assets/svg/footstep_' + currentFootSide + '.svg'" />
     <ion-label class="ion-text-uppercase"><small>{{ 'Foot ' + currentFootSide }}</small></ion-label>
   </ion-chip>
-  <img src="" alt="">
+  <!-- <img src="" alt=""> -->
   <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="takePhoto()">
       <ion-icon name="camera"></ion-icon>

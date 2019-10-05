@@ -61,11 +61,11 @@ export class CameraService {
     try {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         const constraints: MediaTrackConstraints = {
-          facingMode: 'enviroment', // acessa camera traseira se disponivel
-          // width: screen.availHeight - 120,
-          // height: screen.availWidth
-          height: screen.availHeight - 120,
-          width: screen.availWidth
+          facingMode: 'environment', // acessa camera traseira se disponivel
+          width: screen.availHeight - 120,
+          height: screen.availWidth
+          // height: screen.availHeight - 120,
+          // width: screen.availWidth
         };
 
         // inicia camera e acessa o conteudo transmitido por ela
@@ -94,7 +94,7 @@ export class CameraService {
   public snapShot(): SafeStyle {
     const canvas = this.drawCanvas(this.cameraPreview, this.cameraWidth, this.cameraHeight);
     // const canvas = this.drawCanvas(this.cameraPreview, 200, 200);
-    this.stopPreview();
+    // this.stopPreview();
     const image = canvas.toDataURL('image/png', 1);
 
     return this.sanitizer.bypassSecurityTrustStyle(`url(${image})`);

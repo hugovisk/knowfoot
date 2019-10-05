@@ -29,9 +29,6 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
   @ViewChild('cameraStream', { static: false })
   private cameraStream: ElementRef;
 
-  // @ViewChild('content', { static: false })
-  // private content: ElementRef;
-
   testDataPass; // TESTE
 
   public footView = FootView;
@@ -44,10 +41,10 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
   public cameraSize = {
     // width: screen.height - 190,
     // height: screen.width
-    height: screen.availHeight - 120, // 120px rodapé, 70px android botton nav buttons
+    height: screen.availHeight - 120, // 120px altura do  rodapé
     width: screen.availWidth
   };
-  capturePreview: SafeStyle;
+  public capturePreview: SafeStyle;
   testCrop: SafeStyle;
 
   private _currentView: FootView;
@@ -75,8 +72,11 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
   get takedPhotosCount() {
     return (Object.keys(this.foot[this.currentFootSide].view).length);
   }
-  /** Define quantas fotos ja foram tiradas, inicia em 1 termina em 3 */
-  get takedPhotosDisplayNumber() {
+  /**
+   * Retorna paginação da sequencia de fotos.
+   * Inicia em 1 e apartir de 3 não acrescenta 1 a contagem
+   */
+  get paginatorPhotoNumber() {
     return this.takedPhotosCount < 3 ? this.takedPhotosCount + 1 : this.takedPhotosCount;
   }
   ngAfterViewInit() {
@@ -86,7 +86,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
     // }, 200);
   }
   ngOnInit() {
-    // this.displayOptFootSide(AssessMethod.Fpi);
+    this.displayOptFootSide(AssessMethod.Fpi);
     this.testGetData();
     this.footPhotosOnInit();
     this.footSidePhotosInit();
@@ -128,7 +128,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
     this.currentFootSide = FootSide.Right;
   }
 
-  /** Define a vista inicial e limpa historico de photos tiradas */
+  /** Define a vista inicial e limpa ultima de fotos tirada */
   footSidePhotosInit() {
     this.currentView = FootView.Posterior;
     this.lastTakedPhoto = null;
@@ -195,10 +195,10 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
 
   /** tira a foto */
  takePhoto() {
-    if (this.takedPhotosDisplayNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
+    if (this.paginatorPhotoNumber < 4) { // validacao de erro goHorse, arrumar uma solução melhor
       // const result = await CameraPreview.capture();
-      // this.photoAndViewManagement(result.value);
-      this.capturePreview =  this.camera.snapShot();
+      this.photoAndViewManagement(this.camera.snapShot());
+      // this.capturePreview =  this.camera.snapShot();
       // this.testCrop =  this.camera.imageCapture;
     } else {
       console.error('ERROR!');
@@ -212,7 +212,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
    * obs: sequencia de vistas definida
    *      posterior > posteriorToMedial > medial
    */
-  photoAndViewManagement(photo: string) {
+  photoAndViewManagement(photo: SafeStyle) {
     switch (this.currentView) {
       case (FootView.Posterior):
         this.addPhoto(this.currentFootSide, FootView.Posterior, photo);
@@ -238,10 +238,10 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit {
    * armazena as fotos tiradas no objeto foot no formato base64
    * e valida a segurança do conteudo para ser incluido no DOM
    */
-  addPhoto(footSide: FootSide, footView: FootView, cameraResult: string) {
-    this.foot[footSide].view[footView] =
-      this.sanitizer
-        .bypassSecurityTrustStyle(`url(data:image/png;base64,${cameraResult})`);
+  addPhoto(footSide: FootSide, footView: FootView, cameraResult: SafeStyle) {
+    this.foot[footSide].view[footView] = cameraResult;
+      // this.sanitizer
+      //   .bypassSecurityTrustStyle(`url(data:image/png;base64,${cameraResult})`);
   }
 
   /**

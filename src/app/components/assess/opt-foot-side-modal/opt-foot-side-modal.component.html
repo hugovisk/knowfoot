@@ -13,10 +13,15 @@
       <img class="img-patient-position" src="/assets/svg/patient-fpi-position.svg" />
       <div class="img-patient-position-bg"></div>
       <h4>Posicione <span *ngIf="!noPhotos">e fotografe</span></h4>
-      <p class="ion-text-justify">
-        Com o individuo descalço, posicione-o em pé sob apoio bipodal, permanecendo estático durante
+      <!-- <p class="ion-text-justify">
+        Com o individuo descalço, posicione-o em pé sob apoio bipodal. Ele deve permanecer estático durante
         <span *ngIf="noPhotos">a avaliação</span>
-        <span *ngIf="!noPhotos">a sequencia de fotos.</span>
+        <span *ngIf="!noPhotos">a captura das fotos.</span>
+      </p> -->
+      <p class="ion-text-justify">
+        Com o individuo descalço, posicione-o numa postura estática em pé com apoio bipodal e olhando para frente durante
+        <span *ngIf="noPhotos">a avaliação</span>
+        <span *ngIf="!noPhotos">a captura das fotos.</span>
       </p>
       <!-- <p class="ion-text-justify">Siga as indicações de enquadramento das fotos.</p> -->
     </div>

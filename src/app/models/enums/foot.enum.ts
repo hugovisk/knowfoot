@@ -24,3 +24,11 @@ export enum FootView {
     Medial = 'Medial',
     Posterior = 'Posterior'
 }
+
+export enum FootObservation {
+    SupraAndInfraLateralNalleoliCurvature, // = 'SupraAndInfraLateralNalleoliCurvature',
+    CalcanealFrontalPlanePosition, // = 'CalcanealFrontalPlanePosition',
+    AbductionAdductionOfForefootOnRearfoot, // = 'AbductionAdductionOfForefootOnRearfoot',
+    CongruenceOfMedialLongitudinalArch, // = 'CongruenceOfMedialLongitudinalArch',
+    ProeminenceInRegionOfTnj // = 'ProeminenceInRegionOfTnj'
+}

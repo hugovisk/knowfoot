@@ -24,7 +24,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
  * - Capture image with predefined options: width, height, quality, mimetype [✓]
  * - Optimization of image data via capture off lossless pixel data for better post-processing. [✗]
  * - TODO: Use of WebRTC/UserMedia API TODO: implements WebRTC adpter https://github.com/webrtc/adapter
- * - TODO: Define better image file format jpg or png smaller size and better quality.
+ * - Define better image file format jpg or png smaller size and better quality[✓].
  * - TODO: Improve error handling [✗]
  * - TODO: Enumrate enviroment cameras and choose last [✗]
  */
@@ -62,10 +62,10 @@ export class CameraService {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         const constraints: MediaTrackConstraints = {
           facingMode: 'environment', // acessa camera traseira se disponivel
-          width: screen.availHeight - 120,
-          height: screen.availWidth
-          // height: screen.availHeight - 120,
-          // width: screen.availWidth
+          // width: screen.availHeight - 120,
+          // height: screen.availWidth
+          height: screen.availHeight - 120,
+          width: screen.availWidth
         };
 
         // inicia camera e acessa o conteudo transmitido por ela
@@ -90,14 +90,26 @@ export class CameraService {
   /**
    * Captura frame do stream da camera e trata para inserção em background-image no css
    * @returns url com dataURL base64 da imagem sanitizada para inserção no DOM
+   * 
+   * https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
+   * https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
    */
-  public snapShot(): SafeStyle {
-    const canvas = this.drawCanvas(this.cameraPreview, this.cameraWidth, this.cameraHeight);
-    // const canvas = this.drawCanvas(this.cameraPreview, 200, 200);
-    // this.stopPreview();
-    const image = canvas.toDataURL('image/png', 1);
+   public async snapShot() {
+    const canvasPreview = this.drawCanvas(this.cameraPreview, this.cameraWidth, this.cameraHeight);
+    const canvasBlob = this.drawCanvas(this.cameraPreview, 600, 800);
 
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${image})`);
+    const imageToUrl = canvasPreview.toDataURL('image/jpeg', .70);
+    const imageToBlob = await new Promise( resolve => canvasPreview.toBlob(resolve, 'image/jpeg', .70));
+
+    const result = {
+      imageUrl: this.sanitizer.bypassSecurityTrustStyle(`url(${imageToUrl})`),
+      imageBlob: imageToBlob
+    };
+
+    // console.log(result.imageBlob);
+    // console.log(result.imageUrl);
+
+    return result;
   }
 
 

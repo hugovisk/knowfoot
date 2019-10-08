@@ -46,7 +46,7 @@
               [style.backgroundImage]="foot[footSide.Right].view[footView.Posterior]">
             </div> -->
           </div>
-          <button mat-icon-button class="btn-delete-last-photo" *ngIf="foot[currentFootSide].view[footView.Posterior]"
+          <button mat-icon-button class="btn-delete-last-photo" *ngIf="preAssess.foot[currentFootSide].view[footView.Posterior].imageUrl"
             (click)="deleteLastTakedPhoto()">
             <mat-icon>delete_forever</mat-icon>
           </button>

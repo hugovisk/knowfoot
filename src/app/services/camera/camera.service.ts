@@ -71,8 +71,6 @@ export class CameraService {
           height: { ideal: screen.availHeight - 120}
         };
 
-        console.log(`h:${constraints.height} x w:${constraints.width}`);
-        console.log(`h:${this.cameraHeight} x w:${this.cameraWidth}`);
 
         // inicia camera e acessa o conteudo transmitido por ela
         const stream = await navigator.mediaDevices.getUserMedia({ video: constraints });

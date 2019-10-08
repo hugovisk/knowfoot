@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FootSide } from '../../../models/enums/foot.enum';
+import { FootSide, FootView } from '../../../models/enums/foot.enum';
 
 @Component({
   selector: 'app-opt-foot-side-modal',
@@ -26,7 +26,7 @@ export class OptFootSideModalComponent implements OnInit {
   }
 
   get isFootRightPhotosEmpty() {
-    return !Object.keys(this.assessedFoot[FootSide.Right].view).length;
+    return !Object.keys(this.assessedFoot[FootSide.Right].view[FootView.Posterior]).length;
   }
 
   get askForOtherFootAssess() {

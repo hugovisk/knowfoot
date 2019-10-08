@@ -15,13 +15,13 @@ interface Assess {
 }
 
 export interface PreAssessFpi extends Assess {
-    patientName: string;
+    patientName?: string;
     foot?: {
         [footSide: string]: {
             view?: {
                 [footView: string]: {
-                    imageUrl: string,
-                    imageBlob: Blob
+                    imageUrl?: string,
+                    imageBlob?: Blob
                 }
             };
         };
@@ -39,7 +39,7 @@ export interface AssessFpi extends Assess {
                     path: string
                 }
             };
-            imageBlob?: {
+            footPicture?: {
                 [footView: string]: {
                     blob?: Blob,
                     metadata?: object

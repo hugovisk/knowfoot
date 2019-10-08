@@ -27,6 +27,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
  * - Define better image file format jpg or png smaller size and better quality[✓].
  * - TODO: Improve error handling [✗]
  * - TODO: Enumrate enviroment cameras and choose last [✗]
+ * - TODO validacao para camera ter resolucao >= resolucao da tela
  */
 
 export class CameraService {
@@ -64,9 +65,14 @@ export class CameraService {
           facingMode: 'environment', // acessa camera traseira se disponivel
           // width: screen.availHeight - 120,
           // height: screen.availWidth
-          height: screen.availHeight - 120,
-          width: screen.availWidth
+          // height: screen.availHeight - 120,
+          // width: screen.availWidth
+          width: { ideal: screen.availWidth },
+          height: { ideal: screen.availHeight - 120}
         };
+
+        console.log(`h:${constraints.height} x w:${constraints.width}`);
+        console.log(`h:${this.cameraHeight} x w:${this.cameraWidth}`);
 
         // inicia camera e acessa o conteudo transmitido por ela
         const stream = await navigator.mediaDevices.getUserMedia({ video: constraints });
@@ -94,20 +100,17 @@ export class CameraService {
    * https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
    * https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
    */
-   public async snapShot() {
+  public async snapShot() {
     const canvasPreview = this.drawCanvas(this.cameraPreview, this.cameraWidth, this.cameraHeight);
     const canvasBlob = this.drawCanvas(this.cameraPreview, 600, 800);
 
     const imageToUrl = canvasPreview.toDataURL('image/jpeg', .70);
-    const imageToBlob = await new Promise( resolve => canvasPreview.toBlob(resolve, 'image/jpeg', .70));
+    const imageToBlob = await new Promise(resolve => canvasBlob.toBlob(resolve, 'image/jpeg', .70));
 
     const result = {
       imageUrl: this.sanitizer.bypassSecurityTrustStyle(`url(${imageToUrl})`),
       imageBlob: imageToBlob
     };
-
-    // console.log(result.imageBlob);
-    // console.log(result.imageUrl);
 
     return result;
   }

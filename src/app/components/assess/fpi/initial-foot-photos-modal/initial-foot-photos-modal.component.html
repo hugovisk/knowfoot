@@ -18,7 +18,7 @@
   <!-- <img [src]="photo" *ngIf="photo"> -->
   <!-- <iframe src="../../../../../assets/vr.html"></iframe> -->
   <!-- <div id="cameraPreview" class="teste"></div> -->
-  <video #cameraStream autoplay muted playsinline [width]="cameraSize.width" [height]="cameraSize.height"></video>
+  <video #cameraStream autoplay muted playsinline [width]="camera.cameraWidth" [height]="camera.cameraHeight"></video>
   </div>
   <!-- [height]="cameraSize.height" [width]="cameraSize.width" -->
   <!-- <ion-chip>
@@ -75,7 +75,7 @@
         {{footView.Medial}} -->
         <div class="next-view">
           <!-- 1/3 -->
-          {{ paginatorPhotoNumber + '/3'}}
+          {{ pagination + '/3'}}
           <!-- <img src="/assets/svg/foot-view_PosteriorToMedial.svg" /> -->
         </div>
       </ion-col>

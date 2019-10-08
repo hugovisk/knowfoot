@@ -14,6 +14,20 @@ interface Assess {
     updatedAt?: firebase.firestore.FieldValue | Date;
 }
 
+export interface PreAssessFpi extends Assess {
+    patientName: string;
+    foot?: {
+        [footSide: string]: {
+            view?: {
+                [footView: string]: {
+                    imageUrl: string,
+                    imageBlob: Blob
+                }
+            };
+        };
+    };
+}
+
 export interface AssessFpi extends Assess {
     foot?: {
         [footSide: string]: {
@@ -25,7 +39,7 @@ export interface AssessFpi extends Assess {
                     path: string
                 }
             };
-            footPicture?: {
+            imageBlob?: {
                 [footView: string]: {
                     blob?: Blob,
                     metadata?: object

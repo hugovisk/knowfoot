@@ -33,10 +33,16 @@ export class OptFootSideModalComponent implements OnInit {
     return this.assessedFoot ? true : false;
   }
 
-  // TODO: if noPhotos true, close camera preview and start fpi assess
-  async closeModalAndRetrieveFootSide(selectedFootSide) {
+  /**
+   * Fecha o modal e retorna proximo pé a ser avaliado, se houver,
+   * para a componente de camera
+   *
+   * @param next proximo pé a ser fotografado ou `false` se usuario escolher
+   * avaliar somente um pe
+   */
+  async closeModalAndRetrieveFootSide(next: FootSide | boolean) {
     await this.modalController.dismiss({
-      footSide: selectedFootSide
+      footSide: next
     });
   }
   // TODO: ask for confirmation, close assess and back to home

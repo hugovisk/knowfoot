@@ -46,7 +46,8 @@
     <mat-checkbox [(ngModel)]="noPhotos">Avaliar sem fotografar</mat-checkbox>
     <ion-row>
       <ion-col size="6">
-        <button mat-flat-button color="primary" class="side-btn" (click)="closeModalAndRetrieveFootSide(footSide.Left)">
+        <button mat-flat-button color="primary" class="side-btn" 
+          (click)="closeModalAndRetrieveFootSide(footSide.Left)">
           <img class="img-btn" src="/assets/svg/footstep_Left.svg" />
           <mat-icon>arrow_left</mat-icon>Esquerdo
         </button>
@@ -87,8 +88,9 @@
         </button>
       </ion-col> -->
       <ion-col size="12">
-        <button mat-button color="primary" class="side-btn" (click)="closeModalAndRetrieveFootSide(footSide.Left)">
-          Irei avaliar somente o pé {{ nextAssessFootSide === 'footSide.Right' ? footSide.Left : footSide.Right }}
+        <button mat-button color="primary" class="side-btn" 
+          (click)="closeModalAndRetrieveFootSide(false)">
+          Irei avaliar somente o pé {{ nextAssessFootSide === footSide.Right ? footSide.Left : footSide.Right }}
         </button>
       </ion-col>
     </ion-row>

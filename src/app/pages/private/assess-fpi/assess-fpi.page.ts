@@ -128,7 +128,35 @@ export class AssessFpiPage implements OnInit {
     const modal = await this.modalController.create({
       component: InitialFootPhotosModalComponent
     });
-    return await modal.present();
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+    if (data) { // valiadação pois pode retornar undefined
+      console.log(data); // TESTE
+      // this.currentFootSide = data.footSide;
+      // this.currentInit();
+    }
+    // console.log(data); // TESTE
   }
+
+  /** Apresenta modal para escolha de pé que será avaliado */
+  // async displayOptFootSide(method: AssessMethod, foots?) {
+  //   const modal = await this.modalController.create({
+  //     component: OptFootSideModalComponent,
+  //     componentProps: {
+  //       assessMethod: method,
+  //       assessedFoot: foots
+  //     },
+  //     cssClass: 'test-modal', // TESTE
+  //     backdropDismiss: false
+  //   });
+  //   await modal.present();
+  //   const { data } = await modal.onWillDismiss();
+  //   if (data) { // valiadação pois pode retornar undefined
+  //     this.currentFootSide = data.footSide;
+  //     this.currentInit();
+  //   }
+  //   console.log(data); // TESTE
+  // }
 
 }

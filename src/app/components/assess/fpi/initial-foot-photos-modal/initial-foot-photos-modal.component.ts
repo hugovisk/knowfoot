@@ -21,7 +21,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   @ViewChild('cameraStream', { static: false })
   private cameraStream: ElementRef;
 
-  public pacientData; // TESTE
+  public medicalRecord; // TESTE
   public footView = FootView;
   public footSide = FootSide;
 
@@ -45,13 +45,16 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
     private camera: CameraService
   ) { }
 
-  get currentImage() { return this.preAssess.foot[this.currentFootSide].view[this.currentView]; }
+
+  get otherFootSide() { return this.currentFootSide === FootSide.Right ? FootSide.Left : FootSide.Right; }
 
   set currentView(view: FootView) { this._currentView = view; }
   get currentView() { return this._currentView; }
 
   set currentFootSide(side: FootSide) { this._currentFootSide = side; }
   get currentFootSide() { return this._currentFootSide; }
+
+  get currentImage() { return this.preAssess.foot[this.currentFootSide].view[this.currentView]; }
 
   set lastTakedPhoto(footView: SafeStyle) { this._lastTakedPhoto = footView; }
   get lastTakedPhoto() { return this._lastTakedPhoto; }
@@ -69,10 +72,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
 
   /** Verifica se o outro pé já foi fotografado */
   get areBothFeetPhotographed() {
-    const otherSide = this.currentFootSide === FootSide.Right ? FootSide.Left : FootSide.Right;
-    const checkFootPhoto = this.preAssess.foot[otherSide].view[FootView.Posterior];
-
-    if (!(Object.keys(checkFootPhoto).length)) {
+    if (!(Object.keys(this.preAssess.foot[this.otherFootSide].view[FootView.Posterior]).length)) {
       return false;
     }
     return true;
@@ -84,7 +84,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
 
   ngOnInit() {
     this.displayOptFootSide(AssessMethod.Fpi);
-    this.testGetData();
+    this.setMedicalRecord();
     this.preAssessOnInit();
     this.currentInit();
   }
@@ -111,7 +111,9 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
             [FootView.PosteriorToMedial]: {},
           }
         }
-      }
+      },
+      patientId: 'xxxxxxxxxxxxx', // this.medicalRecord.patient.id,
+      patientName: 'Moking Name'// this.medicalRecord.patient.name
     };
   }
 
@@ -120,21 +122,24 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
    * e define pé inicial somente para pré-carregar imagens da interface
    */
   currentInit() {
+    if (this.currentFootSide === undefined) {
+      this.currentFootSide = FootSide.Right;
+    } // else if (!this.currentFootSide) {
+    //   console.log('Fechando o modal');
+    //   delete this.preAssess.foot[this.otherFootSide];
+    //   this.closeModalAndRetrievePreAssess(this.preAssess);
+    // }
     this.currentView = FootView.Posterior;
-    if (!this.currentFootSide) { this.currentFootSide = FootSide.Right; }
     if (this.lastTakedPhoto) { this.lastTakedPhoto = null; }
   }
 
 
-  /** teste recebimento de dados do modal de definiçao do metodo */
-  testGetData() {
-    // this.testState$ = this.activatedRoute.paramMap
-    //   .pipe(map(() => window.history.state));
-    // console.log(this.testState$);
+  /** Recebimento de dados do modal de definiçao do metodo */
+  setMedicalRecord() {
     this.activatedRoute.paramMap
       .pipe(map(() => window.history.state))
-      .forEach(x => this.pacientData = x);
-    console.log(this.pacientData);
+      .forEach(x => this.medicalRecord = x);
+    // console.log(this.medicalRecord);
   }
 
   /** Apresenta modal para escolha de pé que será avaliado */
@@ -149,12 +154,36 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
       backdropDismiss: false
     });
     await modal.present();
+
     const { data } = await modal.onWillDismiss();
     if (data) { // valiadação pois pode retornar undefined
-      this.currentFootSide = data.footSide;
-      this.currentInit();
+      if (data.footSide) {
+        this.currentFootSide = data.footSide;
+        this.currentInit();
+      } else {
+        this.oneFootAssess();
+      }
     }
     console.log(data); // TESTE
+  }
+
+  /**
+   * Deleta a propriedade do pé que não sera avaliado no objeto preAssess
+   * e chama o metodo de fechar o modal
+   */
+  oneFootAssess() {
+    setTimeout(() => {
+      console.log('Fechando o modal');
+      delete this.preAssess.foot[this.otherFootSide];
+      this.closeModalAndRetrievePreAssess();
+    }, 250);
+  }
+
+  /** fecha esse modal e retorna paciente e fotos no objeto preAssess */
+  async closeModalAndRetrievePreAssess() {
+    await this.modalController.dismiss({
+      assess: this.preAssess
+    });
   }
 
   /** fecha esse modal */
@@ -193,7 +222,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
         break;
       case (FootView.Medial):
         this.areBothFeetPhotographed ?
-          this.closeModal() :
+          this.closeModalAndRetrievePreAssess(this.preAssess) :
           this.displayOptFootSide(AssessMethod.Fpi, this.preAssess.foot);
         break;
       default:

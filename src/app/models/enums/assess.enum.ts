@@ -1,4 +1,4 @@
-export const enum AssessMethod {
+export enum AssessMethod {
     Fpi = 'Fpi',
     NavicularDrop = 'NavicularDrop'
 }

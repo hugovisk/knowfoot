@@ -5,34 +5,16 @@
     </ion-button>
   </ion-buttons>
   <div class="ion-text-center">
-    <!-- <h4><mat-icon>assignment</mat-icon></h4> -->
     <h4>Avaliação</h4>
     <h2> {{ patient.name }}</h2>
-    <!-- <ion-chip color="primary" mode="ios" outline="true" *ngIf="assess.method">
-      <ion-label>{{ assess.method }}</ion-label>
-      <ion-icon name="close-circle" (click)="unSetMethod()"></ion-icon>
-    </ion-chip>
-    <ion-chip color="primary" mode="ios" outline="true" *ngIf="assess.foot.Right">
-      <ion-label> Direito </ion-label>
-      <ion-icon name="close-circle" (click)="unSetFootSide('Right')"></ion-icon>
-    </ion-chip>
-    <ion-chip color="primary" mode="ios" outline="true" *ngIf="assess.foot.Left">
-      <ion-label> Esquerdo </ion-label>
-      <ion-icon name="close-circle" (click)="unSetFootSide('Left')"></ion-icon>
-    </ion-chip> -->
-
-    <!-- <button mat-flat-button (click)="test()" color="primary">teste</button> -->
-
   </div>
 </ion-header>
 
 <ion-footer>
-  <!-- *ngIf="!assess.method" -->
   <ion-grid fixed >
     <ion-row>
       <ion-col size="10">
         <h6 >Selecione o método</h6>
-        <!-- class="ion-padding-start" -->
       </ion-col>
       <ion-col size="2" class="ion-text-right">
         <div class="info-icon">
@@ -44,11 +26,8 @@
     </ion-row>
     <ion-row>
       <ion-col size="6">
-        <mat-card class="opt-card" matRipple (click)="setMethod('NavicularDrop')">
+        <mat-card class="opt-card" matRipple (click)="startAssess(assessMethod.NavicularDrop)">
           <div class="container">
-            <!-- <div class="methods-icon drop">
-              <mat-icon class="drop-icon">straighten</mat-icon>
-            </div> -->
             <img class="method-img" src="/assets/svg/method-drop.svg" alt="">
             <mat-card-title>Drop Navicular</mat-card-title>
             <mat-card-subtitle>Confiável</mat-card-subtitle>
@@ -56,11 +35,8 @@
         </mat-card>
       </ion-col>
       <ion-col size="6">
-        <mat-card class="opt-card" matRipple (click)="test()">
+        <mat-card class="opt-card" matRipple (click)="startAssess(assessMethod.Fpi)">
           <div class="container">
-            <!-- <div class="methods-icon fpi">
-              <mat-icon>visibility</mat-icon>
-            </div> -->
             <img class="method-img" src="/assets/svg/method-fpi.svg" alt="">
             <mat-card-title>Foot Posture Index</mat-card-title>
             <mat-card-subtitle>Altamente confiável</mat-card-subtitle>
@@ -68,56 +44,5 @@
         </mat-card>
       </ion-col>
     </ion-row>
-  </ion-grid>
-
-  <!-- <ion-grid fixed *ngIf="assess.method">
-    <ion-row>
-      <ion-col size="10">
-        <h6 class="ion-padding-start">Selecione pé</h6>
-      </ion-col>
-      <ion-col size="2" class="ion-text-right">
-        <div class="info-icon">
-          <button mat-icon-button aria-label="informacoes" color="primary">
-            <ion-icon name="information-circle-outline"></ion-icon>
-          </button>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="4">
-        <mat-card class="example-card" matRipple (click)="setFootSide('Both')">
-          <div class="container">
-            < <div class="methods-icon drop">
-                  <mat-icon class="drop-icon">straighten</mat-icon>
-                </div> 
-            <img class="method-img" src="/assets/svg/footstep_Left.svg" alt="">
-            <mat-card-title>Ambos</mat-card-title>
-          </div>
-        </mat-card>
-      </ion-col>
-      <ion-col size="4">
-        <mat-card class="example-card" matRipple (click)="setFootSide('Left')">
-          <div class="container">
-            <div class="methods-icon drop">
-              <mat-icon class="drop-icon">straighten</mat-icon>
-            </div> 
-            <img class="method-img" src="/assets/svg/footstep_Left.svg" alt="">
-            <mat-card-title>Esquerdo</mat-card-title>
-          </div>
-        </mat-card>
-      </ion-col>
-      <ion-col size="4">
-        <mat-card class="example-card" matRipple (click)="setFootSide('Right')">
-          [routerLink]="[ '/assess-fpi']"> 
-          <div class="container">
-             <div class="methods-icon fpi">
-              <mat-icon>visibility</mat-icon>
-            </div>
-            <img class="method-img" src="/assets/svg/footstep_Right.svg" alt="">
-            <mat-card-title>Direito</mat-card-title>
-          </div>
-        </mat-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
+  </ion-grid>  
 </ion-footer>

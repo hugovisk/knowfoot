@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ModalController } from '@ionic/angular';
+import { AssessMethod } from '../../../models/enums/assess.enum';
 
 @Component({
   selector: 'app-opt-method-modal',
@@ -11,6 +12,8 @@ import { ModalController } from '@ionic/angular';
 export class OptMethodModalComponent implements OnInit {
 
   @Input() patient;
+
+  public assessMethod = AssessMethod;
 
   constructor(
     public modalController: ModalController,
@@ -27,10 +30,20 @@ export class OptMethodModalComponent implements OnInit {
     await this.modalController.dismiss();
   }
 
-  test() {
+  startAssess(method: AssessMethod) {
+    // const url = method === AssessMethod.Fpi ? '/assess-fpi' : '/assess-drop';
+    let url: string;
+
+    switch (method) {
+      case (AssessMethod.Fpi): url = '/assess-fpi'; break;
+      case (AssessMethod.NavicularDrop): url = '/assess-drop'; break;
+      default: console.error('Erro :(');
+    }
+
+
     this.router.navigateByUrl(
-      '/assess-fpi',
-      { state: { assess: this.patient } }
+      url,
+      { state: { patient: this.patient } }
     );
     this.closeModal();
   }

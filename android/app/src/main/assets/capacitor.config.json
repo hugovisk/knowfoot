@@ -1,7 +1,0 @@
-{
-  "appId": "io.ionic.starter",
-  "appName": "knowfoot",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www"
-}

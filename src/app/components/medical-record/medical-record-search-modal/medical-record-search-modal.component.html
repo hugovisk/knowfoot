@@ -38,9 +38,9 @@
   </div> -->
   <!-- <p>{{searchedPatients.length === 20}}</p> -->
   <mat-list>
-    <mat-list-item *ngFor="let item of searchedPatients" (click)="closeModalAndRetrievePatient(item)" matRipple>
-      <ngx-avatar size="45" textSizeRatio="4" [name]="item.name"></ngx-avatar>
-      <p>{{item.name}}</p>
+    <mat-list-item *ngFor="let patient of searchedPatients" (click)="closeModalAndRetrievePatient(patient)" matRipple>
+      <ngx-avatar size="45" textSizeRatio="4" [name]="patient.name"></ngx-avatar>
+      <p>{{patient.name}}</p>
     </mat-list-item>
   </mat-list>
 

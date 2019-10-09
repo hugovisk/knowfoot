@@ -5,8 +5,9 @@ import { debounceTime } from 'rxjs/operators';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatInput } from '@angular/material';
 
-export interface MedicalRecord {
+interface MedicalRecord {
   name: string;
+  id?: string;
 }
 
 
@@ -45,7 +46,6 @@ export class MedicalRecordSearchModalComponent implements OnInit {
 
   testPacients: MedicalRecord[];
   searchedPatients: MedicalRecord[];
-  selectedPatient: MedicalRecord;
 
   searching = false;
 
@@ -55,7 +55,10 @@ export class MedicalRecordSearchModalComponent implements OnInit {
     this.searchControl = new FormControl('');
 
     this.testPacients = [
-      { name: 'Emelia Joynes' },
+      {
+        name: 'Emelia Joynes',
+        id: 'weDHji0986yH'
+      },
       { name: 'Marine Goldsborough' },
       { name: 'Jolanda Benigno' },
       { name: 'Nakisha Sibley' },
@@ -79,7 +82,7 @@ export class MedicalRecordSearchModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setTestPacients('');
+    this.setSearchedPatients('');
 
     this.searchControl.valueChanges
       .subscribe(() => {
@@ -91,7 +94,7 @@ export class MedicalRecordSearchModalComponent implements OnInit {
       .subscribe(search => {
         console.log('Pesquisa: ' + search);
         this.searching = false;
-        this.setTestPacients(search);
+        this.setSearchedPatients(search);
       });
   }
 
@@ -112,17 +115,13 @@ export class MedicalRecordSearchModalComponent implements OnInit {
     });
   }
 
-  setTestPacients(search: string) {
+  setSearchedPatients(search: string) {
     this.searchedPatients = this.filter(search);
   }
-  setAssessPatient(selectedPatient) {
-    this.selectedPatient = selectedPatient;
-  }
 
-  async closeModalAndRetrievePatient(selectedPatient) {
-    this.setAssessPatient(selectedPatient);
+  async closeModalAndRetrievePatient(selectedPatient: MedicalRecord) {
     await this.modalController.dismiss({
-      patient: this.selectedPatient
+      patient: selectedPatient
     });
   }
 

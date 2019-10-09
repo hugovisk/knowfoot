@@ -1,13 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeStyle } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
-// import {
-//   CameraPreview,
-//   CameraPreviewPictureOptions,
-//   CameraPreviewOptions,
-//   CameraPreviewDimensions
-// } from '@ionic-native/camera-preview/ngx';
-// import { Plugins, CameraResultType, CameraSource, CameraOptions, CameraDirection } from '@capacitor/core';
+
 import { FootView, FootSide } from '../../../../models/enums/foot.enum';
 // import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,10 +10,6 @@ import { OptFootSideModalComponent } from '../../../../components/assess/opt-foo
 import { AssessMethod } from '../../../../models/enums/assess.enum';
 import { CameraService } from '../../../../services/camera/camera.service';
 import { PreAssessFpi } from '../../../../models/interfaces/assess';
-// import { Camera } from '@capacitor/core';
-// import undefined = require('firebase/empty-import');
-
-// const { CameraPreview } = Plugins;
 
 
 @Component({
@@ -31,7 +21,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   @ViewChild('cameraStream', { static: false })
   private cameraStream: ElementRef;
 
-  pacientData; // TESTE
+  public pacientData; // TESTE
   public footView = FootView;
   public footSide = FootSide;
 
@@ -77,29 +67,14 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  /** Verifica se ambos os pés foram fotografados */
+  /** Verifica se o outro pé já foi fotografado */
   get areBothFeetPhotographed() {
-    const invertSide = this.currentFootSide === FootSide.Right ? FootSide.Left : FootSide.Right;
-    const checkFootPhoto = this.preAssess.foot[invertSide].view[FootView.Posterior];
+    const otherSide = this.currentFootSide === FootSide.Right ? FootSide.Left : FootSide.Right;
+    const checkFootPhoto = this.preAssess.foot[otherSide].view[FootView.Posterior];
 
     if (!(Object.keys(checkFootPhoto).length)) {
       return false;
     }
-
-
-    // for (const side in this.footSide) {
-    //   if (this.footSide.hasOwnProperty(side)) {
-    //     // for ( const view in this.footView) {
-    //     //   if (this.footView.hasOwnProperty(view)) {
-    //         if (!(Object.keys(this.preAssess.foot[side].view[FootView.Posterior]).length)) {
-    //           return false;
-    //       //   }
-    //       // }
-    //     }
-    // if (!(Object.keys(this.foot[side].view).length)) {
-
-    //   }
-    // }
     return true;
   }
 
@@ -110,21 +85,16 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   ngOnInit() {
     this.displayOptFootSide(AssessMethod.Fpi);
     this.testGetData();
-    this.footPhotosOnInit();
-    this.footSidePhotosInit();
+    this.preAssessOnInit();
+    this.currentInit();
   }
 
 
   /**
    * inicializa objeto que armazena fotos das vistas de cada pé
-   * e define pé inicial somente para pré-carregar imagens da interface
+   *
    */
-  footPhotosOnInit() {
-    // this.foot = {
-    //   [FootSide.Right]: { view: {} },
-    //   [FootSide.Left]: { view: {} }
-    // };
-
+  preAssessOnInit() {
     this.preAssess = {
       foot: {
         [FootSide.Right]: {
@@ -143,14 +113,16 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
         }
       }
     };
-
-    this.currentFootSide = FootSide.Right;
   }
 
-  /** Define a vista inicial e limpa ultima de fotos tirada */
-  footSidePhotosInit() {
+  /**
+   * Define a vista inicial e limpa ultima de fotos tirada ,
+   * e define pé inicial somente para pré-carregar imagens da interface
+   */
+  currentInit() {
     this.currentView = FootView.Posterior;
-    this.lastTakedPhoto = null;
+    if (!this.currentFootSide) { this.currentFootSide = FootSide.Right; }
+    if (this.lastTakedPhoto) { this.lastTakedPhoto = null; }
   }
 
 
@@ -162,7 +134,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
     this.activatedRoute.paramMap
       .pipe(map(() => window.history.state))
       .forEach(x => this.pacientData = x);
-    console.log('TEST GET DATA ' + this.pacientData);
+    console.log(this.pacientData);
   }
 
   /** Apresenta modal para escolha de pé que será avaliado */
@@ -180,9 +152,9 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
     const { data } = await modal.onWillDismiss();
     if (data) { // valiadação pois pode retornar undefined
       this.currentFootSide = data.footSide;
-      this.footSidePhotosInit();
+      this.currentInit();
     }
-    console.log('TEST PATIENT DATA: ' + data.patient); // TESTE
+    console.log(data); // TESTE
   }
 
   /** fecha esse modal */
@@ -190,7 +162,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
     await this.modalController.dismiss();
   }
 
-  /** tira a foto */
+  /** tira uma foto */
   async takePhoto() {
     if (this.pagination < 4) { // restricao goHorse, arrumar uma solução melhor
       const result = await this.camera.snapShot();

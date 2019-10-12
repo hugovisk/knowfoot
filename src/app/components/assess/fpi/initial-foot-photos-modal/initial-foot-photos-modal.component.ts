@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { FootView, FootSide } from '../../../../models/enums/foot.enum';
 // import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OptFootSideModalComponent } from '../../../../components/assess/opt-foot-side-modal/opt-foot-side-modal.component';
 import { AssessMethod } from '../../../../models/enums/assess.enum';
 import { CameraService } from '../../../../services/camera/camera.service';
@@ -41,6 +41,8 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   constructor(
     public modalController: ModalController,
     public activatedRoute: ActivatedRoute,
+    private router: Router,
+    // public router: Router,
     // private sanitizer: DomSanitizer,
     private camera: CameraService
   ) { }
@@ -54,7 +56,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   set currentFootSide(side: FootSide) { this._currentFootSide = side; }
   get currentFootSide() { return this._currentFootSide; }
 
-  get currentImage() { return this.preAssess.foot[this.currentFootSide].view[this.currentView]; }
+  get currentImage() { return this.preAssess.foot[this.currentFootSide].view[this.currentView].image; }
 
   set lastTakedPhoto(footView: SafeStyle) { this._lastTakedPhoto = footView; }
   get lastTakedPhoto() { return this._lastTakedPhoto; }
@@ -72,7 +74,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
 
   /** Verifica se o outro pé já foi fotografado */
   get areBothFeetPhotographed() {
-    if (!(Object.keys(this.preAssess.foot[this.otherFootSide].view[FootView.Posterior]).length)) {
+    if (!(Object.keys(this.preAssess.foot[this.otherFootSide].view[FootView.Posterior].image).length)) {
       return false;
     }
     return true;
@@ -99,16 +101,16 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
       foot: {
         [FootSide.Right]: {
           view: {
-            [FootView.Posterior]: {},
-            [FootView.Medial]: {},
-            [FootView.PosteriorToMedial]: {},
+            [FootView.Posterior]: { image: {}},
+            [FootView.Medial]: { image: {}},
+            [FootView.PosteriorToMedial]: { image: {}},
           }
         },
         [FootSide.Left]: {
           view: {
-            [FootView.Posterior]: {},
-            [FootView.Medial]: {},
-            [FootView.PosteriorToMedial]: {},
+            [FootView.Posterior]: { image: {}},
+            [FootView.Medial]: { image: {}},
+            [FootView.PosteriorToMedial]: { image: {}},
           }
         }
       },
@@ -124,13 +126,11 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   currentInit() {
     if (this.currentFootSide === undefined) {
       this.currentFootSide = FootSide.Right;
-    } // else if (!this.currentFootSide) {
-    //   console.log('Fechando o modal');
-    //   delete this.preAssess.foot[this.otherFootSide];
-    //   this.closeModalAndRetrievePreAssess(this.preAssess);
-    // }
+    }
     this.currentView = FootView.Posterior;
-    if (this.lastTakedPhoto) { this.lastTakedPhoto = null; }
+    if (this.lastTakedPhoto) {
+      this.lastTakedPhoto = null;
+    }
   }
 
 
@@ -163,6 +163,8 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
       } else {
         this.oneFootAssess();
       }
+    } else {
+      this.closeModal();
     }
     console.log(data); // TESTE
   }
@@ -182,13 +184,16 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
   /** fecha esse modal e retorna paciente e fotos no objeto preAssess */
   async closeModalAndRetrievePreAssess() {
     await this.modalController.dismiss({
-      assess: this.preAssess
+      preAssess: this.preAssess
     });
   }
 
   /** fecha esse modal */
-  async closeModal() {
-    await this.modalController.dismiss();
+  closeModal() {
+    setTimeout( async () => {
+      this.router.navigateByUrl('/tabs/assess');
+      await this.modalController.dismiss();
+    }, 250);
   }
 
   /** tira uma foto */
@@ -209,8 +214,8 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
    */
   photoAndViewManagement(result) {
     // this.foot[this.currentFootSide].view[this.currentView] = result.imageUrl;
-    this.currentImage.imageUrl = result.imageUrl;
-    this.currentImage.imageBlob = result.imageBlob;
+    this.currentImage.base64Url = result.imageUrl;
+    this.currentImage.blob = result.imageBlob;
     this.lastTakedPhoto = result.imageUrl;
 
     switch (this.currentView) {
@@ -222,7 +227,7 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
         break;
       case (FootView.Medial):
         this.areBothFeetPhotographed ?
-          this.closeModalAndRetrievePreAssess(this.preAssess) :
+          this.closeModalAndRetrievePreAssess() :
           this.displayOptFootSide(AssessMethod.Fpi, this.preAssess.foot);
         break;
       default:
@@ -249,11 +254,11 @@ export class InitialFootPhotosModalComponent implements OnInit, AfterViewInit, O
    */
   deleteLastTakedPhoto() {
     if (this.currentView === FootView.Medial) {
-      delete this.preAssess.foot[this.currentFootSide].view[FootView.PosteriorToMedial].imageUrl;
-      this.lastTakedPhoto = this.preAssess.foot[this.currentFootSide].view[FootView.Posterior].imageUrl;
+      delete this.preAssess.foot[this.currentFootSide].view[FootView.PosteriorToMedial].image.base64Url;
+      this.lastTakedPhoto = this.preAssess.foot[this.currentFootSide].view[FootView.Posterior].image.base64Url;
       this.currentView = FootView.PosteriorToMedial;
     } else {
-      delete this.preAssess.foot[this.currentFootSide].view[FootView.Posterior].imageUrl;
+      delete this.preAssess.foot[this.currentFootSide].view[FootView.Posterior].image.base64Url;
       this.lastTakedPhoto = null;
       this.currentView = FootView.Posterior;
     }

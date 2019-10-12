@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FootSide, FootView } from '../../../models/enums/foot.enum';
+// import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-opt-foot-side-modal',
@@ -17,7 +18,7 @@ export class OptFootSideModalComponent implements OnInit {
   /** objeto com lados dos pés */
   footSide = FootSide;
 
-  constructor(public modalController: ModalController) { }
+  constructor( public modalController: ModalController ) { }
 
   ngOnInit() { }
 
@@ -47,8 +48,15 @@ export class OptFootSideModalComponent implements OnInit {
   }
   // TODO: ask for confirmation, close assess and back to home
   async closeModal() {
+    // this.router.navigateByUrl('/tabs/assess');
     await this.modalController.dismiss();
   }
+
+  // testRoute() {
+  //   this.router.navigateByUrl('');
+  //   console.log('oi');
+  //   this.modalController.dismiss();
+  // }
 
   // TODO: information popup about the methods
 

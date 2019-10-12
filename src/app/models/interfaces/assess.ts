@@ -7,6 +7,7 @@ import * as firebase from 'firebase/app';
 interface Assess {
     assessId?: string;
     patientId?: string;
+    // patientName?: string;
     assessMethod?: AssessMethod; // string |
     createdAt?: firebase.firestore.FieldValue | Date;
     foot?: {};
@@ -20,8 +21,10 @@ export interface PreAssessFpi extends Assess {
         [footSide: string]: {
             view?: {
                 [footView: string]: {
-                    imageUrl?: string,
-                    imageBlob?: Blob
+                    image: {
+                        base64Url?: SafeStyle,
+                        blob?: Blob
+                    }
                 }
             };
         };
@@ -29,23 +32,40 @@ export interface PreAssessFpi extends Assess {
 }
 
 export interface AssessFpi extends Assess {
+    // foot?: {
+    //     [footSide: string]: {
+    //         assessment?: { [observation: string]: { score: number } };
+    //         posture?: FootPosture; // string |
+    //         imageUrl?: {
+    //             [footView: string]: {
+    //                 downloadUrl: string,
+    //                 path: string
+    //             }
+    //         };
+    //         footPicture?: {
+    //             [footView: string]: {
+    //                 blob?: Blob,
+    //                 metadata?: object
+    //             }
+    //         };
+    //         resultIndex?: number;
+    //     };
+    // };
     foot?: {
         [footSide: string]: {
             assessment?: { [observation: string]: { score: number } };
-            posture?: FootPosture; // string |
-            imageUrl?: {
-                [footView: string]: {
-                    downloadUrl: string,
-                    path: string
-                }
-            };
-            footPicture?: {
-                [footView: string]: {
-                    blob?: Blob,
-                    metadata?: object
-                }
-            };
+            posture?: FootPosture;
             resultIndex?: number;
+            view?: {
+                [footView: string]: {
+                    image?: {
+                        base64Url?: SafeStyle,
+                        blob?: Blob
+                        downloadUrl?: string,
+                        firestoragePath?: string
+                    }
+                }
+            };
         };
     };
 }

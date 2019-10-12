@@ -68,7 +68,7 @@ export class AssessFpiPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.takeInitialFootPhotos();
+    // this.displayPreAssess();
     this.fpiOnInit();
     this.fpiCurrentOnInit(FootSide.Right);
   }
@@ -101,8 +101,7 @@ export class AssessFpiPage implements OnInit {
             [this.observationCriteria[2]]: { score: -2 },
             [this.observationCriteria[3]]: { score: -2 },
             [this.observationCriteria[4]]: { score: -2 }
-          },
-          footPicture: {}
+          }
         }
       },
       observationSlide: 0
@@ -124,7 +123,7 @@ export class AssessFpiPage implements OnInit {
   /**
    * Apresenta formulario de cadastro para novo paciente
    */
-  async takeInitialFootPhotos() {
+  async displayPreAssess() {
     const modal = await this.modalController.create({
       component: InitialFootPhotosModalComponent
     });

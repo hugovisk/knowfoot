@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>FPI  
       <ion-chip color="dark">
@@ -28,22 +28,24 @@
         (click)="footPostureResult(); presentResult()">
         Resultado
       </ion-button>
-    </ion-buttons> <!---->
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
-<ion-item (click)="presentInformation($event)" lines="none" color="light">
+</ion-header> -->
+<!-- <ion-item (click)="presentInformation($event)" lines="none" color="light">
   <ion-label>
     <small><strong>Observar</strong> • {{ observationCriteria[current.observationSlide] }}</small>
   </ion-label>
   <ion-icon name="information-circle" slot="end"></ion-icon>
-</ion-item> <!-- -->
+</ion-item>  -->
 
 <ion-content color="medium">
-  <!-- <div *ngIf="!current.footPictureActive" text-center>
-    <br><br><br><br>
-    <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+  <div class="view-image">
+    <div *ngIf="!current.footPictureActive" class="ion-text-center guide">
+      <!-- <br><br><br><br> -->
+      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+    </div>
   </div>
-  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
+ <!--  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
   </div>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPictureActive">
     <ion-fab-button (click)="takePicture(current.footView)">

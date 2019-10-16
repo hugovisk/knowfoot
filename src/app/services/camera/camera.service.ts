@@ -63,12 +63,12 @@ export class CameraService {
       if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
         const constraints: MediaTrackConstraints = {
           facingMode: 'environment', // acessa camera traseira se disponivel
-          // width: screen.availHeight - 120,
-          // height: screen.availWidth
+          width: screen.availHeight - 120,
+          height: screen.availWidth
           // height: screen.availHeight - 120,
           // width: screen.availWidth
-          width: { ideal: screen.availWidth },
-          height: { ideal: screen.availHeight - 120}
+          // width: { ideal: screen.availWidth },
+          // height: { ideal: screen.availHeight - 120}
         };
 
 

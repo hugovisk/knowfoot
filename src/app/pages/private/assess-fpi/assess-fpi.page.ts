@@ -41,8 +41,8 @@ export class AssessFpiPage implements OnInit {
    *  http://idangero.us/swiper/api/
    */
   fpiScoreSlideOptions = {
-    slidesPerView: 3,
-    spaceBetween: 30,
+    slidesPerView: 4,
+    spaceBetween: 10,
     centeredSlides: true,
     slideToClickedSlide: true
   };
@@ -114,7 +114,7 @@ export class AssessFpiPage implements OnInit {
     // this.fpiScoresSlides03.slideTo(0);
     // this.fpiScoresSlides04.slideTo(0);
 
-    this.currentFoot = this.current.foot[footSide];
+    this.currentFoot = FootSide.Right;
   }
 
   set currentFoot(footSide) { this._currentFoot = this.current.foot[footSide]; }
@@ -137,6 +137,45 @@ export class AssessFpiPage implements OnInit {
     }
     // console.log(data); // TESTE
   }
+
+  /**
+   * Captura a posição do slide ativo
+   * @param activeIndex
+   *
+   * https://ionicframework.com/docs/api/slides
+   */
+  async setCurrentObservationCriteria(activeIndex: Promise<number>) {
+    this.current.observationSlide = await activeIndex;
+  }
+
+  /**
+   * Define critério e valor observados
+   * @param activeIndex
+   */
+  async setScore(activeIndex: Promise<number>) {
+    const observation = this.observationCriteria[this.current.observationSlide];
+
+    switch (await activeIndex) {
+      case (0):
+        this.currentFoot.assessment[observation] = { score: -2 };
+        break;
+      case (1):
+        this.currentFoot.assessment[observation] = { score: -1 };
+        break;
+      case (2):
+        this.currentFoot.assessment[observation] = { score: 0 };
+        break;
+      case (3):
+        this.currentFoot.assessment[observation] = { score: 1 };
+        break;
+      case (4):
+        this.currentFoot.assessment[observation] = { score: 2 };
+        break;
+      default:
+        console.error('ERRO :(');
+    }
+  }
+
 
   /** Apresenta modal para escolha de pé que será avaliado */
   // async displayOptFootSide(method: AssessMethod, foots?) {

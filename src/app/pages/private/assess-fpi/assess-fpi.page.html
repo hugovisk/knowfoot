@@ -38,11 +38,12 @@
   <ion-icon name="information-circle" slot="end"></ion-icon>
 </ion-item>  -->
 
-<ion-content color="medium">
+<ion-content>
   <div class="view-image">
     <div *ngIf="!current.footPictureActive" class="ion-text-center guide">
+        <img class="foot-picture" [src]="'/assets/svg/view_observation_guide_' + current.footView + '.svg'" />
       <!-- <br><br><br><br> -->
-      <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon>
+      <!-- <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon> -->
     </div>
   </div>
  <!--  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
@@ -60,8 +61,8 @@
 </ion-content>
 
 <ion-footer>
-  <!-- <ion-slides #fpiSlides [options]="fpiSlideOptions" pager="true" noSwipingClass
-    (ionSlideWillChange)="setCurrentObservationSlide(fpiSlides.getActiveIndex())">
+  <ion-slides #fpiSlides [options]="fpiSlideOptions" pager="true" noSwipingClass
+    (ionSlideWillChange)="setCurrentObservationCriteria(fpiSlides.getActiveIndex())">
     <ion-slide>
       <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
@@ -69,11 +70,11 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-buttons class="information-score">
+                <!-- <ion-buttons class="information-score">
                   <ion-button (click)="presentInformation($event)">
                     <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
                   </ion-button>
-                </ion-buttons>
+                </ion-buttons> -->
                 <br>
                 <ion-icon class="image-score" name="image"></ion-icon>                
               </ion-col>
@@ -162,7 +163,7 @@
         </ion-slide>
       </ion-slides>
     </ion-slide>
-  </ion-slides> -->
+  </ion-slides>
 </ion-footer>
 <!-- 
 <ion-content class="ion-padding">

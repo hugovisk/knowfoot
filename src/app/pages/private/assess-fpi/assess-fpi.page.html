@@ -66,7 +66,7 @@
     <ion-slide>
       <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreSlideOptions"
         (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
-        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
+        <ion-slide *ngFor="let posture of footPosture | keyvalue: keepOrder">
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -74,9 +74,10 @@
                   <ion-button (click)="presentInformation($event)">
                     <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
                   </ion-button>
-                </ion-buttons> -->
-                <br>
-                <ion-icon class="image-score" name="image"></ion-icon>                
+                </ion-buttons> 
+                <br>-->
+                <img class="foot-posture" [src]="'/assets/svg/posterior_' + posture.key + '.svg'" />
+                <!-- <ion-icon class="image-score" name="image"></ion-icon>                 -->
               </ion-col>
             </ion-row>
           </ion-grid>

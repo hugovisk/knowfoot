@@ -62,6 +62,8 @@ export class AssessFpiPage implements OnInit {
   /** TODO: colocar figuras de comparacao do FPI */
   private fpiScoreImages00: number[] = [-2, -1, 0, 1, 2];
 
+  public footPosture = FootPosture;
+
   constructor(
     public modalController: ModalController,
     public popoverController: PopoverController
@@ -196,5 +198,11 @@ export class AssessFpiPage implements OnInit {
   //   }
   //   console.log(data); // TESTE
   // }
+
+  /**
+   * helper para manter a ordenação do objeto iterado no pipe keyvalue,
+   * sem ele o pipe keyvalue ordena os pares alfabeticamente
+   */
+  keepOrder = (a: string) => a;
 
 }

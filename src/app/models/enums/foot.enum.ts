@@ -12,9 +12,9 @@ export enum FootInjurie {
 }
 
 export enum FootPosture {
-    Neutral = 'Neutral',
-    Pronated = 'Pronated',
     PronatedHighly = 'PronatedHighly',
+    Pronated = 'Pronated',
+    Neutral = 'Neutral',
     Supinated = 'Supinated',
     SupinatedHighly = 'SupinatedHighly'
 }

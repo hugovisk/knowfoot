@@ -22,7 +22,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // import { CameraPreviewWeb } from 'capacitor-camera-preview';
-import { CameraPreview } from '@ionic-native/camera-preview/ngx';
+// import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -53,7 +53,7 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'pt' },
-    CameraPreview
+    // CameraPreview
     // CameraPreviewWeb // capacitor camera preview
   ],
   bootstrap: [AppComponent]

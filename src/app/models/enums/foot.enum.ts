@@ -12,11 +12,11 @@ export enum FootInjurie {
 }
 
 export enum FootPosture {
-    PronatedHighly = 'PronatedHighly',
-    Pronated = 'Pronated',
-    Neutral = 'Neutral',
+    SupinatedHighly = 'SupinatedHighly',
     Supinated = 'Supinated',
-    SupinatedHighly = 'SupinatedHighly'
+    Neutral = 'Neutral',
+    Pronated = 'Pronated',
+    PronatedHighly = 'PronatedHighly'
 }
 
 export enum FootView {
@@ -26,9 +26,9 @@ export enum FootView {
 }
 
 export enum FootObservation {
-    SupraAndInfraLateralNalleoliCurvature, // = 'SupraAndInfraLateralNalleoliCurvature',
-    CalcanealFrontalPlanePosition, // = 'CalcanealFrontalPlanePosition',
-    AbductionAdductionOfForefootOnRearfoot, // = 'AbductionAdductionOfForefootOnRearfoot',
-    CongruenceOfMedialLongitudinalArch, // = 'CongruenceOfMedialLongitudinalArch',
-    ProeminenceInRegionOfTnj // = 'ProeminenceInRegionOfTnj'
+    CalcanealFrontalPlanePosition  = 'CalcanealFrontalPlanePosition',
+    SupraAndInfraLateralMalleoliCurvature = 'SupraAndInfraLateralMalleoliCurvature',
+    AbductionAdductionOfForefootOnRearfoot  = 'AbductionAdductionOfForefootOnRearfoot',
+    CongruenceOfMedialLongitudinalArch  = 'CongruenceOfMedialLongitudinalArch',
+    ProeminenceInRegionOfTnj = 'ProeminenceInRegionOfTnj'
 }

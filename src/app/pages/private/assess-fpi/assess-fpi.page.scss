@@ -1,3 +1,7 @@
+ion-content {
+    --overflow: hidden;
+}
+
 .view-image {
     width: 100%; // 100vw;
     height: 100%; // 100vw * 1.33;
@@ -13,6 +17,8 @@
 
 ion-footer {
     height: 120px;
+    // background-color: #EEE;
+    background-color: #FFF;
 }
 
 .foot-picture {
@@ -23,8 +29,94 @@ ion-footer {
 .foot-posture {
     height: 100px;
     background: no-repeat center center / cover;
+    // border: solid 2px lime;
+    opacity: .65;
 }
 
-.image-score {
-    font-size: 80px;
+// .image-score {
+//     font-size: 80px;
+// }
+
+.score-slide {
+    padding: 5px 0;
+    height: 120px;
+
+    .active {
+        box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 6%;
+
+        .foot-posture {
+            opacity: 1;
+        }
+    }
+
+    .unchecked {
+        position: absolute;
+        right: -5px;
+        font-size: 18px;
+        color: #CCC;
+    }
+
+    .checked {
+        position: absolute;
+        right: -5px;
+        font-size: 18px;
+        color: var(--ion-color-primary);
+    }
+}
+
+.scores-navegation {
+    position: absolute;
+    top: 0;
+    // background-color: lime;
+    height: 55px;
+    width: 100%;
+
+    // .next {
+    //     position: absolute;
+    //     right: 10px;
+    // }
+}
+
+.next-button {
+    margin-top: 4px;
+}
+
+.info-observation-icon {
+    position: absolute;
+    bottom: 20px;
+    right: 23px;
+
+    mat-icon {
+        opacity: .75;
+        font-size: 28px;
+    }
+}
+
+.info-observation-text {
+    position: absolute;
+    bottom: 13px;
+    right: 55px;
+    margin-left: 15px;
+    line-height: 1.5em;
+
+    background-color: rgba(0, 0, 0, 0.7);
+    // padding: 5px;
+    border-radius: 8px;
+    animation: fadeIn ease 5s;
+    p {
+        line-height: 1.5em;
+        font-size: 14px;
+        color: white;
+        margin: 5px 12px 4px;
+    }
+}
+
+ion-chip {
+    --color: white;
+    --background: rgba(var(--ion-color-dark-rgb), 0.4);
+
+    ion-label {
+        padding: 0 5px;
+    }
 }

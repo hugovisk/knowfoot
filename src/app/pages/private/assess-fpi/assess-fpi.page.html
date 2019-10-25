@@ -39,14 +39,50 @@
 </ion-item>  -->
 
 <ion-content>
-  <div class="view-image">
+  <div class="scores-navegation">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="4">
+          <button mat-icon-button *ngIf="current.observationSlide === footObservation.CalcanealFrontalPlanePosition">
+            <mat-icon>close</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="current.observationSlide !== footObservation.CalcanealFrontalPlanePosition" 
+            (click)="observationPrevious()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </ion-col>
+        <ion-col size="8" class="ion-text-right">
+          <a mat-flat-button class="next-button" color="primary"
+            *ngIf="current.observationSlide !== footObservation.ProeminenceInRegionOfTnj"
+            [disabled]="!isScoreSelected"
+            (click)="observationNext()">
+            Próximo
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+          <a mat-flat-button class="next-button" color="primary"
+            *ngIf="current.observationSlide === footObservation.ProeminenceInRegionOfTnj"
+            [disabled]="!isScoreSelected"
+            (click)="endFootAssessment()">
+            Concluir avaliação do pé {{ currentFootSide }}
+            <!-- <mat-icon>arrow_forward</mat-icon> -->
+          </a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="info-observation-icon" (click)="showObservationInfo = !showObservationInfo">
+    <mat-icon>info</mat-icon>
+  </div>
+  
+  <div class="info-observation-text" *ngIf="showObservationInfo" [@inOutAnimation]>
+    <p>Observe o grau de inclinação do calcânio em relação ao solo</p>
+  </div>
+  <div class="view-image" (click)="showObservationInfo = !showObservationInfo">
     <div *ngIf="!current.footPictureActive" class="ion-text-center guide">
-        <img class="foot-picture" [src]="'/assets/svg/view_observation_guide_' + current.footView + '.svg'" />
-      <!-- <br><br><br><br> -->
-      <!-- <ion-icon style="font-size: 150px" name="images" color="light"></ion-icon> -->
+      <img class="foot-picture" [src]="'/assets/svg/view_observation_guide_' + current.footView + '.svg'" />
     </div>
   </div>
- <!--  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
+  <!--  <div class="foot-picture" *ngIf="current.footPictureActive" [style.backgroundImage]="current.footPictureActive">
   </div>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="!current.footPictureActive">
     <ion-fab-button (click)="takePicture(current.footView)">
@@ -59,105 +95,23 @@
     </ion-fab-button>
   </ion-fab> -->
 </ion-content>
-
 <ion-footer>
-  <ion-slides #fpiSlides [options]="fpiSlideOptions" pager="true" noSwipingClass
-    (ionSlideWillChange)="setCurrentObservationCriteria(fpiSlides.getActiveIndex())">
-    <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides00 [options]="fpiScoreSlideOptions"
-        (ionSlideWillChange)="setScore(fpiScoresSlides00.getActiveIndex())">
-        <ion-slide *ngFor="let posture of footPosture | keyvalue: keepOrder">
+  <ion-slides [options]="fpiSlideOptions" noSwipingClass
+    (ionSlideWillChange)="setCurrentFootObservation(fpiSlides[0].getActiveIndex())">
+    <ion-slide *ngFor="let observation of footObservation | keyvalue: keepOrder; let i = index">
+      <ion-slides class="score-slide" [options]="slideOptions"
+        (ionSlideTouchEnd)="setScore(fpiSlides[i+1].getActiveIndex()); validScoreSelected()"
+        (ionSlideWillChange)="setScore(fpiSlides[i+1].getActiveIndex())">
+        <ion-slide *ngFor="let posture of footPosture | keyvalue: keepOrder; let j = index"
+          [ngClass]="{'active': j === activeScore && isScoreSelected} ">
           <ion-grid>
             <ion-row>
               <ion-col>
-                <!-- <ion-buttons class="information-score">
-                  <ion-button (click)="presentInformation($event)">
-                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-                  </ion-button>
-                </ion-buttons> 
-                <br>-->
-                <img class="foot-posture" [src]="'/assets/svg/posterior_' + posture.key + '.svg'" />
-                <!-- <ion-icon class="image-score" name="image"></ion-icon>                 -->
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-slide>
-      </ion-slides>
-    </ion-slide>
-    <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides01 [options]="fpiScoreSlideOptions"
-        (ionSlideWillChange)="setScore(fpiScoresSlides01.getActiveIndex())">
-        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-buttons class="information-score">
-                  <ion-button (click)="presentInformation($event)">
-                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-                <br>
-                <ion-icon class="image-score" name="image"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-slide>
-      </ion-slides>
-    </ion-slide>
-    <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides02 [options]="fpiScoreSlideOptions"
-        (ionSlideWillChange)="setScore(fpiScoresSlides02.getActiveIndex())">
-        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-buttons class="information-score">
-                  <ion-button (click)="presentInformation($event)">
-                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-                <br>
-                <ion-icon class="image-score" name="image"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-slide>
-      </ion-slides>
-    </ion-slide>
-    <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides03 [options]="fpiScoreSlideOptions"
-        (ionSlideWillChange)="setScore(fpiScoresSlides03.getActiveIndex())">
-        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-buttons class="information-score">
-                  <ion-button (click)="presentInformation($event)">
-                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-                <br>
-                <ion-icon class="image-score" name="image"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-slide>
-      </ion-slides>
-    </ion-slide>
-    <ion-slide>
-      <ion-slides class="score-slide" #fpiScoresSlides04 [options]="fpiScoreSlideOptions"
-        (ionSlideWillChange)="setScore(fpiScoresSlides04.getActiveIndex())">
-        <ion-slide *ngFor="let fpiScoreImage00 of fpiScoreImages00">
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-buttons class="information-score">
-                  <ion-button (click)="presentInformation($event)">
-                    <ion-icon slot="icon-only" name="information-circle-outline" color="medium"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
-                <br>
-                <ion-icon class="image-score" name="image"></ion-icon>
+                <mat-icon [ngClass]="j === activeScore && isScoreSelected ? 'checked':'unchecked'">
+                  {{ j === activeScore && isScoreSelected ? 'check_circle':'radio_button_unchecked' }}
+                </mat-icon>
+                <img class="foot-posture" [ngStyle]="{'transform':currentFootSide === 'Left' ? 'scaleX(-1)' : 'none' }"
+                  [src]="'/assets/svg/observations/' + observation.value + '_' + posture.key + '.svg'" />
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -166,10 +120,3 @@
     </ion-slide>
   </ion-slides>
 </ion-footer>
-<!-- 
-<ion-content class="ion-padding">
-  <a mat-flat-button color="primary" (click)="takeInitialFootPhotos()">
-      <mat-icon>camera</mat-icon>
-      <span>pra que esse botao...</span>
-  </a>
-</ion-content> -->

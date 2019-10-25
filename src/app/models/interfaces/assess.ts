@@ -1,5 +1,5 @@
 import { SafeStyle } from '@angular/platform-browser';
-import { FootPosture, FootSide, FootView } from '../enums/foot.enum';
+import { FootPosture, FootSide, FootView, FootObservation } from '../enums/foot.enum';
 import { AssessMethod } from '../enums/assess.enum';
 import * as firebase from 'firebase/app';
 
@@ -53,7 +53,7 @@ export interface AssessFpi extends Assess {
     // };
     foot?: {
         [footSide: string]: {
-            assessment?: { [observation: string]: { score: number } };
+            assessment?: { [observation: string]: { score?: number } };
             posture?: FootPosture;
             resultIndex?: number;
             view?: {
@@ -75,7 +75,7 @@ export interface AssessFpiCurrent extends AssessFpi {
     footPictureActive?: SafeStyle;
     footPictureView?: { [observation: string]: SafeStyle };
     footView?: FootView | string;
-    observationSlide?: number;
+    observationSlide?: FootObservation;
 }
 
 
